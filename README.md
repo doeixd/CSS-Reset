@@ -71,7 +71,7 @@ My opinionated CSS reset for new projects.
     font-size: var(--bodyFontSize);
   }
 
-  /* Makes webcompones / unknown elements display as you'd expect */
+  /* Makes webcomponents / unknown elements display as you'd expect */
   :where(:not(:defined)) { 
       display: block; 
   }
@@ -160,7 +160,7 @@ My opinionated CSS reset for new projects.
     max-height:100dvh; 
   }
 
-  /* Makes so if just a border color is defined, then it'll still work */
+  /* Makes so if just a border color / width is defined, then it'll still work as expected */
   :where(:not(:is(html, audio, textarea, body, main, table, button, checkbox, input, td, tr, th, tbody, table, tfoot, video, form, details, select, summary, fieldset, hr, *::before, *::after, frame, iframe, datalist, object))) { 
     border-style: solid; 
     border-width: 0; 
