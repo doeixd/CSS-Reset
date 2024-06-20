@@ -49,7 +49,9 @@ My opinionated CSS reset for new projects.
     padding: 0; 
     /* Resets to what I believe most people already assume is the case. */
     box-sizing: border-box; 
-    vertical-align: baseline; min-width: 0; scroll-behavior: smooth
+    vertical-align: baseline;
+    min-width: 0;
+    scroll-behavior: smooth;
   }
 
   /* Everything is defined with :where so they have zero specificity and can easily be overwritten. */
