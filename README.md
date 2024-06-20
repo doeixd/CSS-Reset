@@ -11,7 +11,7 @@ My opinionated CSS reset for new projects.
   :where(:is(body, html)) { width: 100%; height: 100%; }
   :where(:is(img, picture, video, canvas, svg)) { display: block; max-width: 100%; vertical-align: middle; }
   :where(:is(input, button, textarea, select)) { font: inherit; cursor: pointer; }
-  :where(*:not(:is(main, body, .prose, .app, .root, #root)) > :is(h1, h2, h3, h4, h5, h6)), :where(p) { font-size: inherit; font-weight: inherit; overflow-wrap: break-word; text-overflow: ellipsis; }
+  :where(*:not(:is(main, body, .prose, .app, .root, #root)) > :is(h1, h2, h3, h4, h5, h6)), :where(p) { font-size: inherit; font-weight: inherit; overflow-wrap: break-word; text-overflow: ellipsis; background-color: inherit; }
   :where(:is(h1, h2, h3, h4, h5, h6)) { text-wrap: balance; letter-spacing: 0.2px; scroll-padding-block: 1lh; }
   :where(p) { text-wrap: pretty; }
   :where(textarea) { form-sizing: content; min-height: 2lh; max-height: 10lh; }
@@ -103,6 +103,7 @@ My opinionated CSS reset for new projects.
     font-weight: inherit; 
     overflow-wrap: break-word;
     text-overflow: ellipsis;
+    background-color: inherit;
   }
 
   /* Normal headings should look like / act headings */
@@ -114,7 +115,7 @@ My opinionated CSS reset for new projects.
 
   /* Make text pretty */
   :where(p) { 
-    text-wrap: pretty; 
+    text-wrap: pretty
   }
 
   /* Auto-grow text areas. */
