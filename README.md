@@ -31,7 +31,8 @@ My opinionated CSS reset for new projects.
 }
 ```
 
-
+<br />
+<br />
 ## With comments
 ```css
 /* Everything is in the reset layer so it can be easily overwritten. */
