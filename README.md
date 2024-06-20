@@ -5,7 +5,7 @@ My opinionated CSS reset for new projects.
 
 ```css
 @layer reset {
-  *, *::before, *::after { transition: all ease-in-out 100ms; margin:0; padding: 0; box-sizing: border-box; vertical-align: baseline; min-width: 0; scroll-behavior: smooth }
+  *, *::before, *::after { transition: all ease-out 100ms; margin:0; padding: 0; box-sizing: border-box; vertical-align: baseline; min-width: 0; scroll-behavior: smooth }
   :where(html) { text-size-adjust: none; -webkit-text-size-adjust: none; -moz-text-size-adjust: none; --bodyFontSize: clamp(13.5px, calc(1.2vw * 2), 16px); --bodyFontColor: #323232 tab-size: 4; font-family: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ; color: var(--bodyFontColor); line-height: 1.5; -webkit-font-smoothing: antialiased; font-size: var(--bodyFontSize); }
   :where(:not(:defined)) { display: block; }
   :where(:is(body, html)) { width: 100%; height: 100%; }
@@ -43,7 +43,7 @@ My opinionated CSS reset for new projects.
   /* Applies to everything */
   *, *::before, *::after { 
     /* I think having some sort of transition is usually the behaviour I want. */
-    transition: all ease-in-out 100ms; 
+    transition: all ease-out 100ms; 
     /* Controversial, but I like having a clean slate of margin / padding. */
     margin:0; 
     padding: 0; 
