@@ -155,7 +155,10 @@ My opinionated CSS reset for new projects.
 
   /* Fixes unexpected popover backdrop issues */
   *::backdrop { 
-    all:unset; 
+    all:unset;
+    position: fixed;
+    inset: 0;
+    opacity: 0.7;
   }
 
   :where(modal::dialog) { 
@@ -177,6 +180,17 @@ My opinionated CSS reset for new projects.
   /* Everyone will probably need this at some point */
   :where(.display-none) { 
     display: none; 
+  }
+
+  :where([hidden], .visually-hidden) {
+    clip: rect(0 0 0 0); 
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap; 
+    width: 1px;
+    content-visibility: hidden;
   }
 
   /* Makes Url heading targets display in view. */
