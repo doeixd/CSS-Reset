@@ -10,7 +10,7 @@ My opinionated CSS reset for new projects.
   :where(:not(:defined)) { display: block; }
   :where(:is(body, html)) { width: 100%; height: 100%; }
   :where(:is(img, picture, video, canvas, svg)) { display: block; max-width: 100%; vertical-align: middle; }
-  :where(:is(input, button, textarea, select)) { font: inherit; cursor: pointer; }
+  :where(:is(input, button, textarea, select):not([disabled])) { font: inherit; cursor: pointer; }
   :where(*:not(:is(main, body, .prose, .app, .root, #root)) > :is(h1, h2, h3, h4, h5, h6)), :where(p) { font-size: inherit; font-weight: inherit; overflow-wrap: break-word; text-overflow: ellipsis; background-color: inherit; }
   :where(:is(h1, h2, h3, h4, h5, h6)) { text-wrap: balance; letter-spacing: 0.2px; scroll-padding-block: 1lh; }
   :where(p) { text-wrap: pretty; }
