@@ -6,7 +6,7 @@ My opinionated CSS reset for new projects.
 ```css
 @layer reset {
   *, *::before, *::after { transition: all ease-out 100ms; margin:0; padding: 0; box-sizing: border-box; vertical-align: baseline; min-width: 0; scroll-behavior: smooth }
-  :where(html) { text-size-adjust: none; -webkit-text-size-adjust: none; -moz-text-size-adjust: none; --bodyFontSize: clamp(13.5px, calc(1.2vw * 2), 16px); --bodyFontColor: #323232; tab-size: 4; font-family: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ; color: var(--bodyFontColor); line-height: 1.5; -webkit-font-smoothing: antialiased; font-size: var(--bodyFontSize); }
+  :where(html) { text-size-adjust: none; -webkit-text-size-adjust: none; -moz-text-size-adjust: none; --bodyFontSize: clamp(13.5px, 2.4vw, 16px); --bodyFontColor: #323232; tab-size: 4; font-family: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ; color: var(--bodyFontColor); line-height: 1.5; -webkit-font-smoothing: antialiased; font-size: var(--bodyFontSize); }
   :where(:not(:defined)) { display: block; }
   :where(:is(body, html)) { width: 100%; height: 100%; }
   :where(:is(img, picture, video, canvas, svg)) { display: block; max-width: 100%; vertical-align: middle; }
@@ -63,7 +63,7 @@ My opinionated CSS reset for new projects.
     -moz-text-size-adjust: none; 
 
     /* My preferred text settings. */
-    --bodyFontSize: clamp(13.5px, calc(1.2vw * 2), 16px);
+    --bodyFontSize: clamp(13.5px, 2.4vw, 16px);
     --bodyFontColor: #323232;
     tab-size: 4; 
     font-family: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ; 
