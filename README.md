@@ -92,7 +92,7 @@ My opinionated CSS reset for new projects.
   }
 
   /* Makes the font / cursor of inputs what you'd probably expect. */
-  :where(:is(input, button, textarea, select)) { 
+  :where(:is(input, button, textarea, select):not([disabled])) { 
     font: inherit; 
     cursor: pointer; 
   }
