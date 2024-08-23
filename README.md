@@ -15,7 +15,7 @@ My opinionated CSS reset for new projects.
   :where(:is(h1, h2, h3, h4, h5, h6)) { text-wrap: balance; letter-spacing: 0.2px; scroll-padding-block: 1lh; }
   :where(p) { text-wrap: pretty; }
   :where(textarea) { form-sizing: content; min-height: 2lh; max-height: 10lh; }
-  :where(button) { box-sizing: content-box }
+  :where(button) { box-sizing: content-box; text-box-trim: both; text-box-edge: cap alphabetic; }
   :where(:is(#root, #__next, div#app)) { isolation: isolate; }
   :where(table) { text-indent: 0; border-color: inherit; border-collapse: collapse; border-spacing: 0; }
   :where(*:not(p) ~ :is(ul, ol) > li), .list-style-none { list-style: none; }
@@ -125,9 +125,11 @@ My opinionated CSS reset for new projects.
     max-height: 10lh; 
   }
 
-  /* Allow button borders to escape their containers. I think this is what most people want. */
+  /* Allow button borders to escape their containers. I think this is what most people want. Also, trim additional space in buttons */
   :where(button) { 
-    box-sizing: content-box 
+    box-sizing: content-box;
+    text-box-trim: both;
+    text-box-edge: cap alphabetic;
   }
 
   /* SPA containers should be isolated. Maybe will help with css performance? Doubt it tho. */
