@@ -43,8 +43,6 @@ My opinionated CSS reset for new projects.
 @layer reset {
   /* Applies to everything */
   *, *::before, *::after { 
-    /* I think having some sort of transition is usually the behaviour I want. */
-    transition: all ease-out 100ms; 
     /* Controversial, but I like having a clean slate of margin / padding. */
     margin:0; 
     padding: 0; 
@@ -53,6 +51,12 @@ My opinionated CSS reset for new projects.
     vertical-align: baseline;
     min-width: 0;
     scroll-behavior: smooth;
+  }
+
+/* I prefer having some sort of transition */
+  :where(:not(:is(svg *, p, h1, h2, h3, h4, h5, h6)) {
+    transition: ease-out 100ms;
+    transition-property: color, background, margin, padding, width, grid-column, grid-row, height, grid-template-     columns, grid-template-rows, opacity, border, border-radius
   }
 
   /* Everything is defined with :where so they have zero specificity and can easily be overwritten. */
