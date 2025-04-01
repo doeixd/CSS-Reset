@@ -14,7 +14,7 @@
 / slate with zero specificity (:where). */
 @layer reset {
 
-/* --- Core Resets --- /
+/* --- Core Resets --- */
 :where(, *::before, *::after) {
 margin: 0;
 padding: 0;
