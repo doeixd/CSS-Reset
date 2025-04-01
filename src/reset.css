@@ -1,0 +1,41 @@
+/* ================================================ */
+/* ==               @layer reset                 == */
+/* ================================================ */
+/* Purpose: Neutralize browser styles, fix inconsistencies, */
+/* establish predictable baseline behavior, and provide a clean */
+/* slate with zero specificity (:where). */
+@layer reset {
+  /* --- Core Resets --- */
+  :where(*, *::before, *::after) { margin: 0; padding: 0; box-sizing: border-box; vertical-align: baseline; min-width: 0; font: inherit; color: inherit; line-height: inherit; }
+  /* --- Document Level --- */
+  :where(html) { text-size-adjust: 100%; -webkit-text-size-adjust: 100%; -moz-text-size-adjust: none; tab-size: 4; height: 100%; }
+  :where(body) { min-height: 100%; }
+  /* --- Element Display & Behavior --- */
+  :where(:is(img, picture, video, canvas, svg, :not(:defined))) { display: block; max-width: 100%; height: auto; }
+  :where(svg) { fill: currentColor; stroke: currentColor; stroke-width: 0; }
+  /* Form element normalization */
+  :where(button, input, select, textarea) { appearance: none; -webkit-appearance: none; -moz-appearance: none; border-radius: 0; background-color: transparent; letter-spacing: inherit; border: 1px solid transparent; }
+  :where(button) { border: none; background: none; text-align: inherit; }
+  :where(textarea) { resize: vertical; overflow: auto; }
+  /* Default cursors */
+  :where(button, select:not([disabled]), input[type="button"], input[type="submit"], input[type="reset"], input[type="checkbox"], input[type="radio"], label) { cursor: pointer; }
+  :where(input[type="text"], input[type="email"], input[type="search"], input[type="url"], input[type="tel"], input[type="number"], input[type="password"], textarea) { cursor: text; }
+  :where([disabled]) { cursor: not-allowed; }
+  /* --- Text Element Resets --- */
+  :where(p, h1, h2, h3, h4, h5, h6, li, dd, dt, blockquote) { overflow-wrap: break-word; }
+  :where(h1, h2, h3, h4, h5, h6) { text-wrap: balance; font-size: inherit; font-weight: inherit; }
+  :where(p, blockquote, li) { text-wrap: pretty; }
+  :where(a) { text-decoration: inherit; }
+  :where(abbr[title]) { text-decoration: underline dotted; cursor: help; }
+  /* --- Other Element Resets --- */
+  :where(table) { text-indent: 0; border-color: inherit; border-collapse: collapse; border-spacing: 0; }
+  :where(ul, ol) { list-style: none; }
+  :where([src='']) { display: none; }
+  :where(::backdrop) { all: unset; }
+  :where(:not(html, body, svg, img, video, canvas, iframe, frame, object, embed, hr, :where(button, input, select, textarea), table, thead, tbody, tfoot, tr, th, td, details, summary, fieldset)) { border-style: solid; border-width: 0; }
+  /* --- Accessibility & Utilities --- */
+  :where([hidden]) { display: none !important; }
+  :where(.visually-hidden:not(:focus):not(:active), .sr-only:not(:focus):not(:active)) { clip: rect(0 0 0 0); clip-path: inset(50%); height: 1px; overflow: hidden; position: absolute; white-space: nowrap; width: 1px; }
+  /* --- Modern Feature Opt-ins --- */
+  @view-transition { navigation: auto; }
+} /* End of @layer reset */

@@ -1,0 +1,172 @@
+/* ================================================ */
+/* ==            @layer components               == */
+/* ================================================ */
+@layer components {
+  /* Apply base styles to common elements using NEW theme variables */
+  body {
+    background-color: var(--base);
+    color: var(--text-default);
+  }
+
+  a {
+    color: var(--text-link);
+    text-decoration: var(--link-decoration);
+    text-decoration-thickness: var(--link-underline-thickness);
+    text-underline-offset: var(--link-underline-offset);
+    transition: color var(--link-transition-duration) var(--link-transition-timing),
+                text-decoration-color var(--link-transition-duration) var(--link-transition-timing);
+  }
+  a:hover, a:focus-visible {
+    color: var(--text-link-hover);
+    text-decoration: var(--link-decoration-hover);
+    text-decoration-thickness: var(--link-underline-thickness);
+    text-underline-offset: var(--link-underline-offset);
+  }
+
+  /* Basic Button Styling (Structure in defaults, base style here) */
+  .button {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.6em 1.2em; border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--outline-default); /* Default outline */
+    background-color: var(--surface-default); /* Default surface */
+    color: var(--text-default); /* Use default text */
+    font-weight: 500; text-align: center; cursor: pointer;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out;
+    user-select: none; line-height: 1.2;
+  }
+   .button:hover:not([disabled]) {
+     border-color: var(--outline-overt);
+     background-color: var(--highlight-bg-subtle); /* Subtle highlight on hover */
+   }
+  .button:focus-visible {
+     outline: var(--border-width-thick) solid var(--outline-focus);
+     outline-offset: 2px;
+     border-color: transparent; /* Hide border when outline is visible */
+  }
+  .button[disabled] {
+    opacity: 0.5; cursor: not-allowed;
+    background-color: var(--highlight-bg-muted);
+    border-color: var(--outline-muted);
+  }
+
+  /* Input field styling */
+  .input-field {
+    display: block; width: 100%; padding: 0.6em 0.8em;
+    border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--outline-default);
+    background-color: var(--surface-subtle);
+    color: var(--text-default);
+    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .input-field::placeholder { color: var(--text-muted); opacity: 1; }
+  .input-field:hover:not([disabled]) { border-color: var(--outline-overt); }
+  .input-field:focus, .input-field:focus-visible {
+    outline: none; border-color: var(--outline-focus);
+    box-shadow: 0 0 0 var(--border-width-thick) oklch(from var(--outline-focus) l c h / 0.3);
+  }
+  .input-field[disabled] { opacity: 0.6; background-color: var(--surface-muted); border-color: var(--outline-subtle); cursor: not-allowed; }
+  .input-field:invalid { border-color: var(--error); box-shadow: 0 0 0 var(--border-width-thick) oklch(from var(--error) l c h / 0.3); }
+
+  /* Custom Select Arrow */
+  select.input-field {
+    background-image: linear-gradient(45deg, transparent 50%, var(--text-subtle) 50%), linear-gradient(135deg, var(--text-subtle) 50%, transparent 50%);
+    background-position: right 0.8em top 55%, right calc(0.8em + 5px) top 55%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+  }
+  select.input-field:-moz-focusring { color: transparent; text-shadow: 0 0 0 var(--text-default); }
+
+  /* Checkbox/Radio Theming */
+  input[type="checkbox"], input[type="radio"] {
+    border-color: var(--outline-default);
+    background-color: var(--surface-subtle);
+  }
+  input[type="checkbox"]:hover:not(:checked):not([disabled]),
+  input[type="radio"]:hover:not(:checked):not([disabled]) {
+    border-color: var(--outline-overt);
+    background-color: var(--highlight-bg-subtle);
+  }
+  input[type="checkbox"]:checked, input[type="radio"]:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+  input[type="checkbox"]:checked:hover:not([disabled]),
+  input[type="radio"]:checked:hover:not([disabled]) {
+    background-color: var(--accent-overt);
+    border-color: var(--accent-overt);
+  }
+  input[type="checkbox"]::before, input[type="radio"]::before {
+    box-shadow: inset 1em 1em var(--text-on-accent); /* Use contrast text */
+  }
+  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
+     /* Style for the checkmark/dot */
+  }
+
+  /* Basic card structure */
+  .card {
+     --bg: var(--surface-default); /* Set local --bg */
+     background-color: var(--bg);
+     color: var(--auto-contrast-text); /* Use auto-contrast */
+     border-radius: var(--radius-lg);
+     padding: 1.5rem;
+     border: var(--border-width) solid var(--outline-subtle);
+     box-shadow: 0 2px 5px oklch(from var(--base) calc(l - 50%) 0.02 h / 0.1);
+  }
+
+  /* Code block styling */
+  pre {
+    background-color: var(--code-block-bg);
+    border-color: var(--code-block-border);
+    color: var(--text-default); /* Or define --text-code */
+  }
+  :not(pre) > code, kbd, samp {
+    background-color: var(--code-inline-bg);
+    border-color: var(--code-inline-border);
+    color: var(--text-default); /* Or define --text-code */
+  }
+  /* Blockquote styling */
+  blockquote {
+    border-inline-start-color: var(--blockquote-border);
+    color: var(--text-subtle);
+  }
+  /* Horizontal Rule styling */
+  hr { border-block-start-color: var(--hr-color); }
+  /* Table styling */
+  table { border-color: var(--table-border); }
+  th, td { border-bottom-color: var(--table-border); }
+  thead th {
+    background-color: var(--table-header-bg);
+    color: var(--text-overt); /* Use overt text for header */
+   }
+  tbody tr:hover {
+    --bg: var(--table-row-hover-bg); /* Set local --bg */
+    background-color: var(--bg);
+    color: var(--auto-contrast-text); /* Auto contrast on hover */
+  }
+  /* Enhanced Form Focus States */
+  input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: var(--input-focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--input-focus-ring-offset);
+    background-color: var(--input-focus-bg);
+    border-color: var(--outline-focus);
+  }
+
+  button:focus-visible, 
+  a:focus-visible,
+  [tabindex]:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    box-shadow: none;
+  }
+  
+  /* Focus Ring Color */
+  :focus-visible { outline-color: var(--outline-focus); }
+
+  /* Contrast Pair Component */
+  .contrast-pair {
+    --bg: var(--pair-color, var(--accent));
+    background-color: var(--bg);
+    color: var(--auto-contrast-text);
+    padding: 1rem; border-radius: var(--radius-md);
+  }
+} /* End of @layer components */

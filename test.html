@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Framework Test Page</title>
+  <link rel="stylesheet" href="src/index.css">
+  <style>
+    .demo-section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--outline-default);
+      border-radius: var(--radius-lg);
+    }
+
+    .demo-section h2 {
+      margin-top: 0;
+      border-bottom: 1px solid var(--outline-subtle);
+      padding-bottom: 0.5rem;
+    }
+
+    .color-swatch {
+      width: 5rem;
+      height: 5rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-sm);
+      color: var(--auto-contrast-text);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toggle-theme {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 100;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-full);
+      background-color: var(--surface-default);
+      border: 1px solid var(--outline-default);
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+    }
+
+    .dark-icon { display: none; }
+    .light-icon { display: inline; }
+
+    .dark .dark-icon { display: inline; }
+    .dark .light-icon { display: none; }
+  </style>
+</head>
+<body class="bg-base text-default">
+  <header class="l-pad bg-surface-default shadow-sm sticky top-0" style="z-index: 10;">
+    <div class="l-center-content">
+      <div class="l-spread">
+        <h1 class="text-2xl font-bold">CSS Framework Test Page</h1>
+        <nav>
+          <ul class="l-row gap-md">
+            <li><a href="#typography" class="text-link">Typography</a></li>
+            <li><a href="#colors" class="text-link">Colors</a></li>
+            <li><a href="#buttons" class="text-link">Buttons</a></li>
+            <li><a href="#forms" class="text-link">Forms</a></li>
+            <li><a href="#components" class="text-link">Components</a></li>
+            <li><a href="#layouts" class="text-link">Layouts</a></li>
+            <li><a href="#utilities" class="text-link">Utilities</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="l-stack l-pad">
+    <div class="l-center-content l-stack gap-xl" style="--l-center-content-max-width: 80rem;">
+      <section class="demo-section" id="typography">
+        <h2 class="text-3xl font-bold">Typography</h2>
+        
+        <div class="l-stack gap-lg">
+          <div>
+            <h1>Heading 1</h1>
+            <h2>Heading 2</h2>
+            <h3>Heading 3</h3>
+            <h4>Heading 4</h4>
+            <h5>Heading 5</h5>
+            <h6>Heading 6</h6>
+          </div>
+
+          <div>
+            <p class="text-lg">This is a large paragraph with <a href="#">a link</a>, <strong>strong text</strong>, and <em>emphasized text</em>. It demonstrates the typography defaults.</p>
+            
+            <p>This is a standard paragraph with <a href="#">a link</a>, <strong>strong text</strong>, and <em>emphasized text</em>. It demonstrates the typography defaults.</p>
+            
+            <p class="text-sm">This is a small paragraph with <a href="#">a link</a>, <strong>strong text</strong>, and <em>emphasized text</em>. It demonstrates the typography defaults.</p>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-sm">Text Styles</h4>
+            <ul class="l-grid" style="--l-grid-min-item-size: 12rem;">
+              <li class="text-xs">Extra Small Text (.text-xs)</li>
+              <li class="text-sm">Small Text (.text-sm)</li>
+              <li class="text-base">Base Text (.text-base)</li>
+              <li class="text-lg">Large Text (.text-lg)</li>
+              <li class="text-xl">Extra Large (.text-xl)</li>
+              <li class="text-2xl">2XL Text (.text-2xl)</li>
+              <li class="text-3xl">3XL Text (.text-3xl)</li>
+              <li class="text-4xl">4XL Text (.text-4xl)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-sm">Font Weights</h4>
+            <ul class="l-grid" style="--l-grid-min-item-size: 12rem;">
+              <li class="font-thin">Thin 100 (.font-thin)</li>
+              <li class="font-extra-light">Extra Light 200 (.font-extra-light)</li>
+              <li class="font-light">Light 300 (.font-light)</li>
+              <li class="font-normal">Normal 400 (.font-normal)</li>
+              <li class="font-medium">Medium 500 (.font-medium)</li>
+              <li class="font-semibold">Semibold 600 (.font-semibold)</li>
+              <li class="font-bold">Bold 700 (.font-bold)</li>
+              <li class="font-extra-bold">Extra Bold 800 (.font-extra-bold)</li>
+              <li class="font-black">Black 900 (.font-black)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-sm">Line Heights</h4>
+            <ul class="l-grid" style="--l-grid-min-item-size: 20rem;">
+              <li class="leading-none border border-outline-subtle p-sm">Leading None (.leading-none): This text has no line height spacing, which makes it very compact but can be hard to read for longer text blocks.</li>
+              <li class="leading-tight border border-outline-subtle p-sm">Leading Tight (.leading-tight): This text has tight line height spacing, good for headings and short text blocks where space is at a premium.</li>
+              <li class="leading-snug border border-outline-subtle p-sm">Leading Snug (.leading-snug): This text has snug line height spacing, slightly more breathable than tight but still compact.</li>
+              <li class="leading-normal border border-outline-subtle p-sm">Leading Normal (.leading-normal): This text has normal line height spacing, good for most body text and general readability.</li>
+              <li class="leading-relaxed border border-outline-subtle p-sm">Leading Relaxed (.leading-relaxed): This text has relaxed line height spacing, providing more breathing room between lines for improved readability.</li>
+              <li class="leading-loose border border-outline-subtle p-sm">Leading Loose (.leading-loose): This text has loose line height spacing, providing maximum readability but takes up more vertical space.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-sm">Text Colors</h4>
+            <ul class="l-grid" style="--l-grid-min-item-size: 12rem;">
+              <li class="text-muted">Muted Text (.text-muted)</li>
+              <li class="text-subtle">Subtle Text (.text-subtle)</li>
+              <li class="text-default">Default Text (.text-default)</li>
+              <li class="text-overt">Overt Text (.text-overt)</li>
+              <li class="text-link">Link Text (.text-link)</li>
+              <li class="text-success">Success Text (.text-success)</li>
+              <li class="text-warning">Warning Text (.text-warning)</li>
+              <li class="text-error">Error Text (.text-error)</li>
+              <li class="text-info">Info Text (.text-info)</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="colors">
+        <h2 class="text-3xl font-bold">Colors</h2>
+        
+        <div class="l-stack gap-lg">
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Theme Surface Colors</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 9rem;">
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-base">Base</div>
+                <span class="text-sm text-center">.bg-base</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-bedrock">Bedrock</div>
+                <span class="text-sm text-center">.bg-bedrock</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-surface-muted">Surface Muted</div>
+                <span class="text-sm text-center">.bg-surface-muted</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-surface-subtle">Surface Subtle</div>
+                <span class="text-sm text-center">.bg-surface-subtle</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-surface-default">Surface Default</div>
+                <span class="text-sm text-center">.bg-surface-default</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-surface-overt">Surface Overt</div>
+                <span class="text-sm text-center">.bg-surface-overt</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Brand Colors</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 9rem;">
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent">Accent</div>
+                <span class="text-sm text-center">.bg-accent</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-muted">Accent Muted</div>
+                <span class="text-sm text-center">.bg-accent-muted</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-subtle">Accent Subtle</div>
+                <span class="text-sm text-center">.bg-accent-subtle</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-overt">Accent Overt</div>
+                <span class="text-sm text-center">.bg-accent-overt</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-secondary">Secondary</div>
+                <span class="text-sm text-center">.bg-secondary</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-tertiary">Tertiary</div>
+                <span class="text-sm text-center">.bg-tertiary</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Feedback Colors</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 9rem;">
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-success">Success</div>
+                <span class="text-sm text-center">.bg-success</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-warning">Warning</div>
+                <span class="text-sm text-center">.bg-warning</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-error">Error</div>
+                <span class="text-sm text-center">.bg-error</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-info">Info</div>
+                <span class="text-sm text-center">.bg-info</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-surface-success">Surface Success</div>
+                <span class="text-sm text-center">.bg-surface-success</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-surface-error">Surface Error</div>
+                <span class="text-sm text-center">.bg-surface-error</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Gray Scale</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 6rem;">
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-0">0</div>
+                <span class="text-sm text-center">.bg-gray-0</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-1">1</div>
+                <span class="text-sm text-center">.bg-gray-1</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-2">2</div>
+                <span class="text-sm text-center">.bg-gray-2</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-3">3</div>
+                <span class="text-sm text-center">.bg-gray-3</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-4">4</div>
+                <span class="text-sm text-center">.bg-gray-4</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-5">5</div>
+                <span class="text-sm text-center">.bg-gray-5</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-6">6</div>
+                <span class="text-sm text-center">.bg-gray-6</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-7">7</div>
+                <span class="text-sm text-center">.bg-gray-7</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-8">8</div>
+                <span class="text-sm text-center">.bg-gray-8</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-9">9</div>
+                <span class="text-sm text-center">.bg-gray-9</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-10">10</div>
+                <span class="text-sm text-center">.bg-gray-10</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-11">11</div>
+                <span class="text-sm text-center">.bg-gray-11</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-gray-12">12</div>
+                <span class="text-sm text-center">.bg-gray-12</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Accent Palette Scale</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 6rem;">
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-0">0</div>
+                <span class="text-sm text-center">.bg-accent-palette-0</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-1">1</div>
+                <span class="text-sm text-center">.bg-accent-palette-1</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-2">2</div>
+                <span class="text-sm text-center">.bg-accent-palette-2</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-3">3</div>
+                <span class="text-sm text-center">.bg-accent-palette-3</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-4">4</div>
+                <span class="text-sm text-center">.bg-accent-palette-4</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-5">5</div>
+                <span class="text-sm text-center">.bg-accent-palette-5</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-6">6</div>
+                <span class="text-sm text-center">.bg-accent-palette-6</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-7">7</div>
+                <span class="text-sm text-center">.bg-accent-palette-7</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-8">8</div>
+                <span class="text-sm text-center">.bg-accent-palette-8</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-9">9</div>
+                <span class="text-sm text-center">.bg-accent-palette-9</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-10">10</div>
+                <span class="text-sm text-center">.bg-accent-palette-10</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-11">11</div>
+                <span class="text-sm text-center">.bg-accent-palette-11</span>
+              </div>
+              <div class="l-stack gap-xs">
+                <div class="color-swatch bg-accent-palette-12">12</div>
+                <span class="text-sm text-center">.bg-accent-palette-12</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="buttons">
+        <h2 class="text-3xl font-bold">Buttons</h2>
+        
+        <div class="l-stack gap-lg">
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Basic Buttons</h3>
+            <div class="l-cluster gap-md">
+              <button class="button">Default Button</button>
+              <button class="button" disabled>Disabled Button</button>
+              <button class="button button--small">Small Button</button>
+              <button class="button button--large">Large Button</button>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Filled Buttons</h3>
+            <div class="l-cluster gap-md">
+              <button class="button button-filled-accent">Accent</button>
+              <button class="button button-filled-secondary">Secondary</button>
+              <button class="button button-filled-tertiary">Tertiary</button>
+              <button class="button button-filled-success">Success</button>
+              <button class="button button-filled-warning">Warning</button>
+              <button class="button button-filled-error">Error</button>
+              <button class="button button-filled-info">Info</button>
+              <button class="button button-filled-gray">Gray</button>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Outline Buttons</h3>
+            <div class="l-cluster gap-md">
+              <button class="button button-outline-accent">Accent</button>
+              <button class="button button-outline-secondary">Secondary</button>
+              <button class="button button-outline-tertiary">Tertiary</button>
+              <button class="button button-outline-success">Success</button>
+              <button class="button button-outline-warning">Warning</button>
+              <button class="button button-outline-error">Error</button>
+              <button class="button button-outline-info">Info</button>
+              <button class="button button-outline-gray">Gray</button>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Text Buttons</h3>
+            <div class="l-cluster gap-md">
+              <button class="button button-text-accent">Accent</button>
+              <button class="button button-text-secondary">Secondary</button>
+              <button class="button button-text-tertiary">Tertiary</button>
+              <button class="button button-text-success">Success</button>
+              <button class="button button-text-warning">Warning</button>
+              <button class="button button-text-error">Error</button>
+              <button class="button button-text-info">Info</button>
+              <button class="button button-text-gray">Gray</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="forms">
+        <h2 class="text-3xl font-bold">Forms</h2>
+        
+        <div class="l-stack gap-lg">
+          <div class="l-two-col">
+            <div class="l-stack gap-md">
+              <h3 class="text-xl font-semibold">Basic Form Elements</h3>
+              
+              <div class="form-group">
+                <label for="text-input" class="form-label">Text Input</label>
+                <input type="text" id="text-input" class="form-input" placeholder="Enter text">
+              </div>
+              
+              <div class="form-group">
+                <label for="email-input" class="form-label form-label--required">Email Input</label>
+                <input type="email" id="email-input" class="form-input" placeholder="Enter email">
+                <span class="form-help">We'll never share your email.</span>
+              </div>
+              
+              <div class="form-group">
+                <label for="password-input" class="form-label">Password Input</label>
+                <input type="password" id="password-input" class="form-input" placeholder="Enter password">
+              </div>
+              
+              <div class="form-group">
+                <label for="text-area" class="form-label">Text Area</label>
+                <textarea id="text-area" class="form-input" rows="3" placeholder="Enter longer text"></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="select-input" class="form-label">Select Input</label>
+                <select id="select-input" class="form-input form-select">
+                  <option value="">Select an option</option>
+                  <option value="1">Option 1</option>
+                  <option value="2">Option 2</option>
+                  <option value="3">Option 3</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="l-stack gap-md">
+              <h3 class="text-xl font-semibold">Form States & Variations</h3>
+              
+              <div class="form-group">
+                <label for="disabled-input" class="form-label">Disabled Input</label>
+                <input type="text" id="disabled-input" class="form-input" placeholder="Disabled input" disabled>
+              </div>
+              
+              <div class="form-group">
+                <label for="readonly-input" class="form-label">Readonly Input</label>
+                <input type="text" id="readonly-input" class="form-input" value="Readonly value" readonly>
+              </div>
+              
+              <div class="form-group">
+                <label for="invalid-input" class="form-label">Invalid Input</label>
+                <input type="text" id="invalid-input" class="form-input form-input--invalid" value="Invalid value">
+                <span class="form-error">This field is required.</span>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Checkbox</label>
+                <div class="form-checkbox">
+                  <input type="checkbox" id="checkbox-1" class="form-checkbox__input">
+                  <label for="checkbox-1" class="form-checkbox__label">Option 1</label>
+                </div>
+                <div class="form-checkbox">
+                  <input type="checkbox" id="checkbox-2" class="form-checkbox__input">
+                  <label for="checkbox-2" class="form-checkbox__label">Option 2</label>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Radio Buttons</label>
+                <div class="form-radio">
+                  <input type="radio" id="radio-1" name="radio-group" class="form-radio__input">
+                  <label for="radio-1" class="form-radio__label">Option 1</label>
+                </div>
+                <div class="form-radio">
+                  <input type="radio" id="radio-2" name="radio-group" class="form-radio__input">
+                  <label for="radio-2" class="form-radio__label">Option 2</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Sample Form</h3>
+            <div class="card">
+              <div class="card__header">
+                <h3 class="card__title">Contact Form</h3>
+                <p class="card__subtitle">Please fill out all required fields.</p>
+              </div>
+              <div class="card__body">
+                <form class="l-stack gap-md">
+                  <div class="l-two-col">
+                    <div class="form-group">
+                      <label for="first-name" class="form-label form-label--required">First Name</label>
+                      <input type="text" id="first-name" class="form-input" placeholder="Enter first name">
+                    </div>
+                    <div class="form-group">
+                      <label for="last-name" class="form-label form-label--required">Last Name</label>
+                      <input type="text" id="last-name" class="form-input" placeholder="Enter last name">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="form-email" class="form-label form-label--required">Email</label>
+                    <input type="email" id="form-email" class="form-input" placeholder="Enter email">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="form-subject" class="form-label">Subject</label>
+                    <select id="form-subject" class="form-input form-select">
+                      <option value="">Select a subject</option>
+                      <option value="support">Support</option>
+                      <option value="feedback">Feedback</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="form-message" class="form-label form-label--required">Message</label>
+                    <textarea id="form-message" class="form-input" rows="4" placeholder="Enter your message"></textarea>
+                  </div>
+                  
+                  <div class="form-checkbox">
+                    <input type="checkbox" id="form-terms" class="form-checkbox__input">
+                    <label for="form-terms" class="form-checkbox__label">I agree to the terms and conditions</label>
+                  </div>
+                </form>
+              </div>
+              <div class="card__footer">
+                <div class="l-spread">
+                  <button class="button button-text-gray">Cancel</button>
+                  <button class="button button-filled-accent">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="components">
+        <h2 class="text-3xl font-bold">Components</h2>
+        
+        <div class="l-stack gap-xl">
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Cards</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 18rem;">
+              <div class="card">
+                <div class="card__header">
+                  <h4 class="card__title">Standard Card</h4>
+                  <p class="card__subtitle">With header and footer</p>
+                </div>
+                <div class="card__body">
+                  <p>This is a standard card with a header and footer.</p>
+                </div>
+                <div class="card__footer">
+                  <button class="button button-filled-accent">Action</button>
+                </div>
+              </div>
+              
+              <div class="card card--flat">
+                <div class="card__body">
+                  <h4 class="mb-sm">Flat Card</h4>
+                  <p>This is a flat card with no shadow.</p>
+                </div>
+              </div>
+              
+              <div class="card card--hover">
+                <div class="card__body">
+                  <h4 class="mb-sm">Hover Card</h4>
+                  <p>This card has a hover effect. Try hovering over it!</p>
+                </div>
+              </div>
+              
+              <div class="card card--borderless shadow-md">
+                <div class="card__body">
+                  <h4 class="mb-sm">Borderless Card</h4>
+                  <p>This card has no border but includes a shadow.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Alerts</h3>
+            <div class="l-stack gap-md">
+              <div class="alert">
+                <div class="alert__content">
+                  <h4 class="alert__title">Default Alert</h4>
+                  <p class="alert__message">This is a default alert.</p>
+                </div>
+              </div>
+              
+              <div class="alert alert--info">
+                <div class="alert__icon">ℹ️</div>
+                <div class="alert__content">
+                  <h4 class="alert__title">Info Alert</h4>
+                  <p class="alert__message">This is an informational alert.</p>
+                </div>
+                <button class="alert__close">×</button>
+              </div>
+              
+              <div class="alert alert--success">
+                <div class="alert__icon">✅</div>
+                <div class="alert__content">
+                  <h4 class="alert__title">Success Alert</h4>
+                  <p class="alert__message">Your action was completed successfully.</p>
+                </div>
+                <button class="alert__close">×</button>
+              </div>
+              
+              <div class="alert alert--warning">
+                <div class="alert__icon">⚠️</div>
+                <div class="alert__content">
+                  <h4 class="alert__title">Warning Alert</h4>
+                  <p class="alert__message">Be careful with this action.</p>
+                </div>
+                <button class="alert__close">×</button>
+              </div>
+              
+              <div class="alert alert--error">
+                <div class="alert__icon">⛔</div>
+                <div class="alert__content">
+                  <h4 class="alert__title">Error Alert</h4>
+                  <p class="alert__message">An error has occurred.</p>
+                </div>
+                <button class="alert__close">×</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Badges</h3>
+            <div class="l-cluster gap-md">
+              <span class="badge">Default</span>
+              <span class="badge badge--success">Success</span>
+              <span class="badge badge--warning">Warning</span>
+              <span class="badge badge--error">Error</span>
+              <span class="badge badge--info">Info</span>
+              <span class="badge badge--accent">Accent</span>
+              <span class="badge badge--pill">Pill</span>
+              <span class="badge badge--outline">Outline</span>
+              <span class="badge"><span class="badge__dot"></span>With Dot</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Navigation</h3>
+            <div class="l-two-col">
+              <div>
+                <h4 class="text-lg font-semibold mb-sm">Horizontal Navigation</h4>
+                <nav>
+                  <ul class="nav">
+                    <li class="nav__item">
+                      <a href="#" class="nav__link nav__link--active">Home</a>
+                    </li>
+                    <li class="nav__item">
+                      <a href="#" class="nav__link">Products</a>
+                    </li>
+                    <li class="nav__item">
+                      <a href="#" class="nav__link">Services</a>
+                    </li>
+                    <li class="nav__item">
+                      <a href="#" class="nav__link">Contact</a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+              
+              <div>
+                <h4 class="text-lg font-semibold mb-sm">Vertical Navigation</h4>
+                <nav>
+                  <ul class="nav nav--vertical">
+                    <li class="nav__item">
+                      <a href="#" class="nav__link nav__link--active">Home</a>
+                    </li>
+                    <li class="nav__item">
+                      <a href="#" class="nav__link">Products</a>
+                    </li>
+                    <li class="nav__item">
+                      <a href="#" class="nav__link">Services</a>
+                    </li>
+                    <li class="nav__item">
+                      <a href="#" class="nav__link">Contact</a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Breadcrumbs</h3>
+            <nav aria-label="Breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb__item">
+                  <a href="#" class="breadcrumb__link">Home</a>
+                </li>
+                <li class="breadcrumb__item">
+                  <a href="#" class="breadcrumb__link">Category</a>
+                </li>
+                <li class="breadcrumb__item">
+                  <a href="#" class="breadcrumb__link breadcrumb__link--active">Current Page</a>
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="layouts">
+        <h2 class="text-3xl font-bold">Layouts</h2>
+        
+        <div class="l-stack gap-xl">
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Grid Layout</h3>
+            <div class="l-grid">
+              <div class="bg-surface-subtle p-md rounded-md">Grid Item 1</div>
+              <div class="bg-surface-subtle p-md rounded-md">Grid Item 2</div>
+              <div class="bg-surface-subtle p-md rounded-md">Grid Item 3</div>
+              <div class="bg-surface-subtle p-md rounded-md">Grid Item 4</div>
+              <div class="bg-surface-subtle p-md rounded-md">Grid Item 5</div>
+              <div class="bg-surface-subtle p-md rounded-md">Grid Item 6</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Two Column Layout</h3>
+            <div class="l-two-col">
+              <div class="bg-surface-subtle p-md rounded-md">Column 1</div>
+              <div class="bg-surface-subtle p-md rounded-md">Column 2</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Split Layout</h3>
+            <div class="l-split" style="--l-split-fraction: 2fr;">
+              <div class="bg-surface-subtle p-md rounded-md">Wider Column (2fr)</div>
+              <div class="bg-surface-subtle p-md rounded-md">Narrower Column (1fr)</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Row Layout</h3>
+            <div class="l-row">
+              <div class="bg-surface-subtle p-md rounded-md">Item 1</div>
+              <div class="bg-surface-subtle p-md rounded-md">Item 2</div>
+              <div class="bg-surface-subtle p-md rounded-md">Item 3</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Stack Layout</h3>
+            <div class="l-stack" style="--l-stack-gap: var(--space-lg);">
+              <div class="bg-surface-subtle p-md rounded-md">Stack Item 1</div>
+              <div class="bg-surface-subtle p-md rounded-md">Stack Item 2</div>
+              <div class="bg-surface-subtle p-md rounded-md">Stack Item 3</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Cluster Layout</h3>
+            <div class="l-cluster">
+              <span class="badge badge--accent">Tag 1</span>
+              <span class="badge badge--accent">Tag 2</span>
+              <span class="badge badge--accent">Longer Tag 3</span>
+              <span class="badge badge--accent">Tag 4</span>
+              <span class="badge badge--accent">Another Tag 5</span>
+              <span class="badge badge--accent">Last Tag 6</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Reel Layout</h3>
+            <div class="l-reel">
+              <div class="card" style="min-width: 300px;">
+                <div class="card__body">Reel Item 1</div>
+              </div>
+              <div class="card" style="min-width: 300px;">
+                <div class="card__body">Reel Item 2</div>
+              </div>
+              <div class="card" style="min-width: 300px;">
+                <div class="card__body">Reel Item 3</div>
+              </div>
+              <div class="card" style="min-width: 300px;">
+                <div class="card__body">Reel Item 4</div>
+              </div>
+              <div class="card" style="min-width: 300px;">
+                <div class="card__body">Reel Item 5</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Sidebar Layout</h3>
+            <div class="l-sidebar">
+              <aside class="l-sidebar__aside bg-surface-subtle p-md rounded-md">
+                <h4 class="text-lg font-semibold mb-sm">Sidebar</h4>
+                <nav>
+                  <ul class="nav nav--vertical">
+                    <li class="nav__item">
+                      <a href="#" class="nav__link nav__link--active">Link 1</a>
+                    </li>
+                    <li class="nav__item">
+                      <a href="#" class="nav__link">Link 2</a>
+                    </li>
+                    <li class="nav__item">
+                      <a href="#" class="nav__link">Link 3</a>
+                    </li>
+                  </ul>
+                </nav>
+              </aside>
+              <main class="bg-surface-default p-md rounded-md">
+                <h4 class="text-lg font-semibold mb-sm">Main Content</h4>
+                <p>This is the main content area that goes alongside the sidebar. This area will typically have the majority of the content.</p>
+              </main>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Center Content</h3>
+            <div class="l-center-content bg-surface-subtle p-md rounded-md">
+              <p>This content is centered with a max width. It's useful for creating readable text columns.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="utilities">
+        <h2 class="text-3xl font-bold">Utilities</h2>
+        
+        <div class="l-stack gap-lg">
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Spacing Utilities</h3>
+            <div class="l-stack gap-md">
+              <div class="bg-surface-subtle p-xs rounded-md">Padding Extra Small (p-xs)</div>
+              <div class="bg-surface-subtle p-sm rounded-md">Padding Small (p-sm)</div>
+              <div class="bg-surface-subtle p-md rounded-md">Padding Medium (p-md)</div>
+              <div class="bg-surface-subtle p-lg rounded-md">Padding Large (p-lg)</div>
+              <div class="bg-surface-subtle p-xl rounded-md">Padding Extra Large (p-xl)</div>
+            </div>
+            
+            <div class="bg-surface-subtle rounded-md mt-md">
+              <div class="m-xs bg-surface-default rounded-md">Margin Extra Small (m-xs)</div>
+            </div>
+            <div class="bg-surface-subtle rounded-md">
+              <div class="m-sm bg-surface-default rounded-md">Margin Small (m-sm)</div>
+            </div>
+            <div class="bg-surface-subtle rounded-md">
+              <div class="m-md bg-surface-default rounded-md">Margin Medium (m-md)</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Border Utilities</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 12rem;">
+              <div class="bg-surface-default p-md border rounded-md">Border (border)</div>
+              <div class="bg-surface-default p-md border-thin rounded-md">Border Thin (border-thin)</div>
+              <div class="bg-surface-default p-md border-thick rounded-md">Border Thick (border-thick)</div>
+              <div class="bg-surface-default p-md border border-accent rounded-md">Border Accent (border-accent)</div>
+              <div class="bg-surface-default p-md border border-success rounded-md">Border Success (border-success)</div>
+              <div class="bg-surface-default p-md border border-error rounded-md">Border Error (border-error)</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Border Radius Utilities</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 12rem;">
+              <div class="bg-surface-default p-md border rounded-none">None (rounded-none)</div>
+              <div class="bg-surface-default p-md border rounded-sm">Small (rounded-sm)</div>
+              <div class="bg-surface-default p-md border rounded-md">Medium (rounded-md)</div>
+              <div class="bg-surface-default p-md border rounded-lg">Large (rounded-lg)</div>
+              <div class="bg-surface-default p-md border rounded-xl">Extra Large (rounded-xl)</div>
+              <div class="bg-surface-default p-md border rounded-full">Full (rounded-full)</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Shadow Utilities</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 12rem;">
+              <div class="bg-surface-default p-md rounded-md shadow-none">None (shadow-none)</div>
+              <div class="bg-surface-default p-md rounded-md shadow-sm">Small (shadow-sm)</div>
+              <div class="bg-surface-default p-md rounded-md shadow-md">Medium (shadow-md)</div>
+              <div class="bg-surface-default p-md rounded-md shadow-lg">Large (shadow-lg)</div>
+              <div class="bg-surface-default p-md rounded-md shadow-xl">Extra Large (shadow-xl)</div>
+              <div class="bg-surface-default p-md rounded-md shadow-inner">Inner (shadow-inner)</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Display Utilities</h3>
+            <div class="l-stack gap-md">
+              <div class="bg-surface-default p-md rounded-md block">Block (block)</div>
+              <div class="bg-surface-default p-md rounded-md inline-block">Inline Block (inline-block)</div>
+              <div class="bg-surface-default p-md rounded-md">Inline <span class="inline bg-accent-subtle p-xs rounded-sm">Inline (inline)</span> Text</div>
+              <div class="bg-surface-default p-md rounded-md flex gap-sm">
+                <span class="bg-accent-subtle p-xs rounded-sm">Flex (flex)</span>
+                <span class="bg-accent-subtle p-xs rounded-sm">Item</span>
+                <span class="bg-accent-subtle p-xs rounded-sm">Layout</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Opacity Utilities</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 12rem;">
+              <div class="bg-accent p-md rounded-md opacity-100">100% (opacity-100)</div>
+              <div class="bg-accent p-md rounded-md opacity-75">75% (opacity-75)</div>
+              <div class="bg-accent p-md rounded-md opacity-60">60% (opacity-60)</div>
+              <div class="bg-accent p-md rounded-md opacity-40">40% (opacity-40)</div>
+              <div class="bg-accent p-md rounded-md opacity-20">20% (opacity-20)</div>
+              <div class="bg-accent p-md rounded-md opacity-10">10% (opacity-10)</div>
+              <div class="bg-accent p-md rounded-md opacity-5">5% (opacity-5)</div>
+              <div class="bg-accent p-md rounded-md opacity-0">0% (opacity-0)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="bg-surface-default border-t border-outline-subtle mt-xl">
+    <div class="l-center-content l-pad l-stack gap-md">
+      <div class="l-spread">
+        <p>CSS Framework Test Page</p>
+        <p class="text-subtle">Version 1.0.0</p>
+      </div>
+      <p class="text-subtle text-sm text-center">Created to showcase the features of the CSS Framework.</p>
+    </div>
+  </footer>
+
+  <button class="toggle-theme" onclick="toggleTheme()">
+    <span class="light-icon">🌙</span>
+    <span class="dark-icon">☀️</span>
+  </button>
+
+  <script>
+    // Theme toggle function
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Initialize theme from localStorage or system preference
+    document.addEventListener('DOMContentLoaded', () => {
+      const storedTheme = localStorage.getItem('theme');
+      
+      if (storedTheme === 'dark') {
+        document.body.classList.add('dark');
+      } else if (storedTheme === 'light') {
+        document.body.classList.remove('dark');
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+      }
+    });
+  </script>
+</body>
+</html>

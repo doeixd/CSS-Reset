@@ -1,0 +1,33 @@
+/**
+ * Modern CSS Reset & Component Library
+ * A comprehensive CSS reset and component library with design tokens, theme engine, 
+ * enhanced accessibility features, and utility-first approach.
+ * 
+ * Features:
+ * - Zero-specificity CSS reset using :where()
+ * - Modern color handling with OKLCH
+ * - Comprehensive design token system
+ * - Auto-calculated contrast for text
+ * - Enhanced high contrast mode handling
+ * - Comprehensive shadow system
+ * - Enhanced focus state handling
+ * - Explicit link styling
+ * - Named container query breakpoints
+ * - Built-in dark mode support
+ * - Extensive utility class system
+ * - Layout primitives
+ */
+
+/* Define the CSS cascade layers in specific order of precedence */
+@layer reset, tokens, engine, theme, palette, defaults, components, utilities, layouts;
+
+/* Import all the layers in the defined cascade order */
+@import url("reset.css");
+@import url("tokens.css");
+@import url("engine.css");
+@import url("theme.css");
+@import url("palette.css");
+@import url("defaults.css");
+@import url("components.css");
+@import url("utilities.css");
+@import url("layouts.css");
