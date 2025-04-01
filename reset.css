@@ -1,676 +1,608 @@
-/* ================================================ /
-/ ==              LAYER DEFINITION              == /
-/ ================================================ /
-/ Defines the cascade order. Reset -> Defaults -> Theme -> Utilities. /
-/ Utilities have higher specificity than theme defaults but can be /
-/ overridden by component styles or inline styles. */
-@layer reset, defaults, theme, utilities;
+/* ================================================ */
+/* ==              LAYER DEFINITION              == */
+/* ================================================ */
+/* Defines the cascade order. Reset -> Defaults -> Theme -> Utilities -> Layouts. */
+/* Utilities have higher specificity than theme defaults but can be */
+/* overridden by component styles or inline styles. Layouts build upon utilities. */
+@layer reset, defaults, theme, utilities, layouts; /* Added 'layouts' */
 
-/* ================================================ /
-/ ==               @layer reset                 == /
-/ ================================================ /
-/ Purpose: Neutralize browser styles, fix inconsistencies, /
-/ establish predictable baseline behavior, and provide a clean /
-/ slate with zero specificity (:where). */
+/* ================================================ */
+/* ==               @layer reset                 == */
+/* ================================================ */
+/* Purpose: Neutralize browser styles, fix inconsistencies, */
+/* establish predictable baseline behavior, and provide a clean */
+/* slate with zero specificity (:where). */
 @layer reset {
 
-/* --- Core Resets --- */
-:where(, *::before, *::after) {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-vertical-align: baseline;
-min-width: 0;
-font: inherit;
-color: inherit;
-line-height: inherit;
-}
+  /* --- Core Resets --- */
+  :where(*, *::before, *::after) { /* Combined '*' into the :where */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    vertical-align: baseline;
+    min-width: 0;
+    font: inherit;
+    color: inherit;
+    line-height: inherit;
+  }
 
-/* --- Document Level --- */
-:where(html) {
-text-size-adjust: 100%;
--webkit-text-size-adjust: 100%;
--moz-text-size-adjust: none;
-tab-size: 4;
-height: 100%;
-}
-:where(body) {
-min-height: 100%;
-}
+  /* --- Document Level --- */
+  :where(html) {
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: none; /* Note: -moz- is largely deprecated, but harmless */
+    tab-size: 4;
+    height: 100%; /* Ensure scroll behaviors work as expected */
+  }
+  :where(body) {
+    min-height: 100%;
+  }
 
-/* --- Element Display & Behavior --- */
-:where(:is(img, picture, video, canvas, svg, :not(:defined))) {
-display: block;
-max-width: 100%;
-height: auto;
-}
-:where(svg) {
-fill: currentColor;
-stroke: currentColor;
-stroke-width: 0;
-}
+  /* --- Element Display & Behavior --- */
+  :where(:is(img, picture, video, canvas, svg, :not(:defined))) { /* :not(:defined) is experimental but useful */
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  :where(svg) {
+    fill: currentColor;
+    stroke: currentColor;
+    stroke-width: 0;
+  }
 
-/* Form element normalization */
-:where(button, input, select, textarea) {
-appearance: none;
-border-radius: 0;
-background-color: transparent;
-letter-spacing: inherit;
-border: 1px solid transparent;
-}
-:where(button) {
-border: none;
-background: none;
-text-align: inherit;
-}
-:where(textarea) {
-resize: vertical;
-overflow: auto;
-}
+  /* Form element normalization */
+  :where(button, input, select, textarea) {
+    appearance: none; /* Be aware this removes native select dropdown arrows etc. */
+    -webkit-appearance: none; /* Include -webkit- prefix for broader compatibility */
+    -moz-appearance: none; /* Include -moz- prefix */
+    border-radius: 0;
+    background-color: transparent;
+    letter-spacing: inherit;
+    border: 1px solid transparent; /* Prevents layout shift if border added later */
+  }
+  :where(button) {
+    border: none; /* Overrides the previous border setting specifically for buttons */
+    background: none;
+    text-align: inherit;
+  }
+  :where(textarea) {
+    resize: vertical; /* Common preference */
+    overflow: auto; /* Default, but ensures consistency */
+  }
 
-/* Default cursors */
-:where(button, select:not([disabled]), input[type="button"], input[type="submit"], input[type="reset"], input[type="checkbox"], input[type="radio"], label) {
-cursor: pointer;
-}
-:where(input[type="text"], input[type="email"], input[type="search"], input[type="url"], input[type="tel"], input[type="number"], input[type="password"], textarea) {
-cursor: text;
-}
-:where([disabled]) {
-cursor: not-allowed;
-}
+  /* Default cursors */
+  :where(button, select:not([disabled]), input[type="button"], input[type="submit"], input[type="reset"], input[type="checkbox"], input[type="radio"], label) {
+    cursor: pointer;
+  }
+  :where(input[type="text"], input[type="email"], input[type="search"], input[type="url"], input[type="tel"], input[type="number"], input[type="password"], textarea) {
+    cursor: text;
+  }
+  :where([disabled]) {
+    cursor: not-allowed;
+  }
 
-/* --- Text Element Resets --- */
-:where(p, h1, h2, h3, h4, h5, h6, li, dd, dt, blockquote) {
-overflow-wrap: break-word;
-}
-:where(h1, h2, h3, h4, h5, h6) {
-text-wrap: balance;
-font-size: inherit;
-font-weight: inherit;
-}
-:where(p, blockquote, li) {
-text-wrap: pretty;
-}
-:where(a) {
-text-decoration: inherit;
-}
-:where(abbr[title]) {
-text-decoration: underline dotted;
-cursor: help;
-}
+  /* --- Text Element Resets --- */
+  :where(p, h1, h2, h3, h4, h5, h6, li, dd, dt, blockquote) {
+    overflow-wrap: break-word;
+  }
+  :where(h1, h2, h3, h4, h5, h6) {
+    text-wrap: balance; /* Nice modern enhancement for headings */
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  :where(p, blockquote, li) {
+    text-wrap: pretty; /* Nice modern enhancement for paragraphs */
+  }
+  :where(a) {
+    text-decoration: inherit;
+  }
+  :where(abbr[title]) {
+    text-decoration: underline dotted;
+    cursor: help;
+  }
 
-/* --- Other Element Resets --- /
-:where(table) {
-text-indent: 0;
-border-color: inherit;
-border-collapse: collapse;
-border-spacing: 0;
-}
-:where(ul, ol) {
-list-style: none;
-}
-:where([src='']) { display: none; }
-:where(::backdrop) { all: unset; }
-:where(:not(html, body, svg, img, video, canvas, iframe, frame, object, embed, hr, :where(button, input, select, textarea), table, thead, tbody, tfoot, tr, th, td, details, summary, fieldset)) {
-border-style: solid;
-border-width: 0;
-}
+  /* --- Other Element Resets --- */ /* Fixed comment syntax */
+  :where(table) {
+    text-indent: 0;
+    border-color: inherit; /* Use inherit for potential overrides */
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  :where(ul, ol) {
+    list-style: none;
+  }
+  :where([src='']) { display: none; } /* Hide elements with empty src */
+  :where(::backdrop) { all: unset; } /* Reset backdrop pseudo-element */
+  :where(:not(html, body, svg, img, video, canvas, iframe, frame, object, embed, hr, :where(button, input, select, textarea), table, thead, tbody, tfoot, tr, th, td, details, summary, fieldset)) {
+    border-style: solid;
+    border-width: 0;
+  } /* This is a broad selector, ensure excluded elements are correct */
 
-/* --- Accessibility & Utilities --- */
-:where([hidden]) { display: none !important; }
-:where(.visually-hidden:not(:focus):not(:active), .sr-only:not(:focus):not(:active)) {
-clip: rect(0 0 0 0);
-clip-path: inset(50%);
-height: 1px;
-overflow: hidden;
-position: absolute;
-white-space: nowrap;
-width: 1px;
-}
+  /* --- Accessibility & Utilities --- */
+  :where([hidden]) { display: none !important; } /* Ensure hidden has priority */
+  :where(.visually-hidden:not(:focus):not(:active), .sr-only:not(:focus):not(:active)) {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
 
-/* --- Modern Feature Opt-ins --- /
-@view-transition {
-navigation: auto;
-}
-} / End of @layer reset */
+  /* --- Modern Feature Opt-ins --- */ /* Fixed comment syntax */
+  @view-transition {
+    navigation: auto;
+  }
+} /* End of @layer reset */
 
-/* ================================================ /
-/ ==              @layer defaults               == /
-/ ================================================ /
-/ Purpose: Apply structural styles and basic appearance /
-/ using variables defined in the @theme layer. */
+/* ================================================ */
+/* ==              @layer defaults               == */
+/* ================================================ */
+/* Purpose: Apply structural styles and basic appearance */
+/* using variables defined in the @theme layer. */
 @layer defaults {
 
-/* --- Base Body & Document Styles --- */
-body {
-font-family: var(--font-primary, sans-serif);
-color: var(--text-1, #111);
-background-color: var(--base-bg, #fff);
-line-height: var(--body-line-height, 1.5);
+  /* --- Base Body & Document Styles --- */
+  body {
+    font-family: var(--font-primary, sans-serif);
+    color: var(--text-1, #111); /* Ensure fallback */
+    background-color: var(--base-bg, #fff); /* Ensure fallback */
+    line-height: var(--body-line-height, 1.5);
 
--webkit-font-smoothing: var(--font-smoothing-webkit, antialiased);
--moz-osx-font-smoothing: var(--font-smoothing-moz, grayscale);
-font-synthesis: var(--font-synthesis, none);
-text-rendering: var(--text-rendering, optimizeLegibility);
-hyphens: var(--body-hyphens, auto);
-scroll-behavior: var(--scroll-behavior, smooth);
+    -webkit-font-smoothing: var(--font-smoothing-webkit, antialiased);
+    -moz-osx-font-smoothing: var(--font-smoothing-moz, grayscale);
+    font-synthesis: var(--font-synthesis, none);
+    text-rendering: var(--text-rendering, optimizeLegibility);
+    hyphens: var(--body-hyphens, auto);
+    scroll-behavior: var(--scroll-behavior, smooth);
+  }
 
-::selection {
-   background-color: var(--selection-bg, Highlight); 
-   color: var(--selection-text, HighlightText);
-}
+  ::selection {
+    background-color: var(--selection-bg, Highlight); /* Use standard keywords as fallback */
+    color: var(--selection-text, HighlightText);
+  }
 
+  /* --- Typography Defaults --- */
+  h1, h2, h3, h4, h5, h6, p, ul, ol, dl, pre, blockquote, figure, table, hr, details {
+    margin-block: 0 var(--space-flow, 1em); /* Consistent vertical rhythm */
+  }
+  :is(article, section, aside, div, li, dd, dt, blockquote) > :last-child {
+    margin-block-end: 0; /* Remove bottom margin from last child in containers */
+  }
 
-}
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-heading, 600);
+    line-height: var(--line-height-heading, 1.2);
+    color: var(--text-heading, var(--text-1, inherit));
+    letter-spacing: var(--letter-spacing-heading, normal);
+  }
+  h1 { font-size: var(--font-size-h1, 2.5rem); }
+  h2 { font-size: var(--font-size-h2, 2.0rem); }
+  h3 { font-size: var(--font-size-h3, 1.75rem); }
+  h4 { font-size: var(--font-size-h4, 1.5rem); }
+  h5 { font-size: var(--font-size-h5, 1.25rem); }
+  h6 { font-size: var(--font-size-h6, 1.0rem); letter-spacing: var(--letter-spacing-h6, 0.5px); text-transform: var(--text-transform-h6, uppercase); }
 
-/* --- Typography Defaults --- */
-h1, h2, h3, h4, h5, h6, p, ul, ol, dl, pre, blockquote, figure, table, hr, details {
-margin-block: 0 var(--space-flow, 1em);
-}
-:is(article, section, aside, div, li, dd, dt, blockquote) > :last-child {
-margin-block-end: 0;
-}
+  p {
+    line-height: var(--body-line-height, 1.6); /* Potentially different from base line-height */
+    color: var(--text-2, var(--text-1, inherit));
+  }
 
-h1, h2, h3, h4, h5, h6 {
-font-weight: var(--font-weight-heading, 600);
-line-height: var(--line-height-heading, 1.2);
-color: var(--text-heading, var(--text-1, inherit));
-letter-spacing: var(--letter-spacing-heading, normal);
-}
-h1 { font-size: var(--font-size-h1, 2.5rem); }
-h2 { font-size: var(--font-size-h2, 2.0rem); }
-h3 { font-size: var(--font-size-h3, 1.75rem); }
-h4 { font-size: var(--font-size-h4, 1.5rem); }
-h5 { font-size: var(--font-size-h5, 1.25rem); }
-h6 { font-size: var(--font-size-h6, 1.0rem); letter-spacing: var(--letter-spacing-h6, 0.5px); text-transform: var(--text-transform-h6, uppercase); }
+  /* Lists */
+  ul, ol {
+    padding-inline-start: var(--space-list-indent, 1.5em);
+  }
+  ul { list-style: var(--list-style-unordered, disc); }
+  ol { list-style: var(--list-style-ordered, decimal); }
+  li { margin-block-end: var(--space-list-item, 0.5em); }
+  li > ul, li > ol {
+    margin-block-start: var(--space-list-item, 0.5em); /* Consistent spacing for nested lists */
+    margin-block-end: 0;
+  }
+  dt { font-weight: var(--font-weight-medium, 500); color: var(--text-1, inherit); }
+  dd { padding-inline-start: var(--space-list-indent, 1.5em); color: var(--text-2, inherit); }
+  dd + dt { margin-block-start: var(--space-md, 1rem); } /* Space between definition pairs */
 
-p {
-line-height: var(--body-line-height, 1.6);
-color: var(--text-2, var(--text-1, inherit));
-}
+  /* Links */
+  a {
+    color: var(--link-color, var(--accent-text, blue));
+    text-decoration: var(--link-decoration, none);
+    transition: color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
+                text-decoration-color var(--transition-duration, 200ms) var(--transition-timing, ease-out);
+  }
+  a:hover, a:focus-visible {
+    color: var(--link-color-hover, var(--link-color, blue));
+    text-decoration: var(--link-decoration-hover, underline);
+    text-decoration-thickness: var(--link-underline-thickness, 1.5px);
+    text-underline-offset: var(--link-underline-offset, 0.15em);
+  }
 
-/* Lists */
-ul, ol {
-padding-inline-start: var(--space-list-indent, 1.5em);
-}
-ul { list-style: var(--list-style-unordered, disc); }
-ol { list-style: var(--list-style-ordered, decimal); }
-li { margin-block-end: var(--space-list-item, 0.5em); }
-li > ul, li > ol {
-margin-block-start: var(--space-list-item, 0.5em);
-margin-block-end: 0;
-}
-dt { font-weight: var(--font-weight-medium, 500); color: var(--text-1); }
-dd { padding-inline-start: var(--space-list-indent, 1.5em); color: var(--text-2); }
-dd + dt { margin-block-start: var(--space-md, 1rem); }
+  /* Code blocks and inline code */
+  pre, code, kbd, samp {
+    font-family: var(--font-mono, monospace);
+    font-size: var(--font-size-code, 0.9em);
+    line-height: var(--line-height-code, 1.4);
+    color: var(--text-code, var(--text-1, inherit));
+  }
+  pre {
+    padding: var(--space-code-block-y, 0.8em) var(--space-code-block-x, 1em);
+    border-radius: var(--radius-md, 6px);
+    overflow-x: auto; /* Essential for long lines */
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    /* Background/border color applied in @theme */
+  }
+  :not(pre) > code, kbd, samp {
+    padding: var(--space-code-inline-y, 0.2em) var(--space-code-inline-x, 0.4em);
+    border-radius: var(--radius-sm, 3px);
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    /* Background/border color applied in @theme */
+  }
+  kbd {
+    letter-spacing: 0.5px; /* Helps distinguish keyboard input */
+  }
 
-/* Links */
-a {
-color: var(--link-color, var(--accent-text, blue));
-text-decoration: var(--link-decoration, none);
-transition: color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
-text-decoration-color var(--transition-duration, 200ms) var(--transition-timing, ease-out);
-}
-a:hover, a:focus-visible {
-color: var(--link-color-hover, var(--link-color, blue));
-text-decoration: var(--link-decoration-hover, underline);
-text-decoration-thickness: var(--link-underline-thickness, 1.5px);
-text-underline-offset: var(--link-underline-offset, 0.15em);
-}
+  /* Blockquotes */
+  blockquote {
+    margin-inline: var(--space-blockquote-margin-inline, 1em); /* Fixed variable name typo */
+    padding-inline-start: var(--space-blockquote-pad, 1em);
+    border-inline-start-width: var(--border-width-blockquote, 3px);
+    border-inline-start-style: solid;
+    color: var(--text-blockquote, var(--text-2, inherit));
+    /* Border color applied in @theme */
+  }
 
-/* Code blocks and inline code */
-pre, code, kbd, samp {
-font-family: var(--font-mono, monospace);
-font-size: var(--font-size-code, 0.9em);
-line-height: var(--line-height-code, 1.4);
-color: var(--text-code, var(--text-1, inherit));
-}
-pre {
-padding: var(--space-code-block-y, 0.8em) var(--space-code-block-x, 1em);
-border-radius: var(--radius-md, 6px);
-overflow-x: auto;
-border-width: var(--border-width, 1px);
-border-style: solid;
-}
-:not(pre) > code, kbd, samp {
-padding: var(--space-code-inline-y, 0.2em) var(--space-code-inline-x, 0.4em);
-border-radius: var(--radius-sm, 3px);
-border-width: var(--border-width, 1px);
-border-style: solid;
-}
-kbd {
-letter-spacing: 0.5px;
-}
+  /* Horizontal Rule */
+  hr {
+    border: none; /* Reset browser border */
+    border-block-start-width: var(--border-width, 1px);
+    border-block-start-style: solid;
+    /* Color applied in @theme */
+  }
 
-/* Blockquotes */
-blockquote {
-margin-inline: var(--space-blockquote- Muted, 1em);
-padding-inline-start: var(--space-blockquote-pad, 1em);
-border-inline-start-width: var(--border-width-blockquote, 3px);
-border-inline-start-style: solid;
-color: var(--text-blockquote, var(--text-2, inherit));
-}
+  /* --- Form Element Defaults --- */
+  input, select, textarea, fieldset {
+    padding: var(--space-input-y, 0.6em) var(--space-input-x, 0.8em);
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    border-radius: var(--radius-md, 6px);
+    color: var(--input-text, var(--text-1, inherit));
+    font-size: var(--font-size-input, 1rem);
+    transition: border-color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
+                box-shadow var(--transition-duration, 200ms) var(--transition-timing, ease-out),
+                background-color var(--transition-duration, 200ms) var(--transition-timing, ease-out);
+    width: 100%; /* Default to full width, override as needed */
+    /* Background/border color applied in @theme */
+  }
+  fieldset {
+    padding: var(--space-fieldset-y, 1.5em) var(--space-fieldset-x, 1.2em);
+    /* Border color applied in @theme */
+  }
+  legend {
+    padding-inline: var(--space-xs, 0.5rem); /* Use spacing variable */
+    font-weight: var(--font-weight-medium, 500); /* Corrected variable name */
+    color: var(--text-1, inherit);
+  }
+  /* Correct width for elements that shouldn't be 100% by default */
+  input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="button"], input[type="reset"], button {
+    width: auto;
+  }
 
-/* Horizontal Rule */
-hr {
-border: none;
-border-block-start-width: var(--border-width, 1px);
-border-block-start-style: solid;
-}
+  /* Button Structure */ /* Fixed comment syntax */
+  button, input[type="button"], input[type="submit"], input[type="reset"] {
+    padding: var(--space-button-y, 0.7em) var(--space-button-x, 1.3em);
+    border-radius: var(--radius-md, 6px);
+    font-weight: var(--font-weight-button, 500);
+    border-width: var(--border-width-button, 1px);
+    border-style: solid;
+    transition: background-color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
+                border-color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
+                color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
+                box-shadow var(--transition-duration, 200ms) var(--transition-timing, ease-out),
+                transform calc(var(--transition-duration, 200ms) / 2) var(--transition-timing, ease-out);
+    line-height: 1; /* Ensure text aligns vertically */
+    box-shadow: var(--shadow-button, none); /* Base shadow */
+    /* Colors/borders applied via utility classes in @utilities */
+  }
+  button:hover:not([disabled]),
+  input[type="button"]:hover:not([disabled]),
+  input[type="submit"]:hover:not([disabled]),
+  input[type="reset"]:hover:not([disabled]) {
+    transform: var(--transform-button-hover, translateY(-1px));
+    box-shadow: var(--shadow-button-hover, 0 2px 4px rgba(0,0,0,0.1)); /* Ensure fallback */
+  }
+  button:active:not([disabled]),
+  input[type="button"]:active:not([disabled]),
+  input[type="submit"]:active:not([disabled]),
+  input[type="reset"]:active:not([disabled]) {
+    transform: var(--transform-button-active, translateY(0px));
+    box-shadow: var(--shadow-button-active, none); /* Active shadow */
+  } /* Added missing closing brace */
 
-/* --- Form Element Defaults --- */
-input, select, textarea, fieldset {
-padding: var(--space-input-y, 0.6em) var(--space-input-x, 0.8em);
-border-width: var(--border-width, 1px);
-border-style: solid;
-border-radius: var(--radius-md, 6px);
-color: var(--input-text, var(--text-1, inherit));
-font-size: var(--font-size-input, 1rem);
-transition: border-color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
-box-shadow var(--transition-duration, 200ms) var(--transition-timing, ease-out),
-background-color var(--transition-duration, 200ms) var(--transition-timing, ease-out);
-width: 100%;
-}
-fieldset {
-padding: var(--space-fieldset-y, 1.5em) var(--space-fieldset-x, 1.2em);
-}
-legend {
-padding-inline: var(--space-xs);
-font-weight: var(--font-weight-medium);
-color: var(--text-1);
-}
-input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="button"], input[type="reset"], button {
-width: auto;
-}
+  /* Select element structure */
+  select {
+    /* Adjust padding-right to accommodate custom arrow defined in @theme */
+    padding-right: var(--space-select-arrow-gap, calc(var(--space-input-x, 0.8em) * 3)); /* Increased default gap */
+  }
 
-/* Button Structure /
-button, input[type="button"], input[type="submit"], input[type="reset"] {
-padding: var(--space-button-y, 0.7em) var(--space-button-x, 1.3em);
-border-radius: var(--radius-md, 6px);
-font-weight: var(--font-weight-button, 500);
-border-width: var(--border-width-button, 1px);
-border-style: solid;
-transition: background-color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
-border-color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
-color var(--transition-duration, 200ms) var(--transition-timing, ease-out),
-box-shadow var(--transition-duration, 200ms) var(--transition-timing, ease-out),
-transform calc(var(--transition-duration, 200ms) / 2) var(--transition-timing, ease-out);
-line-height: 1;
-box-shadow: var(--shadow-button, none); / Base shadow /
-}
-button:hover:not([disabled]),
-input[type="button"]:hover:not([disabled]),
-input[type="submit"]:hover:not([disabled]),
-input[type="reset"]:hover:not([disabled]) {
-transform: var(--transform-button-hover, translateY(-1px));
-box-shadow: var(--shadow-button-hover, 0 2px 4px rgba(0,0,0,0.1));
-}
-button:active:not([disabled]),
-input[type="button"]:active:not([disabled]),
-input[type="submit"]:active:not([disabled]),
-input[type="reset"]:active:not([disabled]) {
-transform: var(--transform-button-active, translateY(0px));
-box-shadow: var(--shadow-button-active, none); / Active shadow */
-}
+  /* Checkbox/Radio structure */
+  input[type="checkbox"], input[type="radio"] {
+    appearance: var(--appearance-checkbox-radio, none); /* Use var from theme */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    width: var(--size-checkbox-radio, 1.1em);
+    height: var(--size-checkbox-radio, 1.1em);
+    margin-inline-end: var(--space-checkbox-radio-label-gap, 0.5em);
+    vertical-align: middle; /* Align with label text */
+    position: relative; /* For pseudo-element positioning */
+    display: inline-grid; /* For centering the ::before */
+    place-content: center;
+    /* Border color applied in @theme */
+  }
+  input[type="checkbox"] {
+    border-radius: var(--radius-sm, 3px);
+  }
+  input[type="radio"] {
+    border-radius: 50%;
+  }
+  /* Indicator using ::before, styled in @theme */
+  input[type="checkbox"]::before, input[type="radio"]::before {
+    content: '';
+    width: 60%; /* Relative size */
+    height: 60%;
+    transform: scale(0); /* Hidden by default */
+    transition: transform 100ms ease-in-out;
+    box-shadow: inset 1em 1em var(--indicator-color, var(--accent, blue)); /* Color applied in theme */
+    /* Color fallback added */
+  }
+  input[type="radio"]::before {
+    border-radius: 50%; /* Ensure radio indicator is round */
+  }
+  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
+    transform: scale(1); /* Show indicator when checked */
+  }
 
-/* Select element structure */
-select {
-padding-right: var(--space-select-arrow-gap, 2.5em);
-}
+  /* Disabled State */
+  button[disabled], input[disabled], select[disabled], textarea[disabled], fieldset[disabled] {
+    opacity: var(--opacity-disabled, 0.5);
+    /* cursor: not-allowed is handled in reset */
+  }
+  fieldset[disabled] * { /* Ensure children of disabled fieldset are also not-allowed cursor */
+    cursor: not-allowed;
+  }
 
-/* Checkbox/Radio structure */
-input[type="checkbox"], input[type="radio"] {
-appearance: var(--appearance-checkbox-radio, none);
-border-width: var(--border-width, 1px);
-border-style: solid;
-width: var(--size-checkbox-radio, 1.1em);
-height: var(--size-checkbox-radio, 1.1em);
-margin-inline-end: var(--space-checkbox-radio-label-gap, 0.5em);
-vertical-align: middle;
-position: relative;
-display: inline-grid;
-place-content: center;
-}
-input[type="checkbox"] {
-border-radius: var(--radius-sm, 3px);
-}
-input[type="radio"] {
-border-radius: 50%;
-}
-input[type="checkbox"]::before, input[type="radio"]::before {
-content: '';
-width: 60%;
-height: 60%;
-transform: scale(0);
-transition: transform 100ms ease-in-out;
-box-shadow: inset 1em 1em var(--indicator-color, var(--accent));
-}
-input[type="radio"]::before {
-border-radius: 50%;
-}
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
-transform: scale(1);
-}
+  /* --- Table Defaults --- */
+  table {
+    width: 100%;
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    border-radius: var(--radius-lg, 8px);
+    overflow: hidden; /* Needed for border-radius on table */
+    /* border-collapse is set in reset */
+    /* Border color applied in @theme */
+  }
+  th, td {
+    padding: var(--space-table-cell-y, 0.8em) var(--space-table-cell-x, 1em);
+    text-align: left; /* Default alignment */
+    vertical-align: top; /* Default alignment */
+    border-bottom-width: var(--border-width, 1px);
+    border-bottom-style: solid;
+    /* Border color applied in @theme */
+  }
+  thead th {
+    font-weight: var(--font-weight-heading, 600);
+    border-bottom-width: calc(var(--border-width, 1px) * 2); /* Thicker bottom border for header */
+    vertical-align: bottom; /* Align header text to bottom */
+    /* Background color applied in @theme */
+  }
+  tbody tr:last-child th, tbody tr:last-child td {
+    border-bottom: none; /* Remove border from last row */
+  }
 
-/* Disabled State */
-button[disabled], input[disabled], select[disabled], textarea[disabled], fieldset[disabled] {
-opacity: var(--opacity-disabled, 0.5);
-}
-fieldset[disabled] * {
-cursor: not-allowed;
-}
+  /* --- Utilities Setup --- */ /* Fixed comment syntax */
+  /* Container Structure */ /* Fixed comment syntax */
+  .container {
+    width: min(100% - (var(--space-container-padding, 1rem) * 2), var(--width-container-max, 1100px));
+    margin-inline: auto;
+  }
+  /* Display None */ /* Fixed comment syntax */
+  .display-none { display: none !important; }
 
-/* --- Table Defaults --- */
-table {
-width: 100%;
-border-width: var(--border-width, 1px);
-border-style: solid;
-border-radius: var(--radius-lg, 8px);
-overflow: hidden;
-}
-th, td {
-padding: var(--space-table-cell-y, 0.8em) var(--space-table-cell-x, 1em);
-text-align: left;
-vertical-align: top;
-border-bottom-width: var(--border-width, 1px);
-border-bottom-style: solid;
-}
-thead th {
-font-weight: var(--font-weight-heading, 600);
-border-bottom-width: calc(var(--border-width, 1px) * 2);
-vertical-align: bottom;
-}
-tbody tr:last-child th, tbody tr:last-child td {
-border-bottom: none;
-}
+  /* .box Class System Structure */ /* Fixed comment syntax */
+  .box {
+    padding: var(--b-p, 0);
+    margin: var(--b-m, 0);
+    border-width: var(--b-bw, 0);
+    border-style: solid;
+    border-color: var(--b-bc, transparent);
+    border-radius: var(--b-r, 0);
+    background-color: var(--b-bg, transparent);
+    color: var(--b-fg, inherit);
+    /* Add more structural slots as needed */ /* Fixed comment syntax */
+    /* display: var(--b-display, block); */ /* Fixed comment syntax */
+    /* box-shadow: var(--b-shadow, none); */ /* Fixed comment syntax */
+  }
+  /* Apply axis-specific padding/margin if set (used by utilities) */
+  .box[style*="--b-px"] { padding-inline: var(--b-px); }
+  .box[style*="--b-py"] { padding-block: var(--b-py); }
+  .box[style*="--b-mx"] { margin-inline: var(--b-mx); }
+  .box[style*="--b-my"] { margin-block: var(--b-my); }
 
-/* --- Utilities Setup --- /
-/ Container Structure /
-.container {
-width: min(100% - (var(--space-container-padding, 1rem) * 2), var(--width-container-max, 1100px));
-margin-inline: auto;
-}
-/ Display None */
-.display-none { display: none !important; }
+  /* Container Query Structure */ /* Fixed comment syntax */
+  .cq-container, .cq {
+    container-type: var(--cq-type, inline-size);
+    container-name: var(--cq-name, default);
+  }
 
-/* .box Class System Structure /
-.box {
-padding: var(--b-p, 0);
-margin: var(--b-m, 0);
-border-width: var(--b-bw, 0);
-border-style: solid;
-border-color: var(--b-bc, transparent);
-border-radius: var(--b-r, 0);
-background-color: var(--b-bg, transparent);
-color: var(--b-fg, inherit);
-/ Add more structural slots as needed /
-/ display: var(--b-display, block); /
-/ box-shadow: var(--b-shadow, none); */
-}
+  /* --- Accessibility Enhancements --- */ /* Fixed comment syntax */
+  /* Focus visible structure */ /* Fixed comment syntax */
+  :focus-visible {
+    outline-style: solid;
+    outline-width: var(--focus-ring-width, 2px);
+    outline-offset: var(--focus-ring-offset, 2px);
+    box-shadow: none; /* Explicitly remove box-shadow on focus to prioritize outline */
+    /* Outline color applied in @theme */
+  }
+  /* Target scroll structure */ /* Fixed comment syntax */
+  :target {
+    scroll-margin-block-start: var(--space-target-margin, 5ex); /* Offset for fixed headers */
+  }
 
-/* Container Query Structure */
-.cq-container, .cq {
-container-type: var(--cq-type, inline-size);
-container-name: var(--cq-name, default);
-}
+  /* --- Reduced Motion Preferences --- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto !important; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      transition-delay: 0ms !important;
+    }
+  }
 
-/* --- Accessibility Enhancements --- /
-/ Focus visible structure /
-:focus-visible {
-outline-style: solid;
-outline-width: var(--focus-ring-width, 2px);
-outline-offset: var(--focus-ring-offset, 2px);
-box-shadow: none;
-}
-/ Target scroll structure */
-:target {
-scroll-margin-block-start: var(--space-target-margin, 5ex);
-}
+  /* --- View Transition Structure --- */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--transition-duration-page, 300ms);
+    animation-timing-function: var(--transition-timing-page, ease-in-out);
+  }
+  ::view-transition-old(root) { animation-name: var(--view-transition-old, fade-out); }
+  ::view-transition-new(root) { animation-name: var(--view-transition-new, fade-in); z-index: 1; } /* Ensure new view is on top */
 
-/* --- Reduced Motion Preferences --- */
-@media (prefers-reduced-motion: reduce) {
-html { scroll-behavior: auto !important; }
-*, *::before, *::after {
-animation-duration: 0.01ms !important;
-animation-iteration-count: 1 !important;
-transition-duration: 0.01ms !important;
-transition-delay: 0ms !important;
-}
-}
-
-/* --- View Transition Structure --- */
-::view-transition-old(root),
-::view-transition-new(root) {
-animation-duration: var(--transition-duration-page, 300ms);
-animation-timing-function: var(--transition-timing-page, ease-in-out);
-}
-::view-transition-old(root) { animation-name: var(--view-transition-old, fade-out); }
-::view-transition-new(root) { animation-name: var(--view-transition-new, fade-in); z-index: 1; }
-
-@keyframes fade-in { from { opacity: 0; } }
-@keyframes fade-out { to { opacity: 0; } }
+  @keyframes fade-in { from { opacity: 0; } }
+  @keyframes fade-out { to { opacity: 0; } }
 
 } /* End of @layer defaults */
 
-/* ================================================ /
-/ ==               @layer theme                 == /
-/ ================================================ /
-/ Purpose: Define all design tokens (colors, fonts, spacing, /
-/ radii, transitions, shadows) and apply theme-specific styles. */
+/* ================================================ */
+/* ==               @layer theme                 == */
+/* ================================================ */
+/* Purpose: Define all design tokens (colors, fonts, spacing, */
+/* radii, transitions, shadows) and apply theme-specific styles. */
 @layer theme {
 
 :root {
-font-size: var(--font-size-root, 100%);
+  font-size: var(--font-size-root, 100%); /* Base font size for rem calculations */
 
-/* --- Theme Configuration Inputs --- */
---accent-l: 0.65; --accent-c: 0.15; --accent-h: 260; 
---surface-c: 0.015; 
---contrast-factor: 1.0; 
---contrast-lightness-threshold: 0.65; 
---secondary-hue-shift: 60; 
---tertiary-hue-shift: -90; 
---border-width: 1px;
---border-width-thick: 2px;
---border-width-blockquote: 3px;
---border-width-button: 1px;
---radius-sm: 3px; --radius-md: 6px; --radius-lg: 8px; --radius-xl: 12px; --radius-full: 9999px;
---font-primary: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
---font-mono: 'Courier New', Courier, monospace; 
---font-weight-normal: 400; --font-weight-medium: 500; --font-weight-semibold: 600; --font-weight-bold: 700;
---font-weight-heading: var(--font-weight-semibold); --font-weight-button: var(--font-weight-medium);
---letter-spacing-heading: normal; --letter-spacing-h6: 0.5px; --text-transform-h6: uppercase;
---font-size-root: 100%; --font-size-sm: 0.875rem; --font-size-base: 1rem; --font-size-md: 1.125rem; --font-size-lg: 1.25rem; --font-size-xl: 1.5rem;
---font-size-h6: var(--font-size-base); --font-size-h5: var(--font-size-lg); --font-size-h4: var(--font-size-xl);
---font-size-h3: clamp(1.25rem, 2.5vw, 1.75rem); --font-size-h2: clamp(1.5rem, 3vw, 2.0rem); --font-size-h1: clamp(1.8rem, 4vw, 2.5rem);
---font-size-code: 0.9em; --font-size-input: 1rem;
---body-line-height: 1.6; --line-height-heading: 1.2; --line-height-code: 1.4;
---space-unit: 1rem; 
---space-xxs: calc(var(--space-unit) * 0.25); --space-xs: calc(var(--space-unit) * 0.5); --space-sm: calc(var(--space-unit) * 0.75); --space-md: calc(var(--space-unit) * 1);
---space-lg: calc(var(--space-unit) * 1.5); --space-xl: calc(var(--space-unit) * 2); --space-xxl: calc(var(--space-unit) * 3);
---space-flow: var(--space-md); --space-list-indent: var(--space-lg); --space-list-item: var(--space-xs);
---space-blockquote- Muted: var(--space-md); --space-blockquote-pad: var(--space-md);
---space-code-block-y: var(--space-sm); --space-code-block-x: var(--space-md); --space-code-inline-y: var(--space-xxs); --space-code-inline-x: var(--space-xs);
---space-input-y: var(--space-sm); --space-input-x: var(--space-md); --space-button-y: var(--space-sm); --space-button-x: var(--space-lg);
---space-select-arrow-gap: calc(var(--space-input-x) * 2.5); --space-checkbox-radio-label-gap: var(--space-xs);
---space-table-cell-y: var(--space-sm); --space-table-cell-x: var(--space-md); --space-container-padding: var(--space-md); --space-target-margin: var(--space-xxl); 
---space-fieldset-y: 1.5em; --space-fieldset-x: 1.2em;
---transition-duration: 200ms; --transition-timing: ease-out; --transition-duration-page: 300ms; --transition-timing-page: ease-in-out;
---transform-button-hover: translateY(-1px); --transform-button-active: translateY(0px);
---view-transition-old: fade-out; --view-transition-new: fade-in;
---focus-ring-width: 2px; --focus-ring-offset: 2px;
---cq-bp-xs: 20em; --cq-bp-sm: 30em; --cq-bp-md: 45em; --cq-bp-lg: 60em; --cq-bp-xl: 80em;
---cq-type: inline-size; --cq-name: default;
---opacity-disabled: 0.5; --width-container-max: 1100px; --size-checkbox-radio: 1.1em;
---font-smoothing-webkit: antialiased; --font-smoothing-moz: grayscale; --font-synthesis: none; --text-rendering: optimizeLegibility;
---body-hyphens: auto; --scroll-behavior: smooth; --list-style-unordered: disc; --list-style-ordered: decimal;
---link-decoration: none; --link-decoration-hover: underline; --link-underline-thickness: 1.5px; --link-underline-offset: 0.15em;
---appearance-checkbox-radio: none; 
+  /* --- Theme Configuration Inputs --- */
+  --accent-l: 0.65; --accent-c: 0.15; --accent-h: 260; /* OKLCH Accent Color */
+  --surface-c: 0.015; /* Base chroma for surfaces */
+  --contrast-factor: 1.0; /* Adjust text contrast level */
+  --contrast-lightness-threshold: 0.65; /* L* threshold for switching text color on accent */
+  --secondary-hue-shift: 60; /* Example for generating secondary colors */
+  --tertiary-hue-shift: -90; /* Example for generating tertiary colors */
+  --border-width: 1px;
+  --border-width-thick: 2px;
+  --border-width-blockquote: 3px;
+  --border-width-button: 1px;
+  --radius-sm: 3px; --radius-md: 6px; --radius-lg: 8px; --radius-xl: 12px; --radius-full: 9999px;
+  --font-primary: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: 'Courier New', Courier, monospace; /* Standard mono fallback */
+  --font-weight-normal: 400; --font-weight-medium: 500; --font-weight-semibold: 600; --font-weight-bold: 700;
+  --font-weight-heading: var(--font-weight-semibold); --font-weight-button: var(--font-weight-medium);
+  --letter-spacing-heading: normal; --letter-spacing-h6: 0.5px; --text-transform-h6: uppercase;
+  --font-size-root: 100%; --font-size-sm: 0.875rem; --font-size-base: 1rem; --font-size-md: 1.125rem; --font-size-lg: 1.25rem; --font-size-xl: 1.5rem;
+  --font-size-h6: var(--font-size-base); --font-size-h5: var(--font-size-lg); --font-size-h4: var(--font-size-xl);
+  /* Fluid font sizes for larger headings */
+  --font-size-h3: clamp(1.25rem, 2.5vi, 1.75rem); /* Use vi (inline viewport unit) for fluidity based on width */
+  --font-size-h2: clamp(1.5rem, 3vi, 2.0rem);
+  --font-size-h1: clamp(1.8rem, 4vi, 2.5rem);
+  --font-size-code: 0.9em; --font-size-input: 1rem;
+  --body-line-height: 1.6; --line-height-heading: 1.2; --line-height-code: 1.4;
+  --space-unit: 1rem;
+  --space-xxs: calc(var(--space-unit) * 0.25); --space-xs: calc(var(--space-unit) * 0.5); --space-sm: calc(var(--space-unit) * 0.75); --space-md: calc(var(--space-unit) * 1);
+  --space-lg: calc(var(--space-unit) * 1.5); --space-xl: calc(var(--space-unit) * 2); --space-xxl: calc(var(--space-unit) * 3);
+  --space-flow: var(--space-md); /* Default vertical spacing between block elements */
+  --space-list-indent: var(--space-lg); --space-list-item: var(--space-xs);
+  --space-blockquote-margin-inline: var(--space-md); --space-blockquote-pad: var(--space-md); /* Fixed variable name typo */
+  --space-code-block-y: var(--space-sm); --space-code-block-x: var(--space-md); --space-code-inline-y: var(--space-xxs); --space-code-inline-x: var(--space-xs);
+  --space-input-y: var(--space-sm); --space-input-x: var(--space-md); --space-button-y: var(--space-sm); --space-button-x: var(--space-lg);
+  --space-select-arrow-gap: calc(var(--space-input-x) * 3); --space-checkbox-radio-label-gap: var(--space-xs);
+  --space-table-cell-y: var(--space-sm); --space-table-cell-x: var(--space-md); --space-container-padding: var(--space-md); --space-target-margin: var(--space-xxl);
+  --space-fieldset-y: 1.5em; --space-fieldset-x: 1.2em;
+  --transition-duration: 200ms; --transition-timing: ease-out; --transition-duration-page: 300ms; --transition-timing-page: ease-in-out;
+  --transform-button-hover: translateY(-1px); --transform-button-active: translateY(0px);
+  --view-transition-old: fade-out; --view-transition-new: fade-in;
+  --focus-ring-width: 2px; --focus-ring-offset: 2px;
+  --cq-bp-xs: 20em; --cq-bp-sm: 30em; --cq-bp-md: 45em; --cq-bp-lg: 60em; --cq-bp-xl: 80em; /* Container query breakpoints */
+  --cq-type: inline-size; --cq-name: default;
+  --opacity-disabled: 0.5; --width-container-max: 1100px; --size-checkbox-radio: 1.1em;
+  --font-smoothing-webkit: antialiased; --font-smoothing-moz: grayscale; --font-synthesis: none; --text-rendering: optimizeLegibility;
+  --body-hyphens: auto; --scroll-behavior: smooth; --list-style-unordered: disc; --list-style-ordered: decimal;
+  --link-decoration: none; --link-decoration-hover: underline; --link-underline-thickness: 1.5px; --link-underline-offset: 0.15em;
+  --appearance-checkbox-radio: none;
 
-/* Shadows */
---shadow-color-base: 220 10% 10%; /* HSL base for shadow color */
---shadow-sm: 0 1px 2px oklch(from hsl(var(--shadow-color-base)) l c h / 7%);
---shadow-md: 0 4px 6px -1px oklch(from hsl(var(--shadow-color-base)) l c h / 10%), 0 2px 4px -2px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
---shadow-lg: 0 10px 15px -3px oklch(from hsl(var(--shadow-color-base)) l c h / 10%), 0 4px 6px -4px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
---shadow-xl: 0 20px 25px -5px oklch(from hsl(var(--shadow-color-base)) l c h / 10%), 0 8px 10px -6px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
---shadow-inner: inset 0 2px 4px 0 oklch(from hsl(var(--shadow-color-base)) l c h / 5%);
-/* Apply theme adjustments to shadow color alpha/lightness if needed */
---shadow-button: var(--shadow-sm);
---shadow-button-hover: var(--shadow-md);
---shadow-button-active: var(--shadow-inner);
+  /* Shadows (using OKLCH for better perceptual uniformity) */
+  --shadow-color-base: 220 10% 10%; /* HSL base for shadow color (adjust as needed) */
+  /* Convert HSL base to OKLCH lightness/chroma/hue */
+  --shadow-sm: 0 1px 2px oklch(from hsl(var(--shadow-color-base)) l c h / 7%);
+  --shadow-md: 0 4px 6px -1px oklch(from hsl(var(--shadow-color-base)) l c h / 10%), 0 2px 4px -2px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
+  --shadow-lg: 0 10px 15px -3px oklch(from hsl(var(--shadow-color-base)) l c h / 10%), 0 4px 6px -4px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
+  --shadow-xl: 0 20px 25px -5px oklch(from hsl(var(--shadow-color-base)) l c h / 10%), 0 8px 10px -6px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
+  --shadow-inner: inset 0 2px 4px 0 oklch(from hsl(var(--shadow-color-base)) l c h / 5%);
+  /* Apply theme adjustments to shadow color alpha/lightness if needed */
+  --shadow-button: var(--shadow-sm);
+  --shadow-button-hover: var(--shadow-md);
+  --shadow-button-active: var(--shadow-inner);
 
-/* --- Color Generation (Light Mode Defaults) --- */
---base-l-light: 0.98; --base-c-light: var(--surface-c); --base-h-light: var(--accent-h);
---bedrock-l-light: 0.20; --bedrock-c-light: calc(var(--surface-c) * 1.2); --bedrock-h-light: var(--accent-h);
---surface-1-l-light: 0.99; --surface-1-c-light: calc(var(--surface-c) * 0.8); --surface-1-h-light: var(--accent-h);
---surface-2-l-light: 0.96; --surface-2-c-light: var(--surface-c); --surface-2-h-light: var(--accent-h);
---text1-l-light: max(0.1, min(0.35, (1 - var(--base-l-light)) * var(--contrast-factor))); --text1-c-light: calc(var(--surface-c) * 1.8); --text1-h-light: var(--accent-h);
---text2-l-light: max(0.2, min(0.5, (1 - var(--base-l-light)) * var(--contrast-factor) * 0.7)); --text2-c-light: var(--text1-c-light); --text2-h-light: var(--accent-h);
---border-l-light: max(0.75, var(--base-l-light) - 0.12 * var(--contrast-factor)); --border-c-light: var(--surface-c); --border-h-light: var(--accent-h);
+  /* --- Color Generation (Light Mode Defaults) --- */
+  /* Base parameters */
+  --base-l-light: 0.98; --base-c-light: var(--surface-c); --base-h-light: var(--accent-h);
+  --bedrock-l-light: 0.20; --bedrock-c-light: calc(var(--surface-c) * 1.2); --bedrock-h-light: var(--accent-h);
+  --surface-1-l-light: 0.99; --surface-1-c-light: calc(var(--surface-c) * 0.8); --surface-1-h-light: var(--accent-h);
+  --surface-2-l-light: 0.96; --surface-2-c-light: var(--surface-c); --surface-2-h-light: var(--accent-h);
+  /* Text colors derived from base lightness and contrast factor */
+  --text1-l-light: max(0.1, min(0.35, (1 - var(--base-l-light)) * var(--contrast-factor))); --text1-c-light: calc(var(--surface-c) * 1.8); --text1-h-light: var(--accent-h);
+  --text2-l-light: max(0.2, min(0.5, (1 - var(--base-l-light)) * var(--contrast-factor) * 0.7)); --text2-c-light: var(--text1-c-light); --text2-h-light: var(--accent-h);
+  /* Border color derived from base lightness */
+  --border-l-light: max(0.75, var(--base-l-light) - 0.12 * var(--contrast-factor)); --border-c-light: var(--surface-c); --border-h-light: var(--accent-h);
 
-/* --- Assign Light Mode Colors --- */
---base-bg: oklch(var(--base-l-light) var(--base-c-light) var(--base-h-light));
---bedrock-bg: oklch(var(--bedrock-l-light) var(--bedrock-c-light) var(--bedrock-h-light));
---surface-1-bg: oklch(var(--surface-1-l-light) var(--surface-1-c-light) var(--surface-1-h-light));
---surface-2-bg: oklch(var(--surface-2-l-light) var(--surface-2-c-light) var(--surface-2-h-light));
---text-1: oklch(var(--text1-l-light) var(--text1-c-light) var(--text1-h-light));
---text-2: oklch(var(--text2-l-light) var(--text2-c-light) var(--text2-h-light));
---text-muted: oklch(from var(--text-2) l calc(c * 0.5) h / 70%); 
---accent: oklch(var(--accent-l) var(--accent-c) var(--accent-h));
---text-on-accent: oklch(from var(--accent) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h); 
---text-on-bedrock: oklch(from var(--bedrock-bg) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
---text-heading: var(--text-1); 
---text-blockquote: var(--text-2);
---text-code: var(--text-1);
---outline-color: oklch(var(--border-l-light) var(--border-c-light) var(--border-h-light)); 
---outline-color-subtle: oklch(from var(--outline-color) calc(l + (1-l)*0.2) c h); 
---outline-color-overt: oklch(from var(--outline-color) calc(l * 0.8) c h); 
---outline-color-accent: var(--accent); 
---outline-color-focus: var(--accent); 
---accent-text: var(--accent); 
---accent-bg-subtle: oklch(from var(--accent) calc(l + (1-l)*0.85) calc(c * 0.2) h); 
---accent-bg: var(--accent); 
---accent-bg-hover: oklch(from var(--accent) calc(l - 0.05) c h); 
---accent-bg-active: oklch(from var(--accent) calc(l - 0.08) c h); 
---accent-border: var(--accent);
---highlight-bg-subtle: oklch(from var(--base-bg) calc(l - 0.03) c h); 
---highlight-bg-overt: oklch(from var(--accent) calc(l + (1-l)*0.6) calc(c * 0.4) h); 
---highlight-text: var(--text-1); 
---selection-bg: var(--accent);
---selection-text: var(--text-on-accent);
---focus-ring-color: var(--outline-color-focus);
---link-color: var(--accent-text);
---link-color-hover: oklch(from var(--link-color) calc(l - 0.05) c h); 
---input-text: var(--text-1);
---input-placeholder-text: var(--text-muted);
---input-bg: var(--base-bg); 
---input-border: var(--outline-color);
---input-border-hover: var(--outline-color-overt);
---input-border-focus: var(--outline-color-accent);
---input-shadow-focus: oklch(from var(--accent) l c h / 30%);
---button-primary-bg: var(--accent-bg);
---button-primary-text: var(--text-on-accent);
---button-primary-border: transparent;
---button-primary-bg-hover: var(--accent-bg-hover);
---button-primary-bg-active: var(--accent-bg-active);
---button-outline-bg: transparent;
---button-outline-text: var(--accent-text);
---button-outline-border: var(--accent-border);
---button-outline-bg-hover: var(--accent-bg-subtle);
---button-outline-bg-active: oklch(from var(--accent-bg-subtle) calc(l - 0.03) c h);
---button-text-bg: transparent;
---button-text-text: var(--accent-text);
---button-text-border: transparent;
---button-text-bg-hover: var(--accent-bg-subtle);
---button-text-bg-active: oklch(from var(--accent-bg-subtle) calc(l - 0.03) c h);
---code-text: var(--text-1);
---code-block-bg: var(--surface-2-bg); 
---code-block-border: var(--outline-color-subtle);
---code-inline-bg: var(--surface-1-bg);
---code-inline-border: var(--outline-color-subtle);
---table-border: var(--outline-color);
---table-header-bg: var(--surface-1-bg);
---table-row-hover-bg: var(--highlight-bg-subtle);
---blockquote-text: var(--text-2);
---blockquote-border: var(--outline-color);
---hr-color: var(--outline-color-subtle);
---indicator-color: var(--text-on-accent); 
---error-l: 0.6; --error-c: 0.22; --error-h: 25; 
---warning-l: 0.7; --warning-c: 0.2; --warning-h: 70; 
---success-l: 0.65; --success-c: 0.2; --success-h: 145; 
---info-l: 0.7; --info-c: 0.18; --info-h: 230; 
---error-base: oklch(var(--error-l) var(--error-c) var(--error-h)); --error-text: var(--error-base); --error-border: var(--error-base); --error-bg-subtle: oklch(from var(--error-base) calc(l + (1-l)*0.85) calc(c * 0.3) h); --text-on-error: oklch(from var(--error-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
---warning-base: oklch(var(--warning-l) var(--warning-c) var(--warning-h)); --warning-text: var(--warning-base); --warning-border: var(--warning-base); --warning-bg-subtle: oklch(from var(--warning-base) calc(l + (1-l)*0.85) calc(c * 0.3) h); --text-on-warning: oklch(from var(--warning-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
---success-base: oklch(var(--success-l) var(--success-c) var(--success-h)); --success-text: var(--success-base); --success-border: var(--success-base); --success-bg-subtle: oklch(from var(--success-base) calc(l + (1-l)*0.85) calc(c * 0.3) h); --text-on-success: oklch(from var(--success-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
---info-base: oklch(var(--info-l) var(--info-c) var(--info-h)); --info-text: var(--info-base); --info-border: var(--info-base); --info-bg-subtle: oklch(from var(--info-base) calc(l + (1-l)*0.85) calc(c * 0.3) h); --text-on-info: oklch(from var(--info-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
---scrollbar-thumb-color: var(--outline-color-overt);
---scrollbar-track-color: var(--surface-1-bg);
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-
-}
-
-/* --- Color Generation (Dark Mode Overrides) --- /
-@media (prefers-color-scheme: dark) {
-:root {
---shadow-color-base: 220 20% 90%; / Lighter base for dark mode shadows */
---shadow-sm: 0 1px 2px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
---shadow-md: 0 4px 6px -1px oklch(from hsl(var(--shadow-color-base)) l c h / 12%), 0 2px 4px -2px oklch(from hsl(var(--shadow-color-base)) l c h / 12%);
---shadow-lg: 0 10px 15px -3px oklch(from hsl(var(--shadow-color-base)) l c h / 12%), 0 4px 6px -4px oklch(from hsl(var(--shadow-color-base)) l c h / 12%);
---shadow-xl: 0 20px 25px -5px oklch(from hsl(var(--shadow-color-base)) l c h / 12%), 0 8px 10px -6px oklch(from hsl(var(--shadow-color-base)) l c h / 12%);
---shadow-inner: inset 0 2px 4px 0 oklch(from hsl(var(--shadow-color-base)) l c h / 7%);
-
---base-l-dark: 0.18; --base-c-dark: var(--surface-c); --base-h-dark: var(--accent-h);
-  --bedrock-l-dark: 0.95; --bedrock-c-dark: calc(var(--surface-c) * 0.7); --bedrock-h-dark: var(--accent-h);
-  --surface-1-l-dark: 0.23; --surface-1-c-dark: calc(var(--surface-c) * 1.2); --surface-1-h-dark: var(--accent-h);
-  --surface-2-l-dark: 0.28; --surface-2-c-dark: calc(var(--surface-c) * 1.4); --surface-2-h-dark: var(--accent-h);
-  --text1-l-dark: max(0.9, min(0.98, (1 - var(--base-l-dark)) * var(--contrast-factor))); --text1-c-dark: calc(var(--surface-c) * 0.8); --text1-h-dark: var(--accent-h);
-  --text2-l-dark: max(0.7, min(0.85, (1 - var(--base-l-dark)) * var(--contrast-factor) * 0.8)); --text2-c-dark: var(--text1-c-dark); --text2-h-dark: var(--accent-h);
-  --border-l-dark: min(0.5, var(--base-l-dark) + 0.15 * var(--contrast-factor)); --border-c-dark: var(--surface-c); --border-h-dark: var(--accent-h);
-  --accent-l-dark: max(0.7, var(--accent-l) + 0.1); --accent-c-dark: min(0.25, var(--accent-c) * 1.1); --accent-h-dark: var(--accent-h);
-
-  /* --- Assign Dark Mode Colors --- */
-  --base-bg: oklch(var(--base-l-dark) var(--base-c-dark) var(--base-h-dark));
-  --bedrock-bg: oklch(var(--bedrock-l-dark) var(--bedrock-c-dark) var(--bedrock-h-dark));
-  --surface-1-bg: oklch(var(--surface-1-l-dark) var(--surface-1-c-dark) var(--surface-1-h-dark));
-  --surface-2-bg: oklch(var(--surface-2-l-dark) var(--surface-2-c-dark) var(--surface-2-h-dark));
-  --text-1: oklch(var(--text1-l-dark) var(--text1-c-dark) var(--text1-h-dark));
-  --text-2: oklch(var(--text2-l-dark) var(--text2-c-dark) var(--text2-h-dark));
-  --text-muted: oklch(from var(--text-2) l calc(c * 0.7) h / 70%);
-  --accent: oklch(var(--accent-l-dark) var(--accent-c-dark) var(--accent-h-dark)); 
-  --text-on-accent: oklch(from var(--accent) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h); 
+  /* --- Assign Light Mode Colors (Semantic Variables) --- */
+  --base-bg: oklch(var(--base-l-light) var(--base-c-light) var(--base-h-light));
+  --bedrock-bg: oklch(var(--bedrock-l-light) var(--bedrock-c-light) var(--bedrock-h-light)); /* For elements needing high contrast BG */
+  --surface-1-bg: oklch(var(--surface-1-l-light) var(--surface-1-c-light) var(--surface-1-h-light)); /* Subtle surface variation */
+  --surface-2-bg: oklch(var(--surface-2-l-light) var(--surface-2-c-light) var(--surface-2-h-light)); /* More distinct surface */
+  --text-1: oklch(var(--text1-l-light) var(--text1-c-light) var(--text1-h-light)); /* Primary text */
+  --text-2: oklch(var(--text2-l-light) var(--text2-c-light) var(--text2-h-light)); /* Secondary/subtle text */
+  --text-muted: oklch(from var(--text-2) l calc(c * 0.5) h / 70%); /* Muted text, lower chroma/opacity */
+  --accent: oklch(var(--accent-l) var(--accent-c) var(--accent-h)); /* Main accent color */
+  /* Calculate text color for on-accent background based on contrast threshold */
+  --text-on-accent: oklch(from var(--accent) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+  /* Calculate text color for on-bedrock background */
   --text-on-bedrock: oklch(from var(--bedrock-bg) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
   --text-heading: var(--text-1);
   --text-blockquote: var(--text-2);
   --text-code: var(--text-1);
-  --outline-color: oklch(var(--border-l-dark) var(--border-c-dark) var(--border-h-dark)); 
-  --outline-color-subtle: oklch(from var(--outline-color) calc(l - (l*0.2)) c h); 
-  --outline-color-overt: oklch(from var(--outline-color) calc(l + (1-l)*0.2) c h); 
-  --outline-color-accent: var(--accent);
-  --outline-color-focus: var(--accent);
-  --accent-text: var(--accent); 
-  --accent-bg-subtle: oklch(from var(--accent) calc(l * 0.3) calc(c * 0.4) h); 
-  --accent-bg: var(--accent);
-  --accent-bg-hover: oklch(from var(--accent) calc(l + 0.05) c h); 
-  --accent-bg-active: oklch(from var(--accent) calc(l + 0.08) c h); 
-  --accent-border: var(--accent);
-  --highlight-bg-subtle: oklch(from var(--base-bg) calc(l + 0.04) c h); 
-  --highlight-bg-overt: oklch(from var(--accent) calc(l * 0.5) calc(c * 0.6) h); 
-  --highlight-text: var(--text-1);
-  --selection-bg: var(--accent);
-  --selection-text: var(--text-on-accent);
-  --focus-ring-color: var(--outline-color-focus);
+  --outline-color: oklch(var(--border-l-light) var(--border-c-light) var(--border-h-light)); /* Default border color */
+  --outline-color-subtle: oklch(from var(--outline-color) calc(l + (1-l)*0.2) c h); /* Lighter border */
+  --outline-color-overt: oklch(from var(--outline-color) calc(l * 0.8) c h); /* Darker/stronger border */
+  --outline-color-accent: var(--accent); /* Accent border */
+  --outline-color-focus: var(--accent); /* Focus ring color */
+  --accent-text: var(--accent); /* Text using accent color */
+  --accent-bg-subtle: oklch(from var(--accent) calc(l + (1-l)*0.85) calc(c * 0.2) h); /* Very light accent background */
+  --accent-bg: var(--accent); /* Accent background */
+  --accent-bg-hover: oklch(from var(--accent) calc(l - 0.05) c h); /* Darker accent for hover */
+  --accent-bg-active: oklch(from var(--accent) calc(l - 0.08) c h); /* Even darker for active */
+  --accent-border: var(--accent); /* Border using accent color */
+  --highlight-bg-subtle: oklch(from var(--base-bg) calc(l - 0.03) c h); /* Subtle background highlight (e.g., hover) */
+  --highlight-bg-overt: oklch(from var(--accent) calc(l + (1-l)*0.6) calc(c * 0.4) h); /* More prominent accent highlight */
+  --highlight-text: var(--text-1); /* Text on highlighted backgrounds */
+  --selection-bg: var(--accent); /* Text selection background */
+  --selection-text: var(--text-on-accent); /* Text selection color */
+  --focus-ring-color: var(--outline-color-focus); /* Color for focus outlines */
   --link-color: var(--accent-text);
-  --link-color-hover: oklch(from var(--link-color) calc(l + 0.05) c h); 
+  --link-color-hover: oklch(from var(--link-color) calc(l - 0.05) c h); /* Slightly darker link on hover */
   --input-text: var(--text-1);
   --input-placeholder-text: var(--text-muted);
-  --input-bg: var(--surface-1-bg); /* Use surface bg for inputs */
+  --input-bg: var(--base-bg);
   --input-border: var(--outline-color);
   --input-border-hover: var(--outline-color-overt);
   --input-border-focus: var(--outline-color-accent);
-  --input-shadow-focus: oklch(from var(--accent) l c h / 30%);
+  --input-shadow-focus: oklch(from var(--accent) l c h / 30%); /* Subtle shadow for focus */
+  /* Button variants */
   --button-primary-bg: var(--accent-bg);
   --button-primary-text: var(--text-on-accent);
   --button-primary-border: transparent;
@@ -680,50 +612,155 @@ IGNORE_WHEN_COPYING_END
   --button-outline-text: var(--accent-text);
   --button-outline-border: var(--accent-border);
   --button-outline-bg-hover: var(--accent-bg-subtle);
-  --button-outline-bg-active: oklch(from var(--accent-bg-subtle) calc(l + 0.03) c h);
+  --button-outline-bg-active: oklch(from var(--accent-bg-subtle) calc(l - 0.03) c h);
   --button-text-bg: transparent;
   --button-text-text: var(--accent-text);
   --button-text-border: transparent;
   --button-text-bg-hover: var(--accent-bg-subtle);
-  --button-text-bg-active: oklch(from var(--accent-bg-subtle) calc(l + 0.03) c h);
+  --button-text-bg-active: oklch(from var(--accent-bg-subtle) calc(l - 0.03) c h);
+  /* Code styling */
   --code-text: var(--text-1);
-  --code-block-bg: var(--surface-1-bg); 
+  --code-block-bg: var(--surface-2-bg);
   --code-block-border: var(--outline-color-subtle);
   --code-inline-bg: var(--surface-1-bg);
   --code-inline-border: var(--outline-color-subtle);
+  /* Table styling */
   --table-border: var(--outline-color);
   --table-header-bg: var(--surface-1-bg);
   --table-row-hover-bg: var(--highlight-bg-subtle);
+  /* Blockquote styling */
   --blockquote-text: var(--text-2);
   --blockquote-border: var(--outline-color);
+  /* HR styling */
   --hr-color: var(--outline-color-subtle);
-  --indicator-color: var(--text-on-accent); 
-  --error-l-dark: 0.7; --error-c-dark: 0.22; --error-h-dark: 25;
-  --warning-l-dark: 0.8; --warning-c-dark: 0.2; --warning-h-dark: 70;
-  --success-l-dark: 0.75; --success-c-dark: 0.2; --success-h-dark: 145;
-  --info-l-dark: 0.8; --info-c-dark: 0.18; --info-h-dark: 230;
-  --error-base: oklch(var(--error-l-dark) var(--error-c-dark) var(--error-h-dark)); --error-text: var(--error-base); --error-border: var(--error-base); --error-bg-subtle: oklch(from var(--error-base) calc(l * 0.3) calc(c * 0.5) h); --text-on-error: oklch(from var(--error-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
-  --warning-base: oklch(var(--warning-l-dark) var(--warning-c-dark) var(--warning-h-dark)); --warning-text: var(--warning-base); --warning-border: var(--warning-base); --warning-bg-subtle: oklch(from var(--warning-base) calc(l * 0.3) calc(c * 0.5) h); --text-on-warning: oklch(from var(--warning-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
-  --success-base: oklch(var(--success-l-dark) var(--success-c-dark) var(--success-h-dark)); --success-text: var(--success-base); --success-border: var(--success-base); --success-bg-subtle: oklch(from var(--success-base) calc(l * 0.3) calc(c * 0.5) h); --text-on-success: oklch(from var(--success-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
-  --info-base: oklch(var(--info-l-dark) var(--info-c-dark) var(--info-h-dark)); --info-text: var(--info-base); --info-border: var(--info-base); --info-bg-subtle: oklch(from var(--info-base) calc(l * 0.3) calc(c * 0.5) h); --text-on-info: oklch(from var(--info-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+  /* Checkbox/Radio indicator */
+  --indicator-color: var(--text-on-accent);
+  /* Feedback colors (adjust LCH values as needed) */
+  --error-l: 0.6; --error-c: 0.22; --error-h: 25;
+  --warning-l: 0.7; --warning-c: 0.2; --warning-h: 70;
+  --success-l: 0.65; --success-c: 0.2; --success-h: 145;
+  --info-l: 0.7; --info-c: 0.18; --info-h: 230;
+  --error-base: oklch(var(--error-l) var(--error-c) var(--error-h)); --error-text: var(--error-base); --error-border: var(--error-base); --error-bg-subtle: oklch(from var(--error-base) calc(l + (1-l)*0.85) calc(c * 0.3) h); --text-on-error: oklch(from var(--error-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+  --warning-base: oklch(var(--warning-l) var(--warning-c) var(--warning-h)); --warning-text: var(--warning-base); --warning-border: var(--warning-base); --warning-bg-subtle: oklch(from var(--warning-base) calc(l + (1-l)*0.85) calc(c * 0.3) h); --text-on-warning: oklch(from var(--warning-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+  --success-base: oklch(var(--success-l) var(--success-c) var(--success-h)); --success-text: var(--success-base); --success-border: var(--success-base); --success-bg-subtle: oklch(from var(--success-base) calc(l + (1-l)*0.85) calc(c * 0.3) h); --text-on-success: oklch(from var(--success-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+  --info-base: oklch(var(--info-l) var(--info-c) var(--info-h)); --info-text: var(--info-base); --info-border: var(--info-base); --info-bg-subtle: oklch(from var(--info-base) calc(l + (1-l)*0.85) calc(c * 0.3) h); --text-on-info: oklch(from var(--info-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+  /* Scrollbar */
   --scrollbar-thumb-color: var(--outline-color-overt);
   --scrollbar-track-color: var(--surface-1-bg);
 }
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
 
-} /* End of Dark Mode */
+/* --- Color Generation (Dark Mode Overrides) --- */ /* Fixed comment syntax */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Adjusted shadow base for dark mode */
+    --shadow-color-base: 220 20% 90%; /* Lighter base for dark mode shadows */
+    --shadow-sm: 0 1px 2px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
+    --shadow-md: 0 4px 6px -1px oklch(from hsl(var(--shadow-color-base)) l c h / 12%), 0 2px 4px -2px oklch(from hsl(var(--shadow-color-base)) l c h / 12%);
+    --shadow-lg: 0 10px 15px -3px oklch(from hsl(var(--shadow-color-base)) l c h / 12%), 0 4px 6px -4px oklch(from hsl(var(--shadow-color-base)) l c h / 12%);
+    --shadow-xl: 0 20px 25px -5px oklch(from hsl(var(--shadow-color-base)) l c h / 12%), 0 8px 10px -6px oklch(from hsl(var(--shadow-color-base)) l c h / 12%);
+    --shadow-inner: inset 0 2px 4px 0 oklch(from hsl(var(--shadow-color-base)) l c h / 7%);
 
-/* --- Apply Theme Specific Styles --- /
-/ Apply colors/styles directly tied to the theme's visual identity */
+    /* Dark Mode Base Parameters */
+    --base-l-dark: 0.18; --base-c-dark: var(--surface-c); --base-h-dark: var(--accent-h);
+    --bedrock-l-dark: 0.95; --bedrock-c-dark: calc(var(--surface-c) * 0.7); --bedrock-h-dark: var(--accent-h);
+    --surface-1-l-dark: 0.23; --surface-1-c-dark: calc(var(--surface-c) * 1.2); --surface-1-h-dark: var(--accent-h);
+    --surface-2-l-dark: 0.28; --surface-2-c-dark: calc(var(--surface-c) * 1.4); --surface-2-h-dark: var(--accent-h);
+    /* Dark Mode Text/Border Parameters */
+    --text1-l-dark: max(0.9, min(0.98, (1 - var(--base-l-dark)) * var(--contrast-factor))); --text1-c-dark: calc(var(--surface-c) * 0.8); --text1-h-dark: var(--accent-h);
+    --text2-l-dark: max(0.7, min(0.85, (1 - var(--base-l-dark)) * var(--contrast-factor) * 0.8)); --text2-c-dark: var(--text1-c-dark); --text2-h-dark: var(--accent-h);
+    --border-l-dark: min(0.5, var(--base-l-dark) + 0.15 * var(--contrast-factor)); --border-c-dark: var(--surface-c); --border-h-dark: var(--accent-h);
+    /* Dark Mode Accent Adjustment (often needs to be lighter/more chromatic) */
+    --accent-l-dark: max(0.7, var(--accent-l) + 0.1); --accent-c-dark: min(0.25, var(--accent-c) * 1.1); --accent-h-dark: var(--accent-h);
 
-/* Scrollbar Theming /
+    /* --- Assign Dark Mode Colors (Semantic Variables) --- */
+    --base-bg: oklch(var(--base-l-dark) var(--base-c-dark) var(--base-h-dark));
+    --bedrock-bg: oklch(var(--bedrock-l-dark) var(--bedrock-c-dark) var(--bedrock-h-dark));
+    --surface-1-bg: oklch(var(--surface-1-l-dark) var(--surface-1-c-dark) var(--surface-1-h-dark));
+    --surface-2-bg: oklch(var(--surface-2-l-dark) var(--surface-2-c-dark) var(--surface-2-h-dark));
+    --text-1: oklch(var(--text1-l-dark) var(--text1-c-dark) var(--text1-h-dark));
+    --text-2: oklch(var(--text2-l-dark) var(--text2-c-dark) var(--text2-h-dark));
+    --text-muted: oklch(from var(--text-2) l calc(c * 0.7) h / 70%);
+    --accent: oklch(var(--accent-l-dark) var(--accent-c-dark) var(--accent-h-dark));
+    --text-on-accent: oklch(from var(--accent) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+    --text-on-bedrock: oklch(from var(--bedrock-bg) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+    --text-heading: var(--text-1);
+    --text-blockquote: var(--text-2);
+    --text-code: var(--text-1);
+    --outline-color: oklch(var(--border-l-dark) var(--border-c-dark) var(--border-h-dark));
+    --outline-color-subtle: oklch(from var(--outline-color) calc(l - (l*0.2)) c h); /* Darker subtle border */
+    --outline-color-overt: oklch(from var(--outline-color) calc(l + (1-l)*0.2) c h); /* Lighter overt border */
+    --outline-color-accent: var(--accent);
+    --outline-color-focus: var(--accent);
+    --accent-text: var(--accent);
+    --accent-bg-subtle: oklch(from var(--accent) calc(l * 0.3) calc(c * 0.4) h); /* Darker subtle accent bg */
+    --accent-bg: var(--accent);
+    --accent-bg-hover: oklch(from var(--accent) calc(l + 0.05) c h); /* Lighter hover */
+    --accent-bg-active: oklch(from var(--accent) calc(l + 0.08) c h); /* Even lighter active */
+    --accent-border: var(--accent);
+    --highlight-bg-subtle: oklch(from var(--base-bg) calc(l + 0.04) c h); /* Slightly lighter highlight */
+    --highlight-bg-overt: oklch(from var(--accent) calc(l * 0.5) calc(c * 0.6) h); /* Darker overt highlight */
+    --highlight-text: var(--text-1);
+    --selection-bg: var(--accent);
+    --selection-text: var(--text-on-accent);
+    --focus-ring-color: var(--outline-color-focus);
+    --link-color: var(--accent-text);
+    --link-color-hover: oklch(from var(--link-color) calc(l + 0.05) c h); /* Slightly lighter link hover */
+    --input-text: var(--text-1);
+    --input-placeholder-text: var(--text-muted);
+    --input-bg: var(--surface-1-bg); /* Use surface bg for inputs in dark mode */
+    --input-border: var(--outline-color);
+    --input-border-hover: var(--outline-color-overt);
+    --input-border-focus: var(--outline-color-accent);
+    --input-shadow-focus: oklch(from var(--accent) l c h / 30%);
+    --button-primary-bg: var(--accent-bg);
+    --button-primary-text: var(--text-on-accent);
+    --button-primary-border: transparent;
+    --button-primary-bg-hover: var(--accent-bg-hover);
+    --button-primary-bg-active: var(--accent-bg-active);
+    --button-outline-bg: transparent;
+    --button-outline-text: var(--accent-text);
+    --button-outline-border: var(--accent-border);
+    --button-outline-bg-hover: var(--accent-bg-subtle);
+    --button-outline-bg-active: oklch(from var(--accent-bg-subtle) calc(l + 0.03) c h);
+    --button-text-bg: transparent;
+    --button-text-text: var(--accent-text);
+    --button-text-border: transparent;
+    --button-text-bg-hover: var(--accent-bg-subtle);
+    --button-text-bg-active: oklch(from var(--accent-bg-subtle) calc(l + 0.03) c h);
+    --code-text: var(--text-1);
+    --code-block-bg: var(--surface-1-bg); /* Darker code block */
+    --code-block-border: var(--outline-color-subtle);
+    --code-inline-bg: var(--surface-1-bg);
+    --code-inline-border: var(--outline-color-subtle);
+    --table-border: var(--outline-color);
+    --table-header-bg: var(--surface-1-bg);
+    --table-row-hover-bg: var(--highlight-bg-subtle);
+    --blockquote-text: var(--text-2);
+    --blockquote-border: var(--outline-color);
+    --hr-color: var(--outline-color-subtle);
+    --indicator-color: var(--text-on-accent); /* Checkbox/radio indicator */
+    /* Dark Mode Feedback Colors (often need higher lightness) */
+    --error-l-dark: 0.7; --error-c-dark: 0.22; --error-h-dark: 25;
+    --warning-l-dark: 0.8; --warning-c-dark: 0.2; --warning-h-dark: 70;
+    --success-l-dark: 0.75; --success-c-dark: 0.2; --success-h-dark: 145;
+    --info-l-dark: 0.8; --info-c-dark: 0.18; --info-h-dark: 230;
+    --error-base: oklch(var(--error-l-dark) var(--error-c-dark) var(--error-h-dark)); --error-text: var(--error-base); --error-border: var(--error-base); --error-bg-subtle: oklch(from var(--error-base) calc(l * 0.3) calc(c * 0.5) h); --text-on-error: oklch(from var(--error-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+    --warning-base: oklch(var(--warning-l-dark) var(--warning-c-dark) var(--warning-h-dark)); --warning-text: var(--warning-base); --warning-border: var(--warning-base); --warning-bg-subtle: oklch(from var(--warning-base) calc(l * 0.3) calc(c * 0.5) h); --text-on-warning: oklch(from var(--warning-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+    --success-base: oklch(var(--success-l-dark) var(--success-c-dark) var(--success-h-dark)); --success-text: var(--success-base); --success-border: var(--success-base); --success-bg-subtle: oklch(from var(--success-base) calc(l * 0.3) calc(c * 0.5) h); --text-on-success: oklch(from var(--success-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+    --info-base: oklch(var(--info-l-dark) var(--info-c-dark) var(--info-h-dark)); --info-text: var(--info-base); --info-border: var(--info-base); --info-bg-subtle: oklch(from var(--info-base) calc(l * 0.3) calc(c * 0.5) h); --text-on-info: oklch(from var(--info-base) clamp(0.05, (var(--contrast-lightness-threshold) / l - 1) * 999, 0.98) min(c * 0.3, 0.05) h);
+    /* Scrollbar */
+    --scrollbar-thumb-color: var(--outline-color-overt);
+    --scrollbar-track-color: var(--surface-1-bg);
+  } /* Added missing closing brace for :root */
+} /* End of Dark Mode @media */
+
+/* --- Apply Theme Specific Styles --- */ /* Fixed comment syntax */
+/* Apply colors/styles directly tied to the theme's visual identity */
+
+/* Scrollbar Theming */ /* Fixed comment syntax */
 html {
-scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
-/ scrollbar-width: thin; / / Optional */
+  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+  /* scrollbar-width: thin; */ /* Optional */
 }
 
 /* Code blocks */
@@ -736,34 +773,78 @@ blockquote { border-inline-start-color: var(--blockquote-border); color: var(--b
 /* Horizontal Rule */
 hr { border-block-start-color: var(--hr-color); }
 
-/* Input styles */
+/* Input styles (using nesting for pseudo-elements/states) */
 input, select, textarea {
-background-color: var(--input-bg); border-color: var(--input-border); color: var(--input-text);
-&::placeholder { color: var(--input-placeholder-text); opacity: 1; }
+  background-color: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--input-text);
+  /* Placeholder styling */
+  &::placeholder {
+    color: var(--input-placeholder-text);
+    opacity: 1; /* Ensure placeholder is fully opaque */
+  }
 }
-input:hover, select:hover, textarea:hover { border-color: var(--input-border-hover); }
-input:focus, select:focus, textarea:focus { border-color: var(--input-border-focus); box-shadow: 0 0 0 var(--focus-ring-width) var(--input-shadow-focus); }
-input:invalid, select:invalid, textarea:invalid { border-color: var(--error-border); box-shadow: 0 0 0 var(--focus-ring-width) oklch(from var(--error-border) l c h / 30%); }
+input:hover, select:hover, textarea:hover {
+  border-color: var(--input-border-hover);
+}
+input:focus, select:focus, textarea:focus,
+input:focus-visible, select:focus-visible, textarea:focus-visible { /* Include focus-visible */
+  border-color: var(--input-border-focus);
+  /* Use outline for focus ring consistent with :focus-visible default, remove box-shadow */
+  outline-color: var(--focus-ring-color);
+  outline-style: solid;
+  outline-width: var(--focus-ring-width);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: none; /* Remove potential input-specific shadow */
+}
+/* Invalid state styling */
+input:invalid, select:invalid, textarea:invalid {
+  border-color: var(--error-border);
+  /* Apply subtle shadow or outline for invalid state, distinct from focus */
+  outline-color: oklch(from var(--error-border) l c h / 50%); /* Example: Slightly transparent error outline */
+  outline-style: solid;
+  outline-width: var(--focus-ring-width);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: none;
+}
 fieldset { border-color: var(--outline-color); }
 legend { color: var(--text-1); }
 
 /* Custom Select Arrow */
 select {
-background-image: linear-gradient(45deg, transparent 50%, var(--text-2) 50%), linear-gradient(135deg, var(--text-2) 50%, transparent 50%);
-background-position: right var(--space-md) top 55%, right calc(var(--space-md) - 5px) top 55%;
-background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
+  /* Uses background gradients to create an arrow */
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-2) 50%), linear-gradient(135deg, var(--text-2) 50%, transparent 50%);
+  background-position: right var(--space-md) top 55%, right calc(var(--space-md) + 5px) top 55%; /* Adjusted position based on updated gap */
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
 }
-select:-moz-focusring { color: transparent; text-shadow: 0 0 0 var(--input-text); }
+/* Firefox specific fix for focus state */
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 var(--input-text);
+}
 
 /* Checkbox/Radio Indicator Color */
-input[type="checkbox"], input[type="radio"] { border-color: var(--outline-color); }
-input[type="checkbox"]:checked, input[type="radio"]:checked { background-color: var(--accent); border-color: var(--accent); }
-input[type="checkbox"]::before, input[type="radio"]::before { box-shadow: inset 1em 1em var(--indicator-color); }
-input[type="checkbox"]:hover:not(:checked), input[type="radio"]:hover:not(:checked) { border-color: var(--outline-color-overt); }
+input[type="checkbox"], input[type="radio"] {
+  border-color: var(--outline-color);
+}
+input[type="checkbox"]:checked, input[type="radio"]:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+/* Indicator color is set via box-shadow in ::before rule in defaults */
+input[type="checkbox"]::before, input[type="radio"]::before {
+  box-shadow: inset 1em 1em var(--indicator-color);
+}
+input[type="checkbox"]:hover:not(:checked), input[type="radio"]:hover:not(:checked) {
+  border-color: var(--outline-color-overt);
+}
 
-/* Button Base Styles (Consumed by variants in utilities or components) /
+/* Button Base Styles */ /* Rephrased comment */
+/* Base structural styles are in @defaults. */
+/* Theme colors/variants are applied via utility classes (.button-primary, etc.) in @utilities. */
 button, input[type="button"], input[type="submit"], input[type="reset"] {
-/ Base styles are in defaults, theme applies default variant */
+  /* No theme-specific styles applied directly here, use utilities */
 }
 
 /* Table styles */
@@ -773,165 +854,188 @@ thead th { background-color: var(--table-header-bg); color: var(--text-heading);
 tbody tr:hover { background-color: var(--table-row-hover-bg); }
 
 /* Focus Ring Color */
-:focus-visible { outline-color: var(--focus-ring-color); }
+:focus-visible {
+  outline-color: var(--focus-ring-color);
+}
 
 } /* End of @layer theme */
 
-/* ================================================ /
-/ ==             @layer utilities               == /
-/ ================================================ /
-/ Purpose: Provide helpful utility classes for common styling /
-/ patterns, layout, spacing, colors, etc., leveraging /
-/ variables defined in the @theme layer. */
+
+/* ================================================ */
+/* ==             @layer utilities               == */
+/* ================================================ */
+/* Purpose: Provide helpful utility classes for common styling */
+/* patterns, layout, spacing, colors, etc., leveraging */
+/* variables defined in the @theme layer. */
 @layer utilities {
 
-/* --- Semantic Color/Surface Utilities --- /
-/ Backgrounds */
-.bg-base { background-color: var(--base-bg); }
-.bg-surface-1 { background-color: var(--surface-1-bg); }
-.bg-surface-2 { background-color: var(--surface-2-bg); }
-.bg-bedrock { background-color: var(--bedrock-bg); }
-.bg-accent { background-color: var(--accent-bg); }
-.bg-accent-subtle { background-color: var(--accent-bg-subtle); }
-.bg-highlight-subtle { background-color: var(--highlight-bg-subtle); }
-.bg-highlight-overt { background-color: var(--highlight-bg-overt); }
-.bg-error-subtle { background-color: var(--error-bg-subtle); }
-.bg-warning-subtle { background-color: var(--warning-bg-subtle); }
-.bg-success-subtle { background-color: var(--success-bg-subtle); }
-.bg-info-subtle { background-color: var(--info-bg-subtle); }
-.bg-transparent { background-color: transparent; }
+  /* --- Semantic Color/Surface Utilities --- */ /* Fixed comment syntax */
+  /* Backgrounds */
+  .bg-base { background-color: var(--base-bg); }
+  .bg-surface-1 { background-color: var(--surface-1-bg); }
+  .bg-surface-2 { background-color: var(--surface-2-bg); }
+  .bg-bedrock { background-color: var(--bedrock-bg); }
+  .bg-accent { background-color: var(--accent-bg); }
+  .bg-accent-subtle { background-color: var(--accent-bg-subtle); }
+  .bg-highlight-subtle { background-color: var(--highlight-bg-subtle); }
+  .bg-highlight-overt { background-color: var(--highlight-bg-overt); }
+  .bg-error-subtle { background-color: var(--error-bg-subtle); }
+  .bg-warning-subtle { background-color: var(--warning-bg-subtle); }
+  .bg-success-subtle { background-color: var(--success-bg-subtle); }
+  .bg-info-subtle { background-color: var(--info-bg-subtle); }
+  .bg-transparent { background-color: transparent; }
 
-/* Text Colors */
-.text-1, .text-overt { color: var(--text-1); }
-.text-2, .text-subtle { color: var(--text-2); }
-.text-muted { color: var(--text-muted); }
-.text-accent { color: var(--accent-text); }
-.text-on-accent { color: var(--text-on-accent); }
-.text-on-bedrock { color: var(--text-on-bedrock); }
-.text-link { color: var(--link-color); }
-.text-error { color: var(--error-text); }
-.text-warning { color: var(--warning-text); }
-.text-success { color: var(--success-text); }
-.text-info { color: var(--info-text); }
-.text-inherit { color: inherit; }
+  /* Text Colors */
+  .text-1, .text-overt { color: var(--text-1); }
+  .text-2, .text-subtle { color: var(--text-2); }
+  .text-muted { color: var(--text-muted); }
+  .text-accent { color: var(--accent-text); }
+  .text-on-accent { color: var(--text-on-accent); }
+  .text-on-bedrock { color: var(--text-on-bedrock); }
+  .text-link { color: var(--link-color); }
+  .text-error { color: var(--error-text); }
+  .text-warning { color: var(--warning-text); }
+  .text-success { color: var(--success-text); }
+  .text-info { color: var(--info-text); }
+  .text-inherit { color: inherit; }
 
-/* Border Colors /
-.border-color { border-color: var(--outline-color); }
-.border-subtle { border-color: var(--outline-color-subtle); }
-.border-overt { border-color: var(--outline-color-overt); }
-.border-accent { border-color: var(--outline-color-accent); }
-.border-error { border-color: var(--error-border); }
-.border-warning { border-color: var(--warning-border); }
-.border-success { border-color: var(--success-border); }
-.border-info { border-color: var(--info-border); }
-.border-transparent { border-color: transparent; }
-/ Side-specific examples /
-.border-b-color { border-bottom-color: var(--outline-color); }
-.border-t-accent { border-top-color: var(--outline-color-accent); }
-/ etc. */
+  /* Border Colors */ /* Fixed comment syntax */
+  .border-color { border-color: var(--outline-color); }
+  .border-subtle { border-color: var(--outline-color-subtle); }
+  .border-overt { border-color: var(--outline-color-overt); }
+  .border-accent { border-color: var(--outline-color-accent); }
+  .border-error { border-color: var(--error-border); }
+  .border-warning { border-color: var(--warning-border); }
+  .border-success { border-color: var(--success-border); }
+  .border-info { border-color: var(--info-border); }
+  .border-transparent { border-color: transparent; }
+  /* Side-specific examples */ /* Fixed comment syntax */
+  .border-b-color { border-bottom-color: var(--outline-color); }
+  .border-t-accent { border-top-color: var(--outline-color-accent); }
+  /* etc. */ /* Fixed comment syntax */
 
-/* --- Box Model & Spacing Utilities --- /
-/ Padding /
-.p-0 { --b-p: 0; } .p-xxs { --b-p: var(--space-xxs); } .p-xs { --b-p: var(--space-xs); } .p-sm { --b-p: var(--space-sm); } .p-md { --b-p: var(--space-md); } .p-lg { --b-p: var(--space-lg); } .p-xl { --b-p: var(--space-xl); } .p-xxl { --b-p: var(--space-xxl); }
-.px-0 { --b-px: 0; } .px-xxs { --b-px: var(--space-xxs); } .px-xs { --b-px: var(--space-xs); } .px-sm { --b-px: var(--space-sm); } .px-md { --b-px: var(--space-md); } .px-lg { --b-px: var(--space-lg); } .px-xl { --b-px: var(--space-xl); } .px-xxl { --b-px: var(--space-xxl); }
-.py-0 { --b-py: 0; } .py-xxs { --b-py: var(--space-xxs); } .py-xs { --b-py: var(--space-xs); } .py-sm { --b-py: var(--space-sm); } .py-md { --b-py: var(--space-md); } .py-lg { --b-py: var(--space-lg); } .py-xl { --b-py: var(--space-xl); } .py-xxl { --b-py: var(--space-xxl); }
-/ Apply axis padding if set /
-.box[style="--b-px"] { padding-inline: var(--b-px); }
-.box[style*="--b-py"] { padding-block: var(--b-py); }
-/* Individual sides (less common for .box, but possible) /
-/ .pt-sm { --b-pt: var(--space-sm); } ... */
+  /* --- Box Model & Spacing Utilities --- */ /* Fixed comment syntax */
+  /* These primarily set variables used by the `.box` component in @defaults */
+  /* Padding */ /* Fixed comment syntax */
+  .p-0 { --b-p: 0; } .p-xxs { --b-p: var(--space-xxs); } .p-xs { --b-p: var(--space-xs); } .p-sm { --b-p: var(--space-sm); } .p-md { --b-p: var(--space-md); } .p-lg { --b-p: var(--space-lg); } .p-xl { --b-p: var(--space-xl); } .p-xxl { --b-p: var(--space-xxl); }
+  .px-0 { --b-px: 0; } .px-xxs { --b-px: var(--space-xxs); } .px-xs { --b-px: var(--space-xs); } .px-sm { --b-px: var(--space-sm); } .px-md { --b-px: var(--space-md); } .px-lg { --b-px: var(--space-lg); } .px-xl { --b-px: var(--space-xl); } .px-xxl { --b-px: var(--space-xxl); }
+  .py-0 { --b-py: 0; } .py-xxs { --b-py: var(--space-xxs); } .py-xs { --b-py: var(--space-xs); } .py-sm { --b-py: var(--space-sm); } .py-md { --b-py: var(--space-md); } .py-lg { --b-py: var(--space-lg); } .py-xl { --b-py: var(--space-xl); } .py-xxl { --b-py: var(--space-xxl); }
+  /* Apply axis padding if set - requires .box class and inline style/var set */ /* Fixed comment syntax */
+  /* .box[style*="--b-px"] { padding-inline: var(--b-px); } - Handled in @defaults */
+  /* .box[style*="--b-py"] { padding-block: var(--b-py); } - Handled in @defaults */
+  /* Individual sides (less common for .box, but possible) */ /* Fixed comment syntax */
+  /* .pt-sm { --b-pt: var(--space-sm); } ... */
 
-/* Margin /
-.m-0 { --b-m: 0; } .m-xxs { --b-m: var(--space-xxs); } .m-xs { --b-m: var(--space-xs); } .m-sm { --b-m: var(--space-sm); } .m-md { --b-m: var(--space-md); } .m-lg { --b-m: var(--space-lg); } .m-xl { --b-m: var(--space-xl); } .m-xxl { --b-m: var(--space-xxl); }
-.mx-auto { margin-inline: auto; } / Specific utility /
-.mx-0 { --b-mx: 0; } .mx-xxs { --b-mx: var(--space-xxs); } .mx-xs { --b-mx: var(--space-xs); } .mx-sm { --b-mx: var(--space-sm); } .mx-md { --b-mx: var(--space-md); } .mx-lg { --b-mx: var(--space-lg); } .mx-xl { --b-mx: var(--space-xl); } .mx-xxl { --b-mx: var(--space-xxl); }
-.my-0 { --b-my: 0; } .my-xxs { --b-my: var(--space-xxs); } .my-xs { --b-my: var(--space-xs); } .my-sm { --b-my: var(--space-sm); } .my-md { --b-my: var(--space-md); } .my-lg { --b-my: var(--space-lg); } .my-xl { --b-my: var(--space-xl); } .my-xxl { --b-my: var(--space-xxl); }
-/ Apply axis margin if set /
-.box[style="--b-mx"] { margin-inline: var(--b-mx); }
-.box[style*="--b-my"] { margin-block: var(--b-my); }
+  /* Margin */ /* Fixed comment syntax */
+  .m-0 { --b-m: 0; } .m-xxs { --b-m: var(--space-xxs); } .m-xs { --b-m: var(--space-xs); } .m-sm { --b-m: var(--space-sm); } .m-md { --b-m: var(--space-md); } .m-lg { --b-m: var(--space-lg); } .m-xl { --b-m: var(--space-xl); } .m-xxl { --b-m: var(--space-xxl); }
+  .mx-auto { margin-inline: auto; } /* Specific utility, applies directly */ /* Fixed comment syntax */
+  .mx-0 { --b-mx: 0; } .mx-xxs { --b-mx: var(--space-xxs); } .mx-xs { --b-mx: var(--space-xs); } .mx-sm { --b-mx: var(--space-sm); } .mx-md { --b-mx: var(--space-md); } .mx-lg { --b-mx: var(--space-lg); } .mx-xl { --b-mx: var(--space-xl); } .mx-xxl { --b-mx: var(--space-xxl); }
+  .my-0 { --b-my: 0; } .my-xxs { --b-my: var(--space-xxs); } .my-xs { --b-my: var(--space-xs); } .my-sm { --b-my: var(--space-sm); } .my-md { --b-my: var(--space-md); } .my-lg { --b-my: var(--space-lg); } .my-xl { --b-my: var(--space-xl); } .my-xxl { --b-my: var(--space-xxl); }
+  /* Apply axis margin if set - requires .box class and inline style/var set */ /* Fixed comment syntax */
+  /* .box[style*="--b-mx"] { margin-inline: var(--b-mx); } - Handled in @defaults */
+  /* .box[style*="--b-my"] { margin-block: var(--b-my); } - Handled in @defaults */
 
-/* --- Layout Utilities --- /
-/ Display /
-.block { display: block; } .inline-block { display: inline-block; } .inline { display: inline; }
-.flex { display: flex; } .inline-flex { display: inline-flex; }
-.grid { display: grid; } .inline-grid { display: inline-grid; }
-.flow-root { display: flow-root; } / For containing floats /
-.hidden { display: none; } / Different from .visually-hidden */
+  /* --- Layout Utilities --- */ /* Fixed comment syntax */
+  /* Display */ /* Fixed comment syntax */
+  .block { display: block; } .inline-block { display: inline-block; } .inline { display: inline; }
+  .flex { display: flex; } .inline-flex { display: inline-flex; }
+  .grid { display: grid; } .inline-grid { display: inline-grid; }
+  .flow-root { display: flow-root; } /* For containing floats */ /* Fixed comment syntax */
+  .hidden { display: none; } /* Different from .visually-hidden */ /* Fixed comment syntax */
 
-/* Flexbox /
-.flex-row { flex-direction: row; } .flex-row-reverse { flex-direction: row-reverse; }
-.flex-col { flex-direction: column; } .flex-col-reverse { flex-direction: column-reverse; }
-.flex-wrap { flex-wrap: wrap; } .flex-wrap-reverse { flex-wrap: wrap-reverse; } .flex-nowrap { flex-wrap: nowrap; }
-.flex-1 { flex: 1 1 0%; } .flex-auto { flex: 1 1 auto; } .flex-initial { flex: 0 1 auto; } .flex-none { flex: none; }
-.items-start { align-items: flex-start; } .items-center { align-items: center; } .items-end { align-items: flex-end; } .items-baseline { align-items: baseline; } .items-stretch { align-items: stretch; }
-.justify-start { justify-content: flex-start; } .justify-center { justify-content: center; } .justify-end { justify-content: flex-end; }
-.justify-between { justify-content: space-between; } .justify-around { justify-content: space-around; } .justify-evenly { justify-content: space-evenly; }
-.gap-0 { gap: 0; } .gap-xxs { gap: var(--space-xxs); } .gap-xs { gap: var(--space-xs); } .gap-sm { gap: var(--space-sm); } .gap-md { gap: var(--space-md); } .gap-lg { gap: var(--space-lg); } .gap-xl { gap: var(--space-xl); } .gap-xxl { gap: var(--space-xxl); }
-/ Add gap-x, gap-y if needed */
+  /* Flexbox */ /* Fixed comment syntax */
+  .flex-row { flex-direction: row; } .flex-row-reverse { flex-direction: row-reverse; }
+  .flex-col { flex-direction: column; } .flex-col-reverse { flex-direction: column-reverse; }
+  .flex-wrap { flex-wrap: wrap; } .flex-wrap-reverse { flex-wrap: wrap-reverse; } .flex-nowrap { flex-wrap: nowrap; }
+  .flex-1 { flex: 1 1 0%; } .flex-auto { flex: 1 1 auto; } .flex-initial { flex: 0 1 auto; } .flex-none { flex: none; }
+  .items-start { align-items: flex-start; } .items-center { align-items: center; } .items-end { align-items: flex-end; } .items-baseline { align-items: baseline; } .items-stretch { align-items: stretch; }
+  .justify-start { justify-content: flex-start; } .justify-center { justify-content: center; } .justify-end { justify-content: flex-end; }
+  .justify-between { justify-content: space-between; } .justify-around { justify-content: space-around; } .justify-evenly { justify-content: space-evenly; }
+  .gap-0 { gap: 0; } .gap-xxs { gap: var(--space-xxs); } .gap-xs { gap: var(--space-xs); } .gap-sm { gap: var(--space-sm); } .gap-md { gap: var(--space-md); } .gap-lg { gap: var(--space-lg); } .gap-xl { gap: var(--space-xl); } .gap-xxl { gap: var(--space-xxl); }
+  /* Add gap-x, gap-y if needed */ /* Fixed comment syntax */
 
-/* Grid /
-.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); } .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } .grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-/ Add more columns or custom grid templates as needed */
-.grid-rows-auto { grid-auto-rows: auto; } .grid-rows-min { grid-auto-rows: min-content; } .grid-rows-max { grid-auto-rows: max-content; } .grid-rows-fr { grid-auto-rows: minmax(0, 1fr); }
+  /* Grid */ /* Fixed comment syntax */
+  .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); } .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } .grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  /* Add more columns or custom grid templates as needed */ /* Fixed comment syntax */
+  .grid-rows-auto { grid-auto-rows: auto; } .grid-rows-min { grid-auto-rows: min-content; } .grid-rows-max { grid-auto-rows: max-content; } .grid-rows-fr { grid-auto-rows: minmax(0, 1fr); }
 
-/* --- Border & Radius Utilities --- /
-/ Border Width (Targets specific border properties, not --b-bw for now) /
-.border { border-width: var(--border-width); border-style: solid; }
-.border-0 { border-width: 0; } .border-2 { border-width: var(--border-width-thick); border-style: solid; } / Example thick */
-.border-t { border-top-width: var(--border-width); border-top-style: solid; } .border-r { border-right-width: var(--border-width); border-right-style: solid; }
-.border-b { border-bottom-width: var(--border-width); border-bottom-style: solid; } .border-l { border-left-width: var(--border-width); border-left-style: solid; }
-.border-x { border-left-width: var(--border-width); border-right-width: var(--border-width); border-left-style: solid; border-right-style: solid; }
-.border-y { border-top-width: var(--border-width); border-bottom-width: var(--border-width); border-top-style: solid; border-bottom-style: solid; }
+  /* --- Border & Radius Utilities --- */ /* Fixed comment syntax */
+  /* Border Width (Applies directly, not via --b-bw) */ /* Fixed comment syntax */
+  .border { border-width: var(--border-width); border-style: solid; }
+  .border-0 { border-width: 0; } .border-2 { border-width: var(--border-width-thick); border-style: solid; } /* Example thick */ /* Fixed comment syntax */
+  .border-t { border-top-width: var(--border-width); border-top-style: solid; } .border-r { border-right-width: var(--border-width); border-right-style: solid; }
+  .border-b { border-bottom-width: var(--border-width); border-bottom-style: solid; } .border-l { border-left-width: var(--border-width); border-left-style: solid; }
+  .border-x { border-left-width: var(--border-width); border-right-width: var(--border-width); border-left-style: solid; border-right-style: solid; }
+  .border-y { border-top-width: var(--border-width); border-bottom-width: var(--border-width); border-top-style: solid; border-bottom-style: solid; }
 
-/* Border Radius (Sets --b-r for .box, or direct property) /
-.radius-0 { --b-r: 0; border-radius: 0;} / Also set direct for non-.box elements /
-.radius-sm { --b-r: var(--radius-sm); border-radius: var(--radius-sm); } .radius-md { --b-r: var(--radius-md); border-radius: var(--radius-md); }
-.radius-lg { --b-r: var(--radius-lg); border-radius: var(--radius-lg); } .radius-xl { --b-r: var(--radius-xl); border-radius: var(--radius-xl); }
-.radius-full { --b-r: var(--radius-full); border-radius: var(--radius-full); }
-/ Corner specific radii /
-/ .radius-t-md { border-top-left-radius: var(--radius-md); border-top-right-radius: var(--radius-md); } ... etc */
+  /* Border Radius (Sets --b-r for .box, AND applies directly for general use) */ /* Fixed comment syntax */
+  .radius-0 { --b-r: 0; border-radius: 0;} /* Also set direct for non-.box elements */ /* Fixed comment syntax */
+  .radius-sm { --b-r: var(--radius-sm); border-radius: var(--radius-sm); } .radius-md { --b-r: var(--radius-md); border-radius: var(--radius-md); }
+  .radius-lg { --b-r: var(--radius-lg); border-radius: var(--radius-lg); } .radius-xl { --b-r: var(--radius-xl); border-radius: var(--radius-xl); }
+  .radius-full { --b-r: var(--radius-full); border-radius: var(--radius-full); }
+  /* Corner specific radii */ /* Fixed comment syntax */
+  /* .radius-t-md { border-top-left-radius: var(--radius-md); border-top-right-radius: var(--radius-md); } ... etc */ /* Fixed comment syntax */
 
-/* --- Typography Utilities --- /
-.text-left { text-align: left; } .text-center { text-align: center; } .text-right { text-align: right; } .text-justify { text-align: justify; }
-.font-normal { font-weight: var(--font-weight-normal); } .font-medium { font-weight: var(--font-weight-medium); }
-.font-semibold { font-weight: var(--font-weight-semibold); } .font-bold { font-weight: var(--font-weight-bold); }
-.italic { font-style: italic; } .not-italic { font-style: normal; }
-.underline { text-decoration-line: underline; } .line-through { text-decoration-line: line-through; } .no-underline { text-decoration-line: none; }
-.uppercase { text-transform: uppercase; } .lowercase { text-transform: lowercase; } .capitalize { text-transform: capitalize; } .normal-case { text-transform: none; }
-/ Add font-size utilities if needed: .text-sm, .text-lg etc. */
+  /* --- Typography Utilities --- */ /* Fixed comment syntax */
+  .text-left { text-align: left; } .text-center { text-align: center; } .text-right { text-align: right; } .text-justify { text-align: justify; }
+  .font-normal { font-weight: var(--font-weight-normal); } .font-medium { font-weight: var(--font-weight-medium); }
+  .font-semibold { font-weight: var(--font-weight-semibold); } .font-bold { font-weight: var(--font-weight-bold); }
+  .italic { font-style: italic; } .not-italic { font-style: normal; }
+  .underline { text-decoration-line: underline; } .line-through { text-decoration-line: line-through; } .no-underline { text-decoration-line: none; }
+  .uppercase { text-transform: uppercase; } .lowercase { text-transform: lowercase; } .capitalize { text-transform: capitalize; } .normal-case { text-transform: none; }
+  /* Add font-size utilities if needed: .text-sm, .text-lg etc. */ /* Fixed comment syntax */
 
-/* --- Shadow Utilities --- */
-.shadow-sm { box-shadow: var(--shadow-sm); } .shadow-md { box-shadow: var(--shadow-md); } .shadow-lg { box-shadow: var(--shadow-lg); }
-.shadow-xl { box-shadow: var(--shadow-xl); } .shadow-inner { box-shadow: var(--shadow-inner); } .shadow-none { box-shadow: none; }
+  /* --- Shadow Utilities --- */
+  .shadow-sm { box-shadow: var(--shadow-sm); } .shadow-md { box-shadow: var(--shadow-md); } .shadow-lg { box-shadow: var(--shadow-lg); }
+  .shadow-xl { box-shadow: var(--shadow-xl); } .shadow-inner { box-shadow: var(--shadow-inner); } .shadow-none { box-shadow: none; }
 
-/* --- Container Query Utilities --- /
-/ Apply these to the element needing CQ behavior /
-.cq-type-inline { --cq-type: inline-size; } .cq-type-size { --cq-type: size; }
-/ Apply these to set the name for targeting /
-/ Example: <div class="cq cq-name-card"> ... @container card (...) { ... } /
-.cq-name-card { --cq-name: card; } .cq-name-sidebar { --cq-name: sidebar; } / Add more as needed */
+  /* --- Container Query Utilities --- */ /* Fixed comment syntax */
+  /* Apply these to the element needing CQ behavior */ /* Fixed comment syntax */
+  .cq-type-inline { container-type: inline-size; } /* Changed var setting to direct application */
+  .cq-type-size { container-type: size; } /* Changed var setting to direct application */
+  /* Apply these to set the name for targeting */ /* Fixed comment syntax */
+  /* Example: <div class="cq cq-name-card"> ... @container card (...) { ... } */ /* Fixed comment syntax */
+  .cq-name-card { container-name: card; } /* Changed var setting to direct application */
+  .cq-name-sidebar { container-name: sidebar; } /* Changed var setting to direct application */
+  /* Add more as needed */ /* Fixed comment syntax */
 
-/* --- Other Utilities --- /
-/ Overflow /
-.overflow-auto { overflow: auto; } .overflow-hidden { overflow: hidden; } .overflow-visible { overflow: visible; } .overflow-scroll { overflow: scroll; }
-.overflow-x-auto { overflow-x: auto; } .overflow-y-auto { overflow-y: auto; } / etc. */
+  /* --- Other Utilities --- */ /* Fixed comment syntax */
+  /* Overflow */ /* Fixed comment syntax */
+  .overflow-auto { overflow: auto; } .overflow-hidden { overflow: hidden; } .overflow-visible { overflow: visible; } .overflow-scroll { overflow: scroll; }
+  .overflow-x-auto { overflow-x: auto; } .overflow-y-auto { overflow-y: auto; } /* etc. */ /* Fixed comment syntax */
 
-/* Positioning /
-.static { position: static; } .relative { position: relative; } .absolute { position: absolute; } .fixed { position: fixed; } .sticky { position: sticky; top: 0; } / Default sticky top /
-/ Inset utilities: .inset-0, .top-xs, .right-md etc. */
+  /* Positioning */ /* Fixed comment syntax */
+  .static { position: static; } .relative { position: relative; } .absolute { position: absolute; } .fixed { position: fixed; } .sticky { position: sticky; top: 0; } /* Default sticky top */ /* Fixed comment syntax */
+  /* Inset utilities: .inset-0, .top-xs, .right-md etc. */ /* Fixed comment syntax */
 
-/* Button Variants (Applying theme styles via utility classes) */
-.button-primary { background-color: var(--button-primary-bg); color: var(--button-primary-text); border-color: var(--button-primary-border); }
-.button-primary:hover:not([disabled]) { background-color: var(--button-primary-bg-hover); }
-.button-primary:active:not([disabled]) { background-color: var(--button-primary-bg-active); }
-.button-outline { background-color: var(--button-outline-bg); color: var(--button-outline-text); border-color: var(--button-outline-border); }
-.button-outline:hover:not([disabled]) { background-color: var(--button-outline-bg-hover); }
-.button-outline:active:not([disabled]) { background-color: var(--button-outline-bg-active); }
-.button-text { background-color: var(--button-text-bg); color: var(--button-text-text); border-color: var(--button-text-border); box-shadow: none; }
-.button-text:hover:not([disabled]) { background-color: var(--button-text-bg-hover); }
-.button-text:active:not([disabled]) { background-color: var(--button-text-bg-active); }
-}
+  /* --- Button Variants (Applying theme styles via utility classes) --- */
+  .button-primary {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border-color: var(--button-primary-border);
+  }
+  .button-primary:hover:not([disabled]) { background-color: var(--button-primary-bg-hover); }
+  .button-primary:active:not([disabled]) { background-color: var(--button-primary-bg-active); }
+
+  .button-outline {
+    background-color: var(--button-outline-bg);
+    color: var(--button-outline-text);
+    border-color: var(--button-outline-border);
+  }
+  .button-outline:hover:not([disabled]) { background-color: var(--button-outline-bg-hover); }
+  .button-outline:active:not([disabled]) { background-color: var(--button-outline-bg-active); }
+
+  .button-text {
+    background-color: var(--button-text-bg);
+    color: var(--button-text-text);
+    border-color: var(--button-text-border);
+    box-shadow: none; /* Text buttons typically have no shadow */
+  }
+  .button-text:hover:not([disabled]) { background-color: var(--button-text-bg-hover); }
+  .button-text:active:not([disabled]) { background-color: var(--button-text-bg-active); }
+
+} /* End of @layer utilities */
 
 /* ================================================ */
 /* ==               @layer layouts               == */
@@ -953,7 +1057,6 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
   }
 
   /* ================== Grid Layouts ================== */
-  /* Spacer Components (Grid-based) */
 
   /* --- Grid Layout --- */
   /* Concept: Bedrock `Grid`, `Columns` (via modifiers) */
@@ -966,11 +1069,13 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
       auto-fit,
       minmax(min(100%, var(--l-grid-min-item-size, 15rem)), 1fr)
     );
-    container-type: inline-size;
+    container-type: inline-size; /* Establish CQ context for modifiers */
     container-name: layout-grid;
   }
   .l-grid > * { min-width: 0; } /* Prevent item overflow */
+
   /* Explicit column count modifiers (closest to Bedrock `ColumnDrop`/`Columns`) */
+  /* Use container queries based on the grid container itself */
   @container layout-grid (min-width: var(--cq-bp-sm, 30em)) {
     .l-grid--cols-2\@sm { grid-template-columns: repeat(2, 1fr); }
     .l-grid--cols-3\@sm { grid-template-columns: repeat(3, 1fr); }
@@ -995,19 +1100,20 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
     container-name: layout-two-col;
     grid-template-columns: 1fr; /* Default: Single column */
   }
-  .l-two-col > * { min-width: 0; }
+  .l-two-col > * { min-width: 0; } /* Prevent item overflow */
+
   @container layout-two-col (min-width: var(--l-two-col-breakpoint, var(--cq-bp-sm, 30em))) {
     .l-two-col { grid-template-columns: 1fr 1fr; } /* Default 50/50 split */
-    .l-two-col--1-2 { grid-template-columns: 1fr 2fr; }
-    .l-two-col--2-1 { grid-template-columns: 2fr 1fr; }
-    .l-two-col--auto-1 { grid-template-columns: auto 1fr; }
-    .l-two-col--1-auto { grid-template-columns: 1fr auto; }
+    .l-two-col--1-2 { grid-template-columns: 1fr 2fr; } /* 1/3, 2/3 */
+    .l-two-col--2-1 { grid-template-columns: 2fr 1fr; } /* 2/3, 1/3 */
+    .l-two-col--auto-1 { grid-template-columns: auto 1fr; } /* Content-sized first column */
+    .l-two-col--1-auto { grid-template-columns: 1fr auto; } /* Content-sized second column */
   }
 
 
   /* --- Split Layout (Grid) --- */
   /* Concept: Bedrock `Split` */
-  /* Divides space into two, default 50/50. */
+  /* Divides space into two, default 50/50, stacks below breakpoint. */
   .l-split {
     display: grid;
     grid-template-columns: 1fr; /* Default: stack */
@@ -1015,15 +1121,16 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
     container-type: inline-size;
     container-name: layout-split;
   }
-  .l-split > * { min-width: 0; }
+  .l-split > * { min-width: 0; } /* Prevent item overflow */
+
   /* Apply split above breakpoint */
   @container layout-split (min-width: var(--l-split-breakpoint, var(--cq-bp-sm, 30em))) {
     /* Default: 50/50 */
     .l-split {
-        grid-template-columns: var(--l-split-fraction, 1fr) 1fr;
+        grid-template-columns: var(--l-split-fraction, 1fr) 1fr; /* Customizable fraction */
     }
      /* Allow custom fraction via inline style: style="--l-split-fraction: 2fr;" or "auto" */
-     /* style="--l-split-fraction: minmax(var(--l-sidebar-width, 15rem), 25%);" */
+     /* Example: style="--l-split-fraction: minmax(var(--l-sidebar-width, 15rem), 25%);" */
   }
    /* Modifier to never stack (for components that always need the split) */
   .l-split--no-stack {
@@ -1032,10 +1139,9 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
 
 
   /* ================= Flexbox Layouts ================= */
-  /* Spacer Components (Flex-based) */
 
   /* --- Row Layout (Flex) --- */
-  /* Concept: Bedrock `Inline` */
+  /* Concept: Bedrock `Inline` (often called Row or Group) */
   /* Arranges items horizontally, stacks vertically based on CQ. */
   .l-row {
     display: flex;
@@ -1043,25 +1149,21 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
     gap: var(--l-row-gap, var(--space-md));
     container-type: inline-size;
     container-name: layout-row;
-    flex-direction: column; /* Default: stack */
-    align-items: var(--l-row-align-stacked, stretch);
+    /* Default: stack */
+    flex-direction: column;
+    align-items: var(--l-row-align-stacked, stretch); /* Default align when stacked */
   }
-  .l-row > * { min-width: 0; }
+  .l-row > * { min-width: 0; } /* Prevent item overflow in flex */
+
   /* Apply row layout above stacking breakpoint */
   @container layout-row (min-width: var(--l-row-stack-breakpoint, var(--cq-bp-xs, 20em))) {
-    .l-row {
+    .l-row:not(.l-row--force-stack) { /* Allow forcing stack even above breakpoint */
       flex-direction: var(--l-row-direction, row);
       align-items: var(--l-row-align, center);
       justify-content: var(--l-row-justify, flex-start);
     }
-    /* Allow override if needed */
-    .l-row--no-stack {
-        flex-direction: var(--l-row-direction, row);
-        align-items: var(--l-row-align, center);
-        justify-content: var(--l-row-justify, flex-start);
-    }
   }
-  /* Modifier to never stack */
+  /* Modifier to never stack (overrides CQ logic) */
   .l-row--no-stack {
       flex-direction: var(--l-row-direction, row);
       align-items: var(--l-row-align, center);
@@ -1075,21 +1177,21 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
   .l-stack {
     display: flex;
     flex-direction: column;
-    justify-content: var(--l-stack-justify, flex-start);
-    align-items: var(--l-stack-align, stretch);
+    justify-content: var(--l-stack-justify, flex-start); /* Default vertical justification */
+    align-items: var(--l-stack-align, stretch); /* Default horizontal alignment */
     gap: var(--l-stack-gap, var(--space-md));
   }
 
 
   /* --- Cluster Layout (Flex) --- */
-  /* Concept: Bedrock `InlineCluster` */
+  /* Concept: Bedrock `InlineCluster` (similar to Inline but often used for tag-like lists) */
   /* Groups items like tags or buttons, wrapping naturally. */
   .l-cluster {
     display: flex;
     flex-wrap: wrap;
     gap: var(--l-cluster-gap, var(--space-sm));
-    justify-content: var(--l-cluster-justify, flex-start);
-    align-items: var(--l-cluster-align, center);
+    justify-content: var(--l-cluster-justify, flex-start); /* Default horizontal justification */
+    align-items: var(--l-cluster-align, center); /* Default vertical alignment */
   }
 
 
@@ -1099,12 +1201,12 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
   .l-reel {
     display: flex;
     gap: var(--l-reel-gap, var(--space-md));
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow-x: auto; /* Enable horizontal scroll */
+    overflow-y: hidden; /* Prevent vertical scroll */
     /* Improve scroll experience */
     scrollbar-width: thin; /* Firefox */
     scrollbar-color: var(--scrollbar-thumb-color, grey) var(--scrollbar-track-color, transparent); /* Firefox */
-    -webkit-overflow-scrolling: touch; /* iOS */
+    -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
   }
   /* Optional: Hide scrollbar visually */
   .l-reel--no-scrollbar {
@@ -1114,21 +1216,22 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
       display: none; /* Chrome, Safari, Edge */
   }
   .l-reel > * {
-    flex-shrink: 0;
+    flex-shrink: 0; /* Prevent items from shrinking */
     /* Consider adding a default min-width or width to children */
     /* width: max-content; */
   }
-  /* Ensure images behave */
+  /* Ensure images behave correctly within the reel */
   .l-reel > img {
       height: 100%; /* Constrain image height to reel height */
+      max-height: var(--l-reel-item-max-height, 100%); /* Allow overriding max height */
       width: auto;
       flex-basis: auto;
   }
 
 
   /* --- Switcher Layout (Flex) --- */
-  /* Concept: Bedrock `InlineCluster` (alternative implementation) */
-  /* Switches layout based on item threshold. */
+  /* Concept: CUBE CSS Switcher / Bedrock `InlineCluster` (alternative implementation) */
+  /* Switches layout based on item threshold. Items flex equally until threshold is hit. */
   .l-switcher {
     display: flex;
     flex-wrap: wrap;
@@ -1136,6 +1239,7 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
   }
   .l-switcher > * {
     flex-grow: 1;
+    /* The "magic number" hack: ensures items break when basis < 0 */
     flex-basis: calc((var(--l-switcher-threshold, 20rem) - 100%) * 999);
   }
 
@@ -1144,7 +1248,7 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
   /* Utility: Pushes first and last children to opposite edges. */
   .l-spread {
     display: flex;
-    flex-direction: var(--l-spread-direction, row);
+    flex-direction: var(--l-spread-direction, row); /* row | column */
     justify-content: space-between;
     align-items: var(--l-spread-align, center);
     gap: var(--l-spread-gap, var(--space-md));
@@ -1155,10 +1259,11 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
 
   /* --- PadBox Layout --- */
   /* Concept: Bedrock `PadBox` */
-  /* Adds padding around its content. */
+  /* Adds padding around its content. Can be customized per axis. */
   .l-pad {
+    /* Set default padding using a single variable */
     padding: var(--l-pad-padding, var(--space-md));
-    /* Allow separate axis padding */
+    /* Allow overriding specific axes, falling back to the general padding */
     padding-inline: var(--l-pad-padding-x, var(--l-pad-padding, var(--space-md)));
     padding-block: var(--l-pad-padding-y, var(--l-pad-padding, var(--space-md)));
   }
@@ -1166,11 +1271,11 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
 
   /* --- Center Layout (Wrapper) --- */
   /* Concept: Bedrock `Center` */
-  /* Centers content horizontally within a max-width. */
+  /* Centers content horizontally within a max-width, handles text centering. */
   .l-center-content {
-    box-sizing: content-box; /* Important for max-width + padding */
+    box-sizing: content-box; /* Important for max-width + padding behavior */
     margin-inline: auto; /* The core centering mechanism */
-    max-width: var(--l-center-content-max-width, var(--width-container-max, 60ch));
+    max-width: var(--l-center-content-max-width, var(--width-container-max, 60ch)); /* Default max-width, often ch unit */
     /* Optional padding (applied inside the max-width) */
     padding-inline: var(--l-center-content-gutter, 0);
     /* Optional text alignment */
@@ -1180,105 +1285,126 @@ tbody tr:hover { background-color: var(--table-row-hover-bg); }
 
   /* --- Cover Layout (Grid Wrapper) --- */
   /* Concept: Bedrock `Cover` */
-  /* Centers content within, often for hero sections. */
+  /* Centers content vertically and horizontally, often for hero sections. */
   .l-cover {
     display: grid;
     place-content: var(--l-cover-place-content, center); /* Controls overall block centering */
     place-items: var(--l-cover-place-items, center); /* Controls self-alignment of children */
     padding: var(--l-cover-padding, var(--space-lg));
-    min-height: var(--l-cover-min-height, 50vh);
-    overflow: hidden;
+    min-height: var(--l-cover-min-height, 50vh); /* Default minimum height */
+    overflow: hidden; /* Prevent content overflow */
     text-align: var(--l-cover-text-align, center); /* Common request for covers */
   }
 
 
   /* --- Frame Layout (Wrapper) --- */
   /* Concept: Bedrock `Frame` */
-  /* Maintains an aspect ratio. Expects one direct child (image, video, iframe). */
+  /* Maintains an aspect ratio. Expects one direct child (e.g., img, video, iframe). */
   .l-frame {
     position: relative; /* Establish positioning context */
-    overflow: hidden;
+    overflow: hidden; /* Clip content to the frame */
     /* Default 16:9 ratio, customize with --l-frame-ratio */
     aspect-ratio: var(--l-frame-ratio, 16 / 9);
   }
-  .l-frame > * {
+  .l-frame > :first-child { /* Target only the first direct child */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Common default for images/videos */
+    object-fit: var(--l-frame-object-fit, cover); /* Default fit, allow customization */
+    object-position: var(--l-frame-object-position, center); /* Default position */
   }
 
 
  /* --- Center Layout (Flex Wrapper) --- */
- /* Utility: Centers a single child using flexbox. Needs dimensions. */
+ /* Utility: Centers a single child using flexbox. Requires dimensions on child or parent. */
  .l-center {
     display: flex;
-    justify-content: var(--l-center-justify, center);
-    align-items: var(--l-center-align, center);
-    min-height: var(--l-center-min-height, auto);
-    padding: var(--l-center-padding, 0);
+    justify-content: var(--l-center-justify, center); /* Horizontal centering */
+    align-items: var(--l-center-align, center); /* Vertical centering */
+    min-height: var(--l-center-min-height, auto); /* Optional minimum height */
+    padding: var(--l-center-padding, 0); /* Optional padding */
  }
- .l-center--h { --l-center-align: initial; }
- .l-center--v { --l-center-justify: initial; }
+ .l-center--h { align-items: initial; } /* Center horizontally only */
+ .l-center--v { justify-content: initial; } /* Center vertically only */
 
 
  /* ================= Complex/Specific Layouts ================= */
  /* These combine primitives or address specific UI patterns */
 
  /* --- Sidebar Layout (Grid) --- */
+ /* Stacks on small screens, sidebar layout on larger screens */
  .l-sidebar {
     display: grid;
     gap: var(--l-sidebar-gap, var(--space-lg));
     container-type: inline-size;
     container-name: layout-sidebar;
+    /* Default: stack content then sidebar */
     grid-template-areas: "content" "sidebar";
  }
+ /* Assign grid areas. Assumes main content is NOT the .l-sidebar__aside */
  .l-sidebar > *:not(.l-sidebar__aside) { grid-area: content; min-width: 0; }
- .l-sidebar > .l-sidebar__aside { grid-area: sidebar; min-width: 0; width: 100%; }
+ .l-sidebar > .l-sidebar__aside { grid-area: sidebar; min-width: 0; width: 100%; } /* Sidebar element needs this class */
+
+ /* Apply sidebar layout above breakpoint */
  @container layout-sidebar (min-width: var(--l-sidebar-breakpoint, var(--cq-bp-md, 45em))) {
-    .l-sidebar { grid-template-columns: var(--l-sidebar-width, minmax(15rem, 25%)) 1fr; grid-template-areas: "sidebar content"; }
-    .l-sidebar > .l-sidebar__aside { width: auto; }
-    .l-sidebar--right { grid-template-columns: 1fr var(--l-sidebar-width, minmax(15rem, 25%)); grid-template-areas: "content sidebar"; }
+    .l-sidebar {
+        /* Default: Sidebar on left */
+        grid-template-columns: var(--l-sidebar-width, minmax(15rem, 25%)) 1fr;
+        grid-template-areas: "sidebar content";
+    }
+    .l-sidebar > .l-sidebar__aside { width: auto; } /* Reset width */
+    /* Modifier for sidebar on the right */
+    .l-sidebar--right {
+        grid-template-columns: 1fr var(--l-sidebar-width, minmax(15rem, 25%));
+        grid-template-areas: "content sidebar";
+    }
  }
 
  /* --- Standard Page Layout (Grid) --- */
+ /* Simple Header, Main, Footer structure */
  .l-standard-page {
     display: grid;
-    grid-template-rows: auto 1fr auto;
-    min-height: var(--l-standard-page-min-height, 100vh);
-    gap: var(--l-standard-page-gap, 0);
+    grid-template-rows: auto 1fr auto; /* Header auto, Main fills space, Footer auto */
+    min-height: var(--l-standard-page-min-height, 100vh); /* Ensure footer reaches bottom */
+    gap: var(--l-standard-page-gap, 0); /* Optional gap */
  }
- .l-standard-page > * { min-width: 0; }
+ .l-standard-page > * { min-width: 0; } /* Prevent overflow */
+ /* Optional: Classes for targeting specific areas */
  .l-standard-page__header { grid-row: 1; }
- .l-standard-page__main { grid-row: 2; overflow: auto; }
+ .l-standard-page__main { grid-row: 2; /* overflow: auto; */ /* Add if main content needs scrolling independently */ }
  .l-standard-page__footer { grid-row: 3; }
 
  /* --- Media Object Layout (Flex) --- */
+ /* Classic layout pattern: Image/icon next to text content */
  .l-media {
     display: flex;
-    align-items: var(--l-media-align, flex-start);
+    align-items: var(--l-media-align, flex-start); /* Default alignment */
     gap: var(--l-media-gap, var(--space-md));
  }
- .l-media > :first-child { flex-shrink: 0; }
- .l-media > :last-child { flex-grow: 1; min-width: 0; }
- .l-media--reverse { flex-direction: row-reverse; }
+ .l-media > :first-child { flex-shrink: 0; } /* Prevent media element from shrinking */
+ .l-media > :last-child { flex-grow: 1; min-width: 0; } /* Allow text content to grow and wrap */
+ .l-media--reverse { flex-direction: row-reverse; } /* Modifier for media on the right */
 
  /* --- Tabs Layout Structure (Flex) --- */
+ /* Basic structure for tab components. Requires JS for functionality. */
  .l-tabs {
     display: flex;
-    flex-direction: column;
-    gap: var(--l-tabs-gap, var(--space-md));
+    flex-direction: column; /* Default: Tabs on top */
+    gap: var(--l-tabs-gap, var(--space-md)); /* Gap between list and panel */
  }
- .l-tabs__list { flex-shrink: 0; }
- .l-tabs__panel { flex-grow: 1; min-height: 0; }
+ .l-tabs__list { flex-shrink: 0; /* Prevent tab list from shrinking */ }
+ .l-tabs__panel { flex-grow: 1; min-height: 0; /* Allow panel to grow and potentially scroll */ }
+ /* Modifiers for tab list position */
  .l-tabs--bottom { flex-direction: column-reverse; }
  .l-tabs--left { flex-direction: row; }
  .l-tabs--right { flex-direction: row-reverse; }
+ /* Ensure panel takes up space correctly in side-tab layouts */
  .l-tabs--left > .l-tabs__panel,
  .l-tabs--right > .l-tabs__panel { min-width: 0; }
+ /* Allow setting a width for side tab lists */
  .l-tabs--left > .l-tabs__list,
- .l-tabs--right > .l-tabs__list { width: var(--l-tabs-side-width, max-content); }
+ .l-tabs--right > .l-tabs__list { width: var(--l-tabs-side-width, max-content); flex-shrink: 0; }
 
 } /* End of @layer layouts */
