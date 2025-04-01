@@ -1,0 +1,989 @@
+/* ================================================ */
+/* ==              LAYER DEFINITION              == */
+/* ================================================ */
+/* Defines the cascade order for the unified framework. */
+@layer reset, tokens, engine, theme, palette, defaults, components, utilities, layouts;
+
+/* ================================================ */
+/* ==               @layer reset                 == */
+/* ================================================ */
+/* Purpose: Neutralize browser styles, fix inconsistencies, */
+/* establish predictable baseline behavior, and provide a clean */
+/* slate with zero specificity (:where). */
+@layer reset {
+  /* --- Core Resets --- */
+  :where(*, *::before, *::after) { margin: 0; padding: 0; box-sizing: border-box; vertical-align: baseline; min-width: 0; font: inherit; color: inherit; line-height: inherit; }
+  /* --- Document Level --- */
+  :where(html) { text-size-adjust: 100%; -webkit-text-size-adjust: 100%; -moz-text-size-adjust: none; tab-size: 4; height: 100%; }
+  :where(body) { min-height: 100%; }
+  /* --- Element Display & Behavior --- */
+  :where(:is(img, picture, video, canvas, svg, :not(:defined))) { display: block; max-width: 100%; height: auto; }
+  :where(svg) { fill: currentColor; stroke: currentColor; stroke-width: 0; }
+  /* Form element normalization */
+  :where(button, input, select, textarea) { appearance: none; -webkit-appearance: none; -moz-appearance: none; border-radius: 0; background-color: transparent; letter-spacing: inherit; border: 1px solid transparent; }
+  :where(button) { border: none; background: none; text-align: inherit; }
+  :where(textarea) { resize: vertical; overflow: auto; }
+  /* Default cursors */
+  :where(button, select:not([disabled]), input[type="button"], input[type="submit"], input[type="reset"], input[type="checkbox"], input[type="radio"], label) { cursor: pointer; }
+  :where(input[type="text"], input[type="email"], input[type="search"], input[type="url"], input[type="tel"], input[type="number"], input[type="password"], textarea) { cursor: text; }
+  :where([disabled]) { cursor: not-allowed; }
+  /* --- Text Element Resets --- */
+  :where(p, h1, h2, h3, h4, h5, h6, li, dd, dt, blockquote) { overflow-wrap: break-word; }
+  :where(h1, h2, h3, h4, h5, h6) { text-wrap: balance; font-size: inherit; font-weight: inherit; }
+  :where(p, blockquote, li) { text-wrap: pretty; }
+  :where(a) { text-decoration: inherit; }
+  :where(abbr[title]) { text-decoration: underline dotted; cursor: help; }
+  /* --- Other Element Resets --- */
+  :where(table) { text-indent: 0; border-color: inherit; border-collapse: collapse; border-spacing: 0; }
+  :where(ul, ol) { list-style: none; }
+  :where([src='']) { display: none; }
+  :where(::backdrop) { all: unset; }
+  :where(:not(html, body, svg, img, video, canvas, iframe, frame, object, embed, hr, :where(button, input, select, textarea), table, thead, tbody, tfoot, tr, th, td, details, summary, fieldset)) { border-style: solid; border-width: 0; }
+  /* --- Accessibility & Utilities --- */
+  :where([hidden]) { display: none !important; }
+  :where(.visually-hidden:not(:focus):not(:active), .sr-only:not(:focus):not(:active)) { clip: rect(0 0 0 0); clip-path: inset(50%); height: 1px; overflow: hidden; position: absolute; white-space: nowrap; width: 1px; }
+  /* --- Modern Feature Opt-ins --- */
+  @view-transition { navigation: auto; }
+} /* End of @layer reset */
+
+
+/* ================================================ */
+/* ==     NEW COLOR SYSTEM - LAYERS START        == */
+/* ================================================ */
+
+/* ================================================ */
+/* ==               @layer tokens                == */
+/* ================================================ */
+@layer tokens {
+  /* Register CSS Custom Properties */
+  @property --color-h { syntax: '<number>'; inherits: true; initial-value: 250; }
+  @property --color-c { syntax: '<number>'; inherits: true; initial-value: 0.1; }
+  @property --color-l { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+  @property --color-a { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @property --l-threshold { syntax: '<number>'; inherits: true; initial-value: 0.65; }
+  @property --c-threshold { syntax: '<number>'; inherits: true; initial-value: 0.08; }
+  @property --bg { syntax: '<color>'; inherits: false; initial-value: transparent; }
+  @property --fg { syntax: '<color>'; inherits: true; initial-value: currentColor; }
+  @property --l-delta { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
+  @property --c-delta { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
+
+  :root {
+    /* Lightness Scale (0-14) */
+    --scale-l-0: 99%; --scale-l-1: 95%; --scale-l-2: 90%; --scale-l-3: 82%;
+    --scale-l-4: 74%; --scale-l-5: 66%; --scale-l-6: 58%; --scale-l-7: 50%;
+    --scale-l-8: 42%; --scale-l-9: 34%; --scale-l-10: 26%; --scale-l-11: 18%;
+    --scale-l-12: 10%; --scale-l-13: 5%; --scale-l-14: 1%;
+
+    /* Chroma Scale (0-12) */
+    --scale-c-0: 0; --scale-c-1: 0.02; --scale-c-2: 0.04; --scale-c-3: 0.06;
+    --scale-c-4: 0.08; --scale-c-5: 0.1; --scale-c-6: 0.12; --scale-c-7: 0.15;
+    --scale-c-8: 0.18; --scale-c-9: 0.22; --scale-c-10: 0.26; --scale-c-11: 0.3;
+    --scale-c-12: 0.37;
+
+    /* Alpha Scale (0-8) */
+    --alpha-0: 0; --alpha-1: 0.05; --alpha-2: 0.1; --alpha-3: 0.2;
+    --alpha-4: 0.4; --alpha-5: 0.6; --alpha-6: 0.75; --alpha-7: 0.9;
+    --alpha-8: 1;
+
+    /* Contrast Ratios */
+    --contrast-ratio-low: 3; --contrast-ratio-medium: 4.5; --contrast-ratio-high: 7;
+
+    /* Max Chroma per Lightness Band */
+    --max-chroma-0: 0.04; --max-chroma-1: 0.08; --max-chroma-2: 0.15;
+    --max-chroma-3: 0.22; --max-chroma-4: 0.18; --max-chroma-5: 0.12;
+    --max-chroma-6: 0.06;
+
+    /* Base Hue Definitions for Palette */
+    --hue-gray: 250; --hue-slate: 215; --hue-red: 25; --hue-orange: 40;
+    --hue-amber: 55; --hue-yellow: 90; --hue-lime: 120; --hue-green: 145;
+    --hue-emerald: 160; --hue-teal: 180; --hue-cyan: 195; --hue-sky: 210;
+    --hue-blue: 245; --hue-indigo: 265; --hue-violet: 285; --hue-purple: 300;
+    --hue-fuchsia: 320; --hue-pink: 340; --hue-rose: 355;
+  }
+}
+
+/* ================================================ */
+/* ==              @layer engine                 == */
+/* ================================================ */
+@layer engine {
+ :root {
+    /* Lightness delta percentages */
+    --l-delta-0: 0%; --l-delta-1: 2%; --l-delta-2: 4%; --l-delta-3: 7%;
+    --l-delta-4: 10%; --l-delta-5: 14%; --l-delta-6: 19%; --l-delta-7: 25%;
+    --l-delta-8: 32%; --l-delta-9: 40%; --l-delta-10: 50%; --l-delta-11: 60%;
+    --l-delta-12: 70%; --l-delta-13: 80%; --l-delta-14: 90%;
+    --l-delta-0-down: calc(-1 * var(--l-delta-0)); --l-delta-1-down: calc(-1 * var(--l-delta-1));
+    --l-delta-2-down: calc(-1 * var(--l-delta-2)); --l-delta-3-down: calc(-1 * var(--l-delta-3));
+    --l-delta-4-down: calc(-1 * var(--l-delta-4)); --l-delta-5-down: calc(-1 * var(--l-delta-5));
+    --l-delta-6-down: calc(-1 * var(--l-delta-6)); --l-delta-7-down: calc(-1 * var(--l-delta-7));
+    --l-delta-8-down: calc(-1 * var(--l-delta-8)); --l-delta-9-down: calc(-1 * var(--l-delta-9));
+    --l-delta-10-down: calc(-1 * var(--l-delta-10)); --l-delta-11-down: calc(-1 * var(--l-delta-11));
+    --l-delta-12-down: calc(-1 * var(--l-delta-12)); --l-delta-13-down: calc(-1 * var(--l-delta-13));
+    --l-delta-14-down: calc(-1 * var(--l-delta-14));
+
+    /* Chroma delta percentages */
+    --c-delta-0: 0%; --c-delta-1: 10%; --c-delta-2: 20%; --c-delta-3: 30%;
+    --c-delta-4: 40%; --c-delta-5: 50%; --c-delta-6: 60%; --c-delta-7: 70%;
+    --c-delta-8: 80%; --c-delta-9: 90%; --c-delta-10: 100%;
+    --c-delta-0-down: calc(-1 * var(--c-delta-0)); --c-delta-1-down: calc(-1 * var(--c-delta-1));
+    --c-delta-2-down: calc(-1 * var(--c-delta-2)); --c-delta-3-down: calc(-1 * var(--c-delta-3));
+    --c-delta-4-down: calc(-1 * var(--c-delta-4)); --c-delta-5-down: calc(-1 * var(--c-delta-5));
+    --c-delta-6-down: calc(-1 * var(--c-delta-6)); --c-delta-7-down: calc(-1 * var(--c-delta-7));
+    --c-delta-8-down: calc(-1 * var(--c-delta-8)); --c-delta-9-down: calc(-1 * var(--c-delta-9));
+    --c-delta-10-down: calc(-1 * var(--c-delta-10));
+
+    /* Auto Contrast Calculation */
+    --auto-contrast-text: oklch(
+      from var(--bg, var(--base))
+      clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+      min(c, var(--c-threshold, 0.08))
+      h
+    );
+  }
+}
+
+/* ================================================ */
+/* ==               @layer theme                 == */
+/* ================================================ */
+@layer theme {
+  /* Light Mode Theme */
+  :root {
+    /* Config */
+    --accent-h: var(--hue-violet); --accent-c: 0.15; --accent-l: 60%;
+    --secondary-hue-shift: 60; --tertiary-hue-shift: -90;
+    --surface-c: 0.015; --contrast-factor: 1.0;
+    --l-threshold: 0.65; --c-threshold: 0.08;
+    --border-width: 1px; --border-width-thick: 2px; --border-width-thin: 0.5px;
+    --radius-sm: 3px; --radius-md: 6px; --radius-lg: 8px; --radius-xl: 12px; --radius-full: 9999px;
+    /* Derived Hues */
+    --secondary-h: calc(mod((var(--accent-h) + var(--secondary-hue-shift)), 360));
+    --tertiary-h: calc(mod((var(--accent-h) + var(--tertiary-hue-shift)), 360));
+    --neutral-h: var(--accent-h);
+    /* Feedback Hues */
+    --success-h: var(--hue-green); --warning-h: var(--hue-amber); --error-h: var(--hue-red); --info-h: var(--hue-blue);
+
+    /* Semantic Color Roles (Light Mode) */
+    /* Base & Bedrock */
+    --base: oklch(98% calc(var(--surface-c) * 0.8) var(--neutral-h)); /* Use neutral hue for base */
+    --bedrock: oklch(20% calc(var(--surface-c) * 1.2) var(--neutral-h));
+    /* Surfaces */
+    --surface-muted: oklch(99.5% calc(var(--surface-c) * 0.5) var(--neutral-h));
+    --surface-subtle: oklch(96% calc(var(--surface-c) * 0.8) var(--neutral-h)); /* Often neutral is better than secondary */
+    --surface-default: oklch(92% var(--surface-c) var(--neutral-h));
+    --surface-overt: oklch(89% calc(var(--surface-c) * 1.2) var(--neutral-h));
+    /* Text */
+    --text-muted: oklch(45% calc(var(--surface-c) * 1.5) var(--neutral-h) / 0.8);
+    --text-subtle: oklch(35% calc(var(--surface-c) * 1.8) var(--neutral-h));
+    --text-default: oklch(20% calc(var(--surface-c) * 2) var(--neutral-h));
+    --text-overt: oklch(10% calc(var(--surface-c) * 2.2) var(--neutral-h));
+    /* Links & Highlights */
+    --text-link: oklch(from var(--accent) calc(l + var(--l-delta-1-down)) calc(c + var(--c-delta-1)) h);
+    --text-link-hover: oklch(from var(--text-link) calc(l + var(--l-delta-2-down)) c h);
+    --text-highlight-subtle: oklch(from var(--accent) calc(l + var(--l-delta-2)) calc(c + var(--c-delta-1-down)) h);
+    --text-highlight-overt: oklch(from var(--accent) calc(l + var(--l-delta-1-down)) calc(c + var(--c-delta-1)) h);
+    --text-highlight-bg: oklch(from var(--accent) calc(l + var(--l-delta-12)) calc(c + var(--c-delta-7-down)) h);
+    /* Outlines */
+    --outline-muted: oklch(from var(--base) calc(l + var(--l-delta-4-down)) calc(c + var(--c-delta-2-down)) h / 0.5);
+    --outline-subtle: oklch(from var(--base) calc(l + var(--l-delta-5-down)) c h);
+    --outline-default: oklch(from var(--base) calc(l + var(--l-delta-6-down)) calc(c + var(--c-delta-1)) h);
+    --outline-overt: oklch(from var(--base) calc(l + var(--l-delta-7-down)) calc(c + var(--c-delta-2)) h);
+    --outline-focus: oklch(var(--accent-l) var(--accent-c) var(--accent-h));
+    --outline-active: oklch(from var(--accent) calc(l + var(--l-delta-2-down)) calc(c + var(--c-delta-1)) h);
+    --outline-highlight-subtle: oklch(from var(--accent) calc(l + var(--l-delta-7)) calc(c + var(--c-delta-4-down)) h);
+    --outline-highlight-overt: oklch(from var(--accent) calc(l + var(--l-delta-4)) calc(c + var(--c-delta-2-down)) h);
+    /* Highlights (Interaction Backgrounds) */
+    --highlight-bg-muted: oklch(from var(--base) calc(l + var(--l-delta-1-down)) c h);
+    --highlight-bg-subtle: oklch(from var(--base) calc(l + var(--l-delta-3-down)) c h);
+    --highlight-bg-overt: oklch(from var(--accent) calc(l + var(--l-delta-10)) calc(c + var(--c-delta-6-down)) h);
+    /* Accent Family */
+    --accent: oklch(var(--accent-l) var(--accent-c) var(--accent-h));
+    --accent-muted: oklch(from var(--accent) calc(l + var(--l-delta-5)) calc(c + var(--c-delta-3-down)) h);
+    --accent-subtle: oklch(from var(--accent) calc(l + var(--l-delta-2)) calc(c + var(--c-delta-1-down)) h);
+    --accent-overt: oklch(from var(--accent) calc(l + var(--l-delta-3-down)) calc(c + var(--c-delta-1)) h);
+    /* Secondary Family */
+    --secondary-l: var(--accent-l); --secondary-c: var(--accent-c);
+    --secondary: oklch(var(--secondary-l) var(--secondary-c) var(--secondary-h));
+    --secondary-muted: oklch(from var(--secondary) calc(l + var(--l-delta-5)) calc(c + var(--c-delta-3-down)) h);
+    --secondary-subtle: oklch(from var(--secondary) calc(l + var(--l-delta-2)) calc(c + var(--c-delta-1-down)) h);
+    --secondary-overt: oklch(from var(--secondary) calc(l + var(--l-delta-3-down)) calc(c + var(--c-delta-1)) h);
+    /* Tertiary Family */
+    --tertiary-l: var(--accent-l); --tertiary-c: var(--accent-c);
+    --tertiary: oklch(var(--tertiary-l) var(--tertiary-c) var(--tertiary-h));
+    --tertiary-muted: oklch(from var(--tertiary) calc(l + var(--l-delta-5)) calc(c + var(--c-delta-3-down)) h);
+    --tertiary-subtle: oklch(from var(--tertiary) calc(l + var(--l-delta-2)) calc(c + var(--c-delta-1-down)) h);
+    --tertiary-overt: oklch(from var(--tertiary) calc(l + var(--l-delta-3-down)) calc(c + var(--c-delta-1)) h);
+    /* Feedback Family */
+    --success-c: 0.15; --success-l: 55%;
+    --warning-c: 0.15; --warning-l: 70%;
+    --error-c: 0.2; --error-l: 60%;
+    --info-c: 0.15; --info-l: 65%;
+    --success: oklch(var(--success-l) var(--success-c) var(--success-h));
+    --warning: oklch(var(--warning-l) var(--warning-c) var(--warning-h));
+    --error: oklch(var(--error-l) var(--error-c) var(--error-h));
+    --info: oklch(var(--info-l) var(--info-c) var(--info-h));
+    --text-success: var(--success); --text-warning: var(--warning); --text-error: var(--error); --text-info: var(--info);
+    --surface-success: oklch(from var(--success) calc(l + var(--l-delta-11)) calc(c + var(--c-delta-6-down)) h);
+    --surface-warning: oklch(from var(--warning) calc(l + var(--l-delta-10)) calc(c + var(--c-delta-6-down)) h);
+    --surface-error: oklch(from var(--error) calc(l + var(--l-delta-10)) calc(c + var(--c-delta-7-down)) h);
+    --surface-info: oklch(from var(--info) calc(l + var(--l-delta-10)) calc(c + var(--c-delta-6-down)) h);
+    --outline-success: oklch(from var(--success) calc(l + var(--l-delta-2-down)) calc(c + var(--c-delta-1)) h);
+    --outline-warning: oklch(from var(--warning) calc(l + var(--l-delta-1-down)) calc(c + var(--c-delta-1)) h);
+    --outline-error: oklch(from var(--error) calc(l + var(--l-delta-1-down)) calc(c + var(--c-delta-1)) h);
+    --outline-info: oklch(from var(--info) calc(l + var(--l-delta-1-down)) calc(c + var(--c-delta-1)) h);
+    /* Auto-contrast text roles (will be calculated by browser using --auto-contrast-text) */
+    --text-on-base: ; --text-on-bedrock: ; --text-on-surface-muted: ; --text-on-surface-subtle: ;
+    --text-on-surface-default: ; --text-on-surface-overt: ;
+    --text-on-accent: ; --text-on-accent-muted: ; --text-on-accent-subtle: ; --text-on-accent-overt: ;
+    --text-on-secondary: ; --text-on-secondary-muted: ; --text-on-secondary-subtle: ; --text-on-secondary-overt: ;
+    --text-on-tertiary: ; --text-on-tertiary-muted: ; --text-on-tertiary-subtle: ; --text-on-tertiary-overt: ;
+    --text-on-highlight-muted: ; --text-on-highlight-subtle: ; --text-on-highlight-overt: ;
+    --text-on-success: ; --text-on-warning: ; --text-on-error: ; --text-on-info: ;
+    /* Specific Component Roles */
+    --indicator-color: var(--text-on-accent); /* Checkbox/Radio checkmark */
+    --scrollbar-thumb-color: var(--outline-default);
+    --scrollbar-track-color: var(--surface-subtle);
+    --hr-color: var(--outline-subtle);
+    --table-border: var(--outline-default);
+    --table-header-bg: var(--surface-subtle);
+    --table-row-hover-bg: var(--highlight-bg-subtle);
+    --code-block-bg: var(--surface-subtle);
+    --code-block-border: var(--outline-subtle);
+    --code-inline-bg: var(--surface-muted);
+    --code-inline-border: var(--outline-muted);
+    --blockquote-border: var(--outline-default);
+  }
+  /* Dark Mode Theme */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Dark Mode Config Overrides */
+      --accent-l: 70%; --accent-c: 0.18;
+      --surface-c: 0.02; --l-threshold: 0.6;
+      /* Dark Mode Role Overrides */
+      --base: oklch(18% calc(var(--surface-c) * 0.8) var(--neutral-h));
+      --bedrock: oklch(95% calc(var(--surface-c) * 0.7) var(--neutral-h));
+      --surface-muted: oklch(15% calc(var(--surface-c) * 0.5) var(--neutral-h));
+      --surface-subtle: oklch(23% calc(var(--surface-c) * 0.8) var(--neutral-h));
+      --surface-default: oklch(27% var(--surface-c) var(--neutral-h));
+      --surface-overt: oklch(30% calc(var(--surface-c) * 1.2) var(--neutral-h));
+      --text-muted: oklch(65% calc(var(--surface-c) * 1.2) var(--neutral-h) / 0.8);
+      --text-subtle: oklch(75% calc(var(--surface-c) * 1.0) var(--neutral-h));
+      --text-default: oklch(88% calc(var(--surface-c) * 0.8) var(--neutral-h));
+      --text-overt: oklch(95% calc(var(--surface-c) * 0.6) var(--neutral-h));
+      --text-link: oklch(from var(--accent) calc(l + var(--l-delta-1)) calc(c + var(--c-delta-1-down)) h);
+      --text-link-hover: oklch(from var(--text-link) calc(l + var(--l-delta-2)) c h);
+      --text-highlight-bg: oklch(from var(--accent) calc(l + var(--l-delta-10-down)) calc(c + var(--c-delta-4-down)) h);
+      --outline-subtle: oklch(from var(--base) calc(l + var(--l-delta-5)) c h);
+      --outline-default: oklch(from var(--base) calc(l + var(--l-delta-6)) calc(c + var(--c-delta-1)) h);
+      --outline-overt: oklch(from var(--base) calc(l + var(--l-delta-7)) calc(c + var(--c-delta-2)) h);
+      --outline-active: oklch(from var(--accent) calc(l + var(--l-delta-2)) calc(c + var(--c-delta-1)) h);
+      --outline-highlight-subtle: oklch(from var(--accent) calc(l + var(--l-delta-5-down)) calc(c + var(--c-delta-3-down)) h);
+      --outline-highlight-overt: oklch(from var(--accent) calc(l + var(--l-delta-2-down)) calc(c + var(--c-delta-1-down)) h);
+      --highlight-bg-muted: oklch(from var(--base) calc(l + var(--l-delta-1)) c h);
+      --highlight-bg-subtle: oklch(from var(--base) calc(l + var(--l-delta-3)) c h);
+      --highlight-bg-overt: oklch(from var(--accent) calc(l + var(--l-delta-7-down)) calc(c + var(--c-delta-4-down)) h);
+      /* Dark Mode Feedback Roles */
+      --success-l: 65%; --warning-l: 75%; --error-l: 70%; --info-l: 75%;
+      /* Recalculate main, text, outline */
+      --success: oklch(var(--success-l) var(--success-c) var(--success-h));
+      --warning: oklch(var(--warning-l) var(--warning-c) var(--warning-h));
+      --error: oklch(var(--error-l) var(--error-c) var(--error-h));
+      --info: oklch(var(--info-l) var(--info-c) var(--info-h));
+      --text-success: var(--success); --text-warning: var(--warning); --text-error: var(--error); --text-info: var(--info);
+      --surface-success: oklch(from var(--success) calc(l + var(--l-delta-9-down)) calc(c + var(--c-delta-5-down)) h);
+      --surface-warning: oklch(from var(--warning) calc(l + var(--l-delta-8-down)) calc(c + var(--c-delta-5-down)) h);
+      --surface-error: oklch(from var(--error) calc(l + var(--l-delta-8-down)) calc(c + var(--c-delta-6-down)) h);
+      --surface-info: oklch(from var(--info) calc(l + var(--l-delta-8-down)) calc(c + var(--c-delta-5-down)) h);
+      --outline-success: oklch(from var(--success) calc(l + var(--l-delta-1)) calc(c + var(--c-delta-1-down)) h);
+      --outline-warning: oklch(from var(--warning) calc(l + var(--l-delta-1)) calc(c + var(--c-delta-1-down)) h);
+      --outline-error: oklch(from var(--error) calc(l + var(--l-delta-1)) calc(c + var(--c-delta-1-down)) h);
+      --outline-info: oklch(from var(--info) calc(l + var(--l-delta-1)) calc(c + var(--c-delta-1-down)) h);
+      /* Dark mode specific component roles */
+       --scrollbar-thumb-color: var(--outline-overt);
+       --scrollbar-track-color: var(--surface-subtle);
+       --hr-color: var(--outline-subtle);
+       --table-border: var(--outline-default);
+       --table-header-bg: var(--surface-subtle);
+       --table-row-hover-bg: var(--highlight-bg-subtle);
+       --code-block-bg: var(--surface-muted); /* Darker code blocks */
+       --code-block-border: var(--outline-subtle);
+       --code-inline-bg: var(--surface-muted);
+       --code-inline-border: var(--outline-muted);
+       --blockquote-border: var(--outline-default);
+    }
+  }
+  /* High Contrast Mode Theme */
+  @media (prefers-contrast: high) {
+    :root { /* High Contrast Light */
+      --contrast-factor: 1.3; --l-threshold: 0.6; --c-threshold: 0.05; --surface-c: 0.005;
+      /* Add more adjustments if needed */
+    }
+    @media (prefers-color-scheme: dark) { /* High Contrast Dark */
+      :root { --contrast-factor: 1.3; --l-threshold: 0.55; --c-threshold: 0.05; --surface-c: 0.01; }
+    }
+  }
+  /* Apply Theme Specific Styles */
+  html {
+    scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+  }
+  ::selection {
+    background-color: var(--highlight-bg-overt);
+    color: var(--text-on-highlight-overt); /* Requires --bg correctly set or browser calculation */
+  }
+}
+
+/* ================================================ */
+/* ==               @layer palette               == */
+/* ================================================ */
+@layer palette {
+  :root {
+    /* Max Chroma Clamps */
+    --clamp-max-c-0: var(--max-chroma-0); --clamp-max-c-1: var(--max-chroma-1);
+    --clamp-max-c-2: var(--max-chroma-2); --clamp-max-c-3: var(--max-chroma-3);
+    --clamp-max-c-4: var(--max-chroma-4); --clamp-max-c-5: var(--max-chroma-5);
+    --clamp-max-c-6: var(--max-chroma-6);
+    --clamp-error-max-c-2: calc(var(--max-chroma-2) * 1.1); --clamp-error-max-c-3: calc(var(--max-chroma-3) * 1.1); --clamp-error-max-c-4: calc(var(--max-chroma-4) * 1.1);
+    --clamp-orange-max-c-2: calc(var(--max-chroma-2) * 1.1); --clamp-orange-max-c-3: calc(var(--max-chroma-3) * 1.1); --clamp-orange-max-c-4: calc(var(--max-chroma-4) * 1.1);
+    --clamp-neutral-max-c-0: calc(var(--max-chroma-0) * 0.5); --clamp-neutral-max-c-1: calc(var(--max-chroma-1) * 0.5); --clamp-neutral-max-c-2: calc(var(--max-chroma-2) * 0.5);
+    --clamp-neutral-max-c-3: calc(var(--max-chroma-3) * 0.5); --clamp-neutral-max-c-4: calc(var(--max-chroma-4) * 0.5); --clamp-neutral-max-c-5: calc(var(--max-chroma-5) * 0.5); --clamp-neutral-max-c-6: calc(var(--max-chroma-6) * 0.5);
+
+    /* Gray Scale */
+    --gray-0: oklch(var(--scale-l-0) 0 0); --gray-1: oklch(var(--scale-l-1) 0 0); --gray-2: oklch(var(--scale-l-2) 0 0); --gray-3: oklch(var(--scale-l-3) 0 0); --gray-4: oklch(var(--scale-l-4) 0 0); --gray-5: oklch(var(--scale-l-5) 0 0); --gray-6: oklch(var(--scale-l-6) 0 0); --gray-7: oklch(var(--scale-l-7) 0 0); --gray-8: oklch(var(--scale-l-8) 0 0); --gray-9: oklch(var(--scale-l-9) 0 0); --gray-10: oklch(var(--scale-l-10) 0 0); --gray-11: oklch(var(--scale-l-11) 0 0); --gray-12: oklch(var(--scale-l-12) 0 0);
+    /* Neutral Scale */
+    --neutral-0: oklch(var(--scale-l-0) min(var(--scale-c-0), var(--clamp-neutral-max-c-0)) var(--neutral-h)); --neutral-1: oklch(var(--scale-l-1) min(var(--scale-c-1), var(--clamp-neutral-max-c-0)) var(--neutral-h)); --neutral-2: oklch(var(--scale-l-2) min(var(--scale-c-1), var(--clamp-neutral-max-c-1)) var(--neutral-h)); --neutral-3: oklch(var(--scale-l-3) min(var(--scale-c-1), var(--clamp-neutral-max-c-1)) var(--neutral-h)); --neutral-4: oklch(var(--scale-l-4) min(var(--scale-c-1), var(--clamp-neutral-max-c-2)) var(--neutral-h)); --neutral-5: oklch(var(--scale-l-5) min(var(--scale-c-2), var(--clamp-neutral-max-c-2)) var(--neutral-h)); --neutral-6: oklch(var(--scale-l-6) min(var(--scale-c-2), var(--clamp-neutral-max-c-3)) var(--neutral-h)); --neutral-7: oklch(var(--scale-l-7) min(var(--scale-c-2), var(--clamp-neutral-max-c-3)) var(--neutral-h)); --neutral-8: oklch(var(--scale-l-8) min(var(--scale-c-2), var(--clamp-neutral-max-c-4)) var(--neutral-h)); --neutral-9: oklch(var(--scale-l-9) min(var(--scale-c-2), var(--clamp-neutral-max-c-4)) var(--neutral-h)); --neutral-10: oklch(var(--scale-l-10) min(var(--scale-c-1), var(--clamp-neutral-max-c-5)) var(--neutral-h)); --neutral-11: oklch(var(--scale-l-11) min(var(--scale-c-1), var(--clamp-neutral-max-c-5)) var(--neutral-h)); --neutral-12: oklch(var(--scale-l-12) min(var(--scale-c-1), var(--clamp-neutral-max-c-6)) var(--neutral-h));
+    /* Accent Scale */
+    --accent-palette-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--accent-h)); --accent-palette-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--accent-h)); --accent-palette-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--accent-h)); --accent-palette-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--accent-h)); --accent-palette-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--accent-h)); --accent-palette-5: oklch(var(--scale-l-5) min(var(--scale-c-7), var(--clamp-max-c-2)) var(--accent-h)); --accent-palette-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--accent-h)); --accent-palette-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-max-c-3)) var(--accent-h)); --accent-palette-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--accent-h)); --accent-palette-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--accent-h)); --accent-palette-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--accent-h)); --accent-palette-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--accent-h)); --accent-palette-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--accent-h));
+    /* Secondary Scale */
+    --secondary-palette-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--secondary-h)); --secondary-palette-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--secondary-h)); --secondary-palette-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--secondary-h)); --secondary-palette-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--secondary-h)); --secondary-palette-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--secondary-h)); --secondary-palette-5: oklch(var(--scale-l-5) min(var(--scale-c-7), var(--clamp-max-c-2)) var(--secondary-h)); --secondary-palette-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--secondary-h)); --secondary-palette-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-max-c-3)) var(--secondary-h)); --secondary-palette-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--secondary-h)); --secondary-palette-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--secondary-h)); --secondary-palette-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--secondary-h)); --secondary-palette-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--secondary-h)); --secondary-palette-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--secondary-h));
+    /* Tertiary Scale */
+    --tertiary-palette-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--tertiary-h)); --tertiary-palette-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--tertiary-h)); --tertiary-palette-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--tertiary-h)); --tertiary-palette-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--tertiary-h)); --tertiary-palette-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--tertiary-h)); --tertiary-palette-5: oklch(var(--scale-l-5) min(var(--scale-c-7), var(--clamp-max-c-2)) var(--tertiary-h)); --tertiary-palette-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--tertiary-h)); --tertiary-palette-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-max-c-3)) var(--tertiary-h)); --tertiary-palette-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--tertiary-h)); --tertiary-palette-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--tertiary-h)); --tertiary-palette-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--tertiary-h)); --tertiary-palette-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--tertiary-h)); --tertiary-palette-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--tertiary-h));
+    /* Feedback Scales (Success, Warning, Error, Info) */
+    /* ... Success Palette ... */
+    --success-palette-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--success-h)); /* ... up to 12 */
+    /* ... Warning Palette ... */
+    --warning-palette-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--warning-h)); /* ... up to 12 */
+    /* ... Error Palette ... */
+    --error-palette-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--error-h)); /* ... up to 12, using --clamp-error-max-c-* */
+    /* ... Info Palette ... */
+    --info-palette-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--info-h)); /* ... up to 12 */
+
+    /* == Extended Palette (Common Colors) == */
+    /* (Repeat the pattern for slate, red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose) */
+    /* Blue Scale Example */
+    --blue-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-blue)); --blue-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-blue)); --blue-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-blue)); --blue-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-blue)); --blue-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-blue)); --blue-5: oklch(var(--scale-l-5) min(var(--scale-c-7), var(--clamp-max-c-2)) var(--hue-blue)); --blue-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-blue)); --blue-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-max-c-3)) var(--hue-blue)); --blue-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--hue-blue)); --blue-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-blue)); --blue-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-blue)); --blue-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-blue)); --blue-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-blue));
+    /* Red Scale Example */
+    --red-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-red)); --red-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-red)); --red-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-red)); --red-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-red)); --red-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-error-max-c-2, var(--clamp-max-c-2))) var(--hue-red)); --red-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-error-max-c-2, var(--clamp-max-c-2))) var(--hue-red)); --red-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-error-max-c-3, var(--clamp-max-c-3))) var(--hue-red)); --red-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-error-max-c-3, var(--clamp-max-c-3))) var(--hue-red)); --red-8: oklch(var(--scale-l-8) min(var(--scale-c-9), var(--clamp-error-max-c-4, var(--clamp-max-c-4))) var(--hue-red)); --red-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-error-max-c-4, var(--clamp-max-c-4))) var(--hue-red)); --red-10: oklch(var(--scale-l-10) min(var(--scale-c-6), var(--clamp-max-c-5)) var(--hue-red)); --red-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-red)); --red-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-red));
+    /* Green Scale Example */
+    --green-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-green)); --green-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-green)); --green-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-green)); --green-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-green)); --green-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-green)); --green-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-green)); --green-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-green)); --green-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-green)); --green-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--hue-green)); --green-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-green)); --green-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-green)); --green-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-green)); --green-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-green));
+     /* ... Add other extended palette scales here ... */
+  }
+}
+
+/* ================================================ */
+/* ==            @layer defaults                 == */
+/* ================================================ */
+/* Purpose: Apply structural styles and basic appearance */
+/* using variables defined in the NEW @layer theme. */
+@layer defaults {
+
+  /* --- Base Body & Document Styles --- */
+  body {
+    font-family: var(--font-primary, sans-serif); /* Keep font variables if defined elsewhere */
+    color: var(--text-default); /* UPDATED */
+    background-color: var(--base); /* UPDATED */
+    line-height: var(--body-line-height, 1.5);
+
+    -webkit-font-smoothing: var(--font-smoothing-webkit, antialiased);
+    -moz-osx-font-smoothing: var(--font-smoothing-moz, grayscale);
+    font-synthesis: var(--font-synthesis, none);
+    text-rendering: var(--text-rendering, optimizeLegibility);
+    hyphens: var(--body-hyphens, auto);
+    scroll-behavior: var(--scroll-behavior, smooth);
+  }
+
+  /* ::selection is handled in @theme */
+
+  /* --- Typography Defaults --- */
+  h1, h2, h3, h4, h5, h6, p, ul, ol, dl, pre, blockquote, figure, table, hr, details {
+    margin-block: 0 var(--space-flow, 1em);
+  }
+  :is(article, section, aside, div, li, dd, dt, blockquote) > :last-child {
+    margin-block-end: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-heading, 600);
+    line-height: var(--line-height-heading, 1.2);
+    color: var(--text-overt); /* UPDATED */
+    letter-spacing: var(--letter-spacing-heading, normal);
+  }
+  h1 { font-size: var(--font-size-h1, 2.5rem); }
+  h2 { font-size: var(--font-size-h2, 2.0rem); }
+  h3 { font-size: var(--font-size-h3, 1.75rem); }
+  h4 { font-size: var(--font-size-h4, 1.5rem); }
+  h5 { font-size: var(--font-size-h5, 1.25rem); }
+  h6 { font-size: var(--font-size-h6, 1.0rem); letter-spacing: var(--letter-spacing-h6, 0.5px); text-transform: var(--text-transform-h6, uppercase); }
+
+  p {
+    line-height: var(--body-line-height, 1.6);
+    color: var(--text-default); /* UPDATED (use default body text) */
+  }
+
+  /* Lists */
+  ul, ol { padding-inline-start: var(--space-list-indent, 1.5em); }
+  ul { list-style: var(--list-style-unordered, disc); }
+  ol { list-style: var(--list-style-ordered, decimal); }
+  li { margin-block-end: var(--space-list-item, 0.5em); }
+  li > ul, li > ol { margin-block-start: var(--space-list-item, 0.5em); margin-block-end: 0; }
+  dt { font-weight: var(--font-weight-medium, 500); color: var(--text-overt); } /* UPDATED */
+  dd { padding-inline-start: var(--space-list-indent, 1.5em); color: var(--text-subtle); } /* UPDATED */
+  dd + dt { margin-block-start: var(--space-md, 1rem); }
+
+  /* Links - Styling primarily handled in @components */
+  a {
+    /* Base color set in @components */
+    text-decoration: var(--link-decoration, none); /* Keep structural */
+  }
+
+  /* Code blocks and inline code - Structure only, colors in @components */
+  pre, code, kbd, samp {
+    font-family: var(--font-mono, monospace);
+    font-size: var(--font-size-code, 0.9em);
+    line-height: var(--line-height-code, 1.4);
+    /* color: handled in @components */
+  }
+  pre {
+    padding: var(--space-code-block-y, 0.8em) var(--space-code-block-x, 1em);
+    border-radius: var(--radius-md, 6px);
+    overflow-x: auto;
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    /* background/border color: handled in @components */
+  }
+  :not(pre) > code, kbd, samp {
+    padding: var(--space-code-inline-y, 0.2em) var(--space-code-inline-x, 0.4em);
+    border-radius: var(--radius-sm, 3px);
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    /* background/border color: handled in @components */
+  }
+  kbd { letter-spacing: 0.5px; }
+
+  /* Blockquotes - Structure only, colors in @components */
+  blockquote {
+    margin-inline: var(--space-blockquote-margin-inline, 1em);
+    padding-inline-start: var(--space-blockquote-pad, 1em);
+    border-inline-start-width: var(--border-width-blockquote, 3px);
+    border-inline-start-style: solid;
+    /* color/border color: handled in @components */
+  }
+
+  /* Horizontal Rule - Structure only, colors in @components */
+  hr {
+    border: none;
+    border-block-start-width: var(--border-width, 1px);
+    border-block-start-style: solid;
+    /* color: handled in @components */
+  }
+
+  /* --- Form Element Defaults --- */
+  input, select, textarea, fieldset {
+    padding: var(--space-input-y, 0.6em) var(--space-input-x, 0.8em);
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    border-radius: var(--radius-md, 6px);
+    font-size: var(--font-size-input, 1rem);
+    transition: border-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                box-shadow var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                background-color var(--transition-duration, 150ms) var(--transition-timing, ease-out);
+    width: 100%;
+    /* color/border/background: handled in @components */
+  }
+  fieldset {
+    padding: var(--space-fieldset-y, 1.5em) var(--space-fieldset-x, 1.2em);
+    border-color: var(--outline-default); /* UPDATED */
+  }
+  legend {
+    padding-inline: var(--space-xs, 0.5rem);
+    font-weight: var(--font-weight-medium, 500);
+    color: var(--text-overt); /* UPDATED */
+  }
+  input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="button"], input[type="reset"], button {
+    width: auto;
+  }
+
+  /* Button Structure - Colors applied via utilities in @utilities */
+  button, input[type="button"], input[type="submit"], input[type="reset"] {
+    padding: var(--space-button-y, 0.7em) var(--space-button-x, 1.3em);
+    border-radius: var(--radius-md, 6px);
+    font-weight: var(--font-weight-button, 500);
+    border-width: var(--border-width-button, 1px);
+    border-style: solid;
+    transition: background-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                border-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                box-shadow var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                transform calc(var(--transition-duration, 150ms) / 2) var(--transition-timing, ease-out);
+    line-height: 1;
+    box-shadow: var(--shadow-button, none); /* Keep shadows if defined elsewhere */
+    /* Colors/borders applied via utility classes */
+  }
+  /* Hover/Active structure - styles may be overridden by utilities */
+  button:hover:not([disabled]),
+  input[type="button"]:hover:not([disabled]),
+  input[type="submit"]:hover:not([disabled]),
+  input[type="reset"]:hover:not([disabled]) {
+    transform: var(--transform-button-hover, translateY(-1px));
+    box-shadow: var(--shadow-button-hover, 0 2px 4px oklch(from var(--base) calc(l - 50%) 0.02 h / 0.1)); /* Example subtle shadow */
+  }
+  button:active:not([disabled]),
+  input[type="button"]:active:not([disabled]),
+  input[type="submit"]:active:not([disabled]),
+  input[type="reset"]:active:not([disabled]) {
+    transform: var(--transform-button-active, translateY(0px));
+    box-shadow: var(--shadow-button-active, none);
+  }
+
+  /* Select element structure - Arrow appearance handled in @components */
+  select {
+    padding-right: var(--space-select-arrow-gap, calc(var(--space-input-x, 0.8em) * 3));
+  }
+
+  /* Checkbox/Radio structure - Colors handled in @components */
+  input[type="checkbox"], input[type="radio"] {
+    appearance: var(--appearance-checkbox-radio, none);
+    -webkit-appearance: none; -moz-appearance: none;
+    border-width: var(--border-width, 1px); border-style: solid;
+    width: var(--size-checkbox-radio, 1.1em); height: var(--size-checkbox-radio, 1.1em);
+    margin-inline-end: var(--space-checkbox-radio-label-gap, 0.5em);
+    vertical-align: middle; position: relative; display: inline-grid; place-content: center;
+    /* border-color: handled in @components */
+  }
+  input[type="checkbox"] { border-radius: var(--radius-sm, 3px); }
+  input[type="radio"] { border-radius: 50%; }
+  /* Indicator structure */
+  input[type="checkbox"]::before, input[type="radio"]::before {
+    content: ''; width: 60%; height: 60%; transform: scale(0);
+    transition: transform 100ms ease-in-out;
+    /* background/box-shadow color: handled in @components */
+  }
+  input[type="radio"]::before { border-radius: 50%; }
+  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before { transform: scale(1); }
+
+  /* Disabled State Opacity */
+  button[disabled], input[disabled], select[disabled], textarea[disabled], fieldset[disabled] {
+    opacity: var(--opacity-disabled, 0.5);
+  }
+  fieldset[disabled] * { cursor: not-allowed; }
+
+  /* --- Table Defaults - Structure only, colors in @components --- */
+  table {
+    width: 100%;
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    border-radius: var(--radius-lg, 8px);
+    overflow: hidden;
+    /* border-color: handled in @components */
+  }
+  th, td {
+    padding: var(--space-table-cell-y, 0.8em) var(--space-table-cell-x, 1em);
+    text-align: left; vertical-align: top;
+    border-bottom-width: var(--border-width, 1px); border-bottom-style: solid;
+    /* border-bottom-color: handled in @components */
+  }
+  thead th {
+    font-weight: var(--font-weight-heading, 600);
+    border-bottom-width: calc(var(--border-width, 1px) * 2);
+    vertical-align: bottom;
+    /* background/color: handled in @components */
+  }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: none; }
+
+  /* --- Basic Utilities Setup --- */
+  .container {
+    width: min(100% - (var(--space-container-padding, 1rem) * 2), var(--width-container-max, 1100px));
+    margin-inline: auto;
+  }
+  .display-none { display: none !important; }
+  .box { padding: var(--b-p, 0); margin: var(--b-m, 0); border-width: var(--b-bw, 0); border-style: solid; border-color: var(--b-bc, transparent); border-radius: var(--b-r, 0); background-color: var(--b-bg, transparent); color: var(--b-fg, inherit); }
+  .box[style*="--b-px"] { padding-inline: var(--b-px); }
+  .box[style*="--b-py"] { padding-block: var(--b-py); }
+  .box[style*="--b-mx"] { margin-inline: var(--b-mx); }
+  .box[style*="--b-my"] { margin-block: var(--b-my); }
+  .cq-container, .cq { container-type: var(--cq-type, inline-size); container-name: var(--cq-name, default); }
+
+  /* --- Accessibility Enhancements --- */
+  :focus-visible { /* Structure only, color handled in @components */
+    outline-style: solid;
+    outline-width: var(--focus-ring-width, 2px);
+    outline-offset: var(--focus-ring-offset, 2px);
+    box-shadow: none;
+  }
+  :target { scroll-margin-block-start: var(--space-target-margin, 5ex); }
+
+  /* --- Reduced Motion Preferences --- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto !important; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; transition-delay: 0ms !important; }
+  }
+
+  /* --- View Transition Structure --- */
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: var(--transition-duration-page, 300ms); animation-timing-function: var(--transition-timing-page, ease-in-out); }
+  ::view-transition-old(root) { animation-name: var(--view-transition-old, fade-out); }
+  ::view-transition-new(root) { animation-name: var(--view-transition-new, fade-in); z-index: 1; }
+  @keyframes fade-in { from { opacity: 0; } }
+  @keyframes fade-out { to { opacity: 0; } }
+
+} /* End of @layer defaults */
+
+
+/* ================================================ */
+/* ==            @layer components               == */
+/* ================================================ */
+@layer components {
+  /* Apply base styles to common elements using NEW theme variables */
+  body {
+    background-color: var(--base);
+    color: var(--text-default);
+  }
+
+  a {
+    color: var(--text-link);
+    text-decoration: underline;
+    text-decoration-color: oklch(from var(--text-link) l c h / 0.4);
+    text-underline-offset: 0.15em;
+    transition: color 150ms ease-out, text-decoration-color 150ms ease-out;
+  }
+  a:hover, a:focus-visible {
+    color: var(--text-link-hover);
+    text-decoration-color: oklch(from var(--text-link-hover) l c h / 0.8);
+  }
+
+  /* Basic Button Styling (Structure in defaults, base style here) */
+  .button {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.6em 1.2em; border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--outline-default); /* Default outline */
+    background-color: var(--surface-default); /* Default surface */
+    color: var(--text-default); /* Use default text */
+    font-weight: 500; text-align: center; cursor: pointer;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out;
+    user-select: none; line-height: 1.2;
+  }
+   .button:hover:not([disabled]) {
+     border-color: var(--outline-overt);
+     background-color: var(--highlight-bg-subtle); /* Subtle highlight on hover */
+   }
+  .button:focus-visible {
+     outline: var(--border-width-thick) solid var(--outline-focus);
+     outline-offset: 2px;
+     border-color: transparent; /* Hide border when outline is visible */
+  }
+  .button[disabled] {
+    opacity: 0.5; cursor: not-allowed;
+    background-color: var(--highlight-bg-muted);
+    border-color: var(--outline-muted);
+  }
+
+  /* Input field styling */
+  .input-field {
+    display: block; width: 100%; padding: 0.6em 0.8em;
+    border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--outline-default);
+    background-color: var(--surface-subtle);
+    color: var(--text-default);
+    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .input-field::placeholder { color: var(--text-muted); opacity: 1; }
+  .input-field:hover:not([disabled]) { border-color: var(--outline-overt); }
+  .input-field:focus, .input-field:focus-visible {
+    outline: none; border-color: var(--outline-focus);
+    box-shadow: 0 0 0 var(--border-width-thick) oklch(from var(--outline-focus) l c h / 0.3);
+  }
+  .input-field[disabled] { opacity: 0.6; background-color: var(--surface-muted); border-color: var(--outline-subtle); cursor: not-allowed; }
+  .input-field:invalid { border-color: var(--error); box-shadow: 0 0 0 var(--border-width-thick) oklch(from var(--error) l c h / 0.3); }
+
+  /* Custom Select Arrow */
+  select.input-field {
+    background-image: linear-gradient(45deg, transparent 50%, var(--text-subtle) 50%), linear-gradient(135deg, var(--text-subtle) 50%, transparent 50%);
+    background-position: right 0.8em top 55%, right calc(0.8em + 5px) top 55%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+  }
+  select.input-field:-moz-focusring { color: transparent; text-shadow: 0 0 0 var(--text-default); }
+
+  /* Checkbox/Radio Theming */
+  input[type="checkbox"], input[type="radio"] {
+    border-color: var(--outline-default);
+    background-color: var(--surface-subtle);
+  }
+  input[type="checkbox"]:hover:not(:checked):not([disabled]),
+  input[type="radio"]:hover:not(:checked):not([disabled]) {
+    border-color: var(--outline-overt);
+    background-color: var(--highlight-bg-subtle);
+  }
+  input[type="checkbox"]:checked, input[type="radio"]:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+  input[type="checkbox"]:checked:hover:not([disabled]),
+  input[type="radio"]:checked:hover:not([disabled]) {
+    background-color: var(--accent-overt);
+    border-color: var(--accent-overt);
+  }
+  input[type="checkbox"]::before, input[type="radio"]::before {
+    box-shadow: inset 1em 1em var(--text-on-accent); /* Use contrast text */
+  }
+  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
+     /* Style for the checkmark/dot */
+  }
+
+  /* Basic card structure */
+  .card {
+     --bg: var(--surface-default); /* Set local --bg */
+     background-color: var(--bg);
+     color: var(--auto-contrast-text); /* Use auto-contrast */
+     border-radius: var(--radius-lg);
+     padding: 1.5rem;
+     border: var(--border-width) solid var(--outline-subtle);
+     box-shadow: 0 2px 5px oklch(from var(--base) calc(l - 50%) 0.02 h / 0.1);
+  }
+
+  /* Code block styling */
+  pre {
+    background-color: var(--code-block-bg);
+    border-color: var(--code-block-border);
+    color: var(--text-default); /* Or define --text-code */
+  }
+  :not(pre) > code, kbd, samp {
+    background-color: var(--code-inline-bg);
+    border-color: var(--code-inline-border);
+    color: var(--text-default); /* Or define --text-code */
+  }
+  /* Blockquote styling */
+  blockquote {
+    border-inline-start-color: var(--blockquote-border);
+    color: var(--text-subtle);
+  }
+  /* Horizontal Rule styling */
+  hr { border-block-start-color: var(--hr-color); }
+  /* Table styling */
+  table { border-color: var(--table-border); }
+  th, td { border-bottom-color: var(--table-border); }
+  thead th {
+    background-color: var(--table-header-bg);
+    color: var(--text-overt); /* Use overt text for header */
+   }
+  tbody tr:hover {
+    --bg: var(--table-row-hover-bg); /* Set local --bg */
+    background-color: var(--bg);
+    color: var(--auto-contrast-text); /* Auto contrast on hover */
+  }
+  /* Focus Ring Color */
+  :focus-visible { outline-color: var(--outline-focus); }
+
+  /* Contrast Pair Component */
+  .contrast-pair {
+    --bg: var(--pair-color, var(--accent));
+    background-color: var(--bg);
+    color: var(--auto-contrast-text);
+    padding: 1rem; border-radius: var(--radius-md);
+  }
+} /* End of @layer components */
+
+
+/* ================================================ */
+/* ==             @layer utilities               == */
+/* ================================================ */
+@layer utilities {
+  /* --- Background Color Utilities (Theme Roles) --- */
+  .bg-base { background-color: var(--base); } .bg-bedrock { background-color: var(--bedrock); }
+  .bg-surface-muted { background-color: var(--surface-muted); } .bg-surface-subtle { background-color: var(--surface-subtle); }
+  .bg-surface-default { background-color: var(--surface-default); } .bg-surface-overt { background-color: var(--surface-overt); }
+  .bg-accent { background-color: var(--accent); } .bg-accent-muted { background-color: var(--accent-muted); } .bg-accent-subtle { background-color: var(--accent-subtle); } .bg-accent-overt { background-color: var(--accent-overt); }
+  .bg-secondary { background-color: var(--secondary); } .bg-secondary-muted { background-color: var(--secondary-muted); } .bg-secondary-subtle { background-color: var(--secondary-subtle); } .bg-secondary-overt { background-color: var(--secondary-overt); }
+  .bg-tertiary { background-color: var(--tertiary); } .bg-tertiary-muted { background-color: var(--tertiary-muted); } .bg-tertiary-subtle { background-color: var(--tertiary-subtle); } .bg-tertiary-overt { background-color: var(--tertiary-overt); }
+  .bg-highlight-muted { background-color: var(--highlight-bg-muted); } .bg-highlight-subtle { background-color: var(--highlight-bg-subtle); } .bg-highlight-overt { background-color: var(--highlight-bg-overt); }
+  .bg-text-highlight { background-color: var(--text-highlight-bg); }
+  .bg-success { background-color: var(--success); } .bg-warning { background-color: var(--warning); } .bg-error { background-color: var(--error); } .bg-info { background-color: var(--info); }
+  .bg-surface-success { background-color: var(--surface-success); } .bg-surface-warning { background-color: var(--surface-warning); } .bg-surface-error { background-color: var(--surface-error); } .bg-surface-info { background-color: var(--surface-info); }
+  .bg-transparent { background-color: transparent; }
+
+  /* --- Background Color Utilities (Palette Scales) --- */
+  .bg-gray-0 { background-color: var(--gray-0); } /* ... */ .bg-gray-12 { background-color: var(--gray-12); }
+  .bg-neutral-0 { background-color: var(--neutral-0); } /* ... */ .bg-neutral-12 { background-color: var(--neutral-12); }
+  .bg-accent-palette-0 { background-color: var(--accent-palette-0); } /* ... */ .bg-accent-palette-12 { background-color: var(--accent-palette-12); }
+  .bg-red-0 { background-color: var(--red-0); } /* ... */ .bg-red-12 { background-color: var(--red-12); }
+  .bg-orange-0 { background-color: var(--orange-0); } /* ... */ .bg-orange-12 { background-color: var(--orange-12); }
+  .bg-amber-0 { background-color: var(--amber-0); } /* ... */ .bg-amber-12 { background-color: var(--amber-12); }
+  .bg-yellow-0 { background-color: var(--yellow-0); } /* ... */ .bg-yellow-12 { background-color: var(--yellow-12); }
+  .bg-lime-0 { background-color: var(--lime-0); } /* ... */ .bg-lime-12 { background-color: var(--lime-12); }
+  .bg-green-0 { background-color: var(--green-0); } /* ... */ .bg-green-12 { background-color: var(--green-12); }
+  .bg-emerald-0 { background-color: var(--emerald-0); } /* ... */ .bg-emerald-12 { background-color: var(--emerald-12); }
+  .bg-teal-0 { background-color: var(--teal-0); } /* ... */ .bg-teal-12 { background-color: var(--teal-12); }
+  .bg-cyan-0 { background-color: var(--cyan-0); } /* ... */ .bg-cyan-12 { background-color: var(--cyan-12); }
+  .bg-sky-0 { background-color: var(--sky-0); } /* ... */ .bg-sky-12 { background-color: var(--sky-12); }
+  .bg-blue-0 { background-color: var(--blue-0); } /* ... */ .bg-blue-12 { background-color: var(--blue-12); }
+  .bg-indigo-0 { background-color: var(--indigo-0); } /* ... */ .bg-indigo-12 { background-color: var(--indigo-12); }
+  .bg-violet-0 { background-color: var(--violet-0); } /* ... */ .bg-violet-12 { background-color: var(--violet-12); }
+  .bg-purple-0 { background-color: var(--purple-0); } /* ... */ .bg-purple-12 { background-color: var(--purple-12); }
+  .bg-fuchsia-0 { background-color: var(--fuchsia-0); } /* ... */ .bg-fuchsia-12 { background-color: var(--fuchsia-12); }
+  .bg-pink-0 { background-color: var(--pink-0); } /* ... */ .bg-pink-12 { background-color: var(--pink-12); }
+  .bg-rose-0 { background-color: var(--rose-0); } /* ... */ .bg-rose-12 { background-color: var(--rose-12); }
+  /* Add feedback palette backgrounds */
+  .bg-success-palette-0 { background-color: var(--success-palette-0); } /* ... */ .bg-success-palette-12 { background-color: var(--success-palette-12); }
+  .bg-warning-palette-0 { background-color: var(--warning-palette-0); } /* ... */ .bg-warning-palette-12 { background-color: var(--warning-palette-12); }
+  .bg-error-palette-0 { background-color: var(--error-palette-0); } /* ... */ .bg-error-palette-12 { background-color: var(--error-palette-12); }
+  .bg-info-palette-0 { background-color: var(--info-palette-0); } /* ... */ .bg-info-palette-12 { background-color: var(--info-palette-12); }
+
+
+  /* --- Text Color Utilities (Theme Roles) --- */
+  .text-muted { color: var(--text-muted); } .text-subtle { color: var(--text-subtle); } .text-default { color: var(--text-default); } .text-overt { color: var(--text-overt); }
+  .text-link { color: var(--text-link); } .text-highlight-subtle { color: var(--text-highlight-subtle); } .text-highlight-overt { color: var(--text-highlight-overt); }
+  .text-success { color: var(--text-success); } .text-warning { color: var(--text-warning); } .text-error { color: var(--text-error); } .text-info { color: var(--text-info); }
+  /* Contrast Text Utilities */
+  .text-contrast-on-base { --bg: var(--base); color: var(--auto-contrast-text); }
+  .text-contrast-on-bedrock { --bg: var(--bedrock); color: var(--auto-contrast-text); }
+  .text-contrast-on-surface-muted { --bg: var(--surface-muted); color: var(--auto-contrast-text); }
+  .text-contrast-on-surface-subtle { --bg: var(--surface-subtle); color: var(--auto-contrast-text); }
+  .text-contrast-on-surface-default { --bg: var(--surface-default); color: var(--auto-contrast-text); }
+  .text-contrast-on-surface-overt { --bg: var(--surface-overt); color: var(--auto-contrast-text); }
+  .text-contrast-on-accent { --bg: var(--accent); color: var(--auto-contrast-text); }
+  .text-contrast-on-accent-muted { --bg: var(--accent-muted); color: var(--auto-contrast-text); }
+  .text-contrast-on-accent-subtle { --bg: var(--accent-subtle); color: var(--auto-contrast-text); }
+  .text-contrast-on-accent-overt { --bg: var(--accent-overt); color: var(--auto-contrast-text); }
+  .text-contrast-on-secondary { --bg: var(--secondary); color: var(--auto-contrast-text); }
+  .text-contrast-on-tertiary { --bg: var(--tertiary); color: var(--auto-contrast-text); }
+  .text-contrast-on-highlight-muted { --bg: var(--highlight-bg-muted); color: var(--auto-contrast-text); }
+  .text-contrast-on-highlight-subtle { --bg: var(--highlight-bg-subtle); color: var(--auto-contrast-text); }
+  .text-contrast-on-highlight-overt { --bg: var(--highlight-bg-overt); color: var(--auto-contrast-text); }
+  .text-contrast-on-success { --bg: var(--success); color: var(--auto-contrast-text); }
+  .text-contrast-on-warning { --bg: var(--warning); color: var(--auto-contrast-text); }
+  .text-contrast-on-error { --bg: var(--error); color: var(--auto-contrast-text); }
+  .text-contrast-on-info { --bg: var(--info); color: var(--auto-contrast-text); }
+  .text-inherit { color: inherit; }
+
+  /* --- Text Color Utilities (Palette Scales) --- */
+  .text-gray-0 { color: var(--gray-0); } /* ... */ .text-gray-12 { color: var(--gray-12); }
+  .text-neutral-0 { color: var(--neutral-0); } /* ... */ .text-neutral-12 { color: var(--neutral-12); }
+  .text-accent-palette-0 { color: var(--accent-palette-0); } /* ... */ .text-accent-palette-12 { color: var(--accent-palette-12); }
+  .text-red-0 { color: var(--red-0); } /* ... */ .text-red-12 { color: var(--red-12); }
+  /* ... Add utilities for all other palette scale text colors ... */
+
+
+  /* --- Border Color Utilities (Theme Roles) --- */
+  .border-outline-muted { border-color: var(--outline-muted); } .border-outline-subtle { border-color: var(--outline-subtle); } .border-outline-default { border-color: var(--outline-default); } .border-outline-overt { border-color: var(--outline-overt); }
+  .border-accent { border-color: var(--accent); } .border-accent-muted { border-color: var(--accent-muted); } .border-accent-subtle { border-color: var(--accent-subtle); } .border-accent-overt { border-color: var(--accent-overt); }
+  .border-secondary { border-color: var(--secondary); } .border-tertiary { border-color: var(--tertiary); }
+  .border-highlight-subtle { border-color: var(--outline-highlight-subtle); } .border-highlight-overt { border-color: var(--outline-highlight-overt); }
+  .border-success { border-color: var(--outline-success); } .border-warning { border-color: var(--outline-warning); } .border-error { border-color: var(--outline-error); } .border-info { border-color: var(--outline-info); }
+  .border-transparent { border-color: transparent; }
+
+  /* --- Border Color Utilities (Palette Scales) --- */
+  .border-gray-0 { border-color: var(--gray-0); } /* ... */ .border-gray-12 { border-color: var(--gray-12); }
+  .border-neutral-0 { border-color: var(--neutral-0); } /* ... */ .border-neutral-12 { border-color: var(--neutral-12); }
+  .border-accent-palette-0 { border-color: var(--accent-palette-0); } /* ... */ .border-accent-palette-12 { border-color: var(--accent-palette-12); }
+  .border-red-0 { border-color: var(--red-0); } /* ... */ .border-red-12 { border-color: var(--red-12); }
+  /* ... Add utilities for all other palette scale border colors ... */
+
+
+  /* --- Button Style Utilities --- */
+  /* Combine with .button from components */
+  /* Filled Buttons */
+  .button-filled-accent { background-color: var(--accent); --bg: var(--accent); color: var(--auto-contrast-text); border-color: transparent; }
+  .button-filled-accent:hover:not([disabled]) { background-color: var(--accent-overt); }
+  .button-filled-accent:active:not([disabled]) { background-color: oklch(from var(--accent-overt) calc(l + var(--l-delta-1-down)) c h); }
+  /* ... Add other filled button variants (secondary, error, etc.) ... */
+  /* Outline Buttons */
+  .button-outline-accent { color: var(--accent); border-color: var(--accent-subtle); background-color: transparent; }
+  .button-outline-accent:hover:not([disabled]) { background-color: var(--accent-muted); border-color: var(--accent); }
+  .button-outline-accent:active:not([disabled]) { background-color: oklch(from var(--accent-muted) calc(l + var(--l-delta-1-down)) c h); }
+  .button-outline-gray { color: var(--text-subtle); border-color: var(--outline-default); background-color: transparent; }
+  .button-outline-gray:hover:not([disabled]) { background-color: var(--highlight-bg-subtle); color: var(--text-default); border-color: var(--outline-overt); }
+  .button-outline-gray:active:not([disabled]) { background-color: oklch(from var(--highlight-bg-subtle) calc(l + var(--l-delta-1-down)) c h); }
+  /* Text Buttons */
+  .button-text-accent { color: var(--accent); background-color: transparent; border-color: transparent;}
+  .button-text-accent:hover:not([disabled]) { background-color: var(--accent-muted); }
+  .button-text-accent:active:not([disabled]) { background-color: oklch(from var(--accent-muted) calc(l + var(--l-delta-1-down)) c h); }
+  .button-text-gray { color: var(--text-subtle); background-color: transparent; border-color: transparent;}
+  .button-text-gray:hover:not([disabled]) { background-color: var(--highlight-bg-subtle); color: var(--text-default); }
+  .button-text-gray:active:not([disabled]) { background-color: oklch(from var(--highlight-bg-subtle) calc(l + var(--l-delta-1-down)) c h); }
+
+  /* --- Alpha / Opacity Utilities --- */
+  .opacity-0 { opacity: var(--alpha-0); } .opacity-5 { opacity: var(--alpha-1); } .opacity-10 { opacity: var(--alpha-2); } .opacity-20 { opacity: var(--alpha-3); }
+  .opacity-40 { opacity: var(--alpha-4); } .opacity-60 { opacity: var(--alpha-5); } .opacity-75 { opacity: var(--alpha-6); } .opacity-90 { opacity: var(--alpha-7); } .opacity-100 { opacity: var(--alpha-8); }
+  /* Background with Alpha */
+  .bg-accent-alpha-10 { background-color: oklch(from var(--accent) l c h / var(--alpha-2)); }
+  .bg-accent-alpha-20 { background-color: oklch(from var(--accent) l c h / var(--alpha-3)); }
+  .bg-accent-alpha-40 { background-color: oklch(from var(--accent) l c h / var(--alpha-4)); }
+  .bg-accent-alpha-60 { background-color: oklch(from var(--accent) l c h / var(--alpha-5)); }
+  .bg-black-alpha-50 { background-color: oklch(0% 0 0 / 0.5); }
+  .bg-white-alpha-50 { background-color: oklch(100% 0 0 / 0.5); }
+
+  /* --- Auto Contrast Utility --- */
+  .auto-contrast {
+    /* Requires --_local-bg to be set where background is defined */
+    /* e.g., <div class="bg-accent-palette-7 auto-contrast" style="--_local-bg: var(--accent-palette-7)">Text</div> */
+    --bg: var(--_local-bg, var(--base)); /* Fallback to theme base */
+    color: var(--auto-contrast-text);
+  }
+
+  /* --- Palette Swatch Helper --- */
+  .palette-swatch { display: inline-block; width: 2.5rem; height: 2.5rem; border-radius: var(--radius-sm); border: var(--border-width-thin) solid var(--outline-muted); margin: 0.25rem; vertical-align: middle; }
+  .swatch-label { font-size: 0.75rem; color: var(--text-subtle); margin-left: 0.5rem; }
+  .swatch-group { margin-bottom: 1rem; padding: 0.5rem; border: 1px dashed var(--outline-subtle); border-radius: var(--radius-md); }
+} /* End of @layer utilities */
+
+/* ================================================ */
+/* ==     NEW COLOR SYSTEM - LAYERS END          == */
+/* ================================================ */
+
+
+/* ================================================ */
+/* ==               @layer layouts               == */
+/* ================================================ */
+/* Purpose: Provide responsive layout primitives. */
+/* (This layer is mostly unchanged but now benefits from the new theme's spacing/sizing vars if they were updated) */
+@layer layouts {
+  /* --- General Layout Container --- */
+  .l-container { container-type: var(--l-container-type, inline-size); container-name: var(--l-container-name, layout); }
+  /* ================== Grid Layouts ================== */
+  .l-grid { display: grid; gap: var(--l-grid-gap, var(--space-md)); grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--l-grid-min-item-size, 15rem)), 1fr)); container-type: inline-size; container-name: layout-grid; }
+  .l-grid > * { min-width: 0; }
+  @container layout-grid (min-width: var(--cq-bp-sm, 30em)) { /* ... responsive columns ... */ }
+  @container layout-grid (min-width: var(--cq-bp-md, 45em)) { /* ... responsive columns ... */ }
+  .l-two-col { display: grid; gap: var(--l-two-col-gap, var(--space-lg)); container-type: inline-size; container-name: layout-two-col; grid-template-columns: 1fr; }
+  .l-two-col > * { min-width: 0; }
+  @container layout-two-col (min-width: var(--l-two-col-breakpoint, var(--cq-bp-sm, 30em))) { /* ... responsive columns ... */ }
+  .l-split { display: grid; grid-template-columns: 1fr; gap: var(--l-split-gap, var(--space-lg)); container-type: inline-size; container-name: layout-split; }
+  .l-split > * { min-width: 0; }
+  @container layout-split (min-width: var(--l-split-breakpoint, var(--cq-bp-sm, 30em))) { .l-split { grid-template-columns: var(--l-split-fraction, 1fr) 1fr; } }
+  .l-split--no-stack { grid-template-columns: var(--l-split-fraction, 1fr) 1fr; }
+  /* ================= Flexbox Layouts ================= */
+  .l-row { display: flex; flex-wrap: var(--l-row-wrap, wrap); gap: var(--l-row-gap, var(--space-md)); container-type: inline-size; container-name: layout-row; flex-direction: column; align-items: var(--l-row-align-stacked, stretch); }
+  .l-row > * { min-width: 0; }
+  @container layout-row (min-width: var(--l-row-stack-breakpoint, var(--cq-bp-xs, 20em))) { .l-row:not(.l-row--force-stack) { flex-direction: var(--l-row-direction, row); align-items: var(--l-row-align, center); justify-content: var(--l-row-justify, flex-start); } }
+  .l-row--no-stack { flex-direction: var(--l-row-direction, row); align-items: var(--l-row-align, center); justify-content: var(--l-row-justify, flex-start); }
+  .l-stack { display: flex; flex-direction: column; justify-content: var(--l-stack-justify, flex-start); align-items: var(--l-stack-align, stretch); gap: var(--l-stack-gap, var(--space-md)); }
+  .l-cluster { display: flex; flex-wrap: wrap; gap: var(--l-cluster-gap, var(--space-sm)); justify-content: var(--l-cluster-justify, flex-start); align-items: var(--l-cluster-align, center); }
+  .l-reel { display: flex; gap: var(--l-reel-gap, var(--space-md)); overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color); -webkit-overflow-scrolling: touch; } /* Uses theme scrollbar vars */
+  .l-reel--no-scrollbar { scrollbar-width: none; } .l-reel--no-scrollbar::-webkit-scrollbar { display: none; } .l-reel > * { flex-shrink: 0; } .l-reel > img { height: 100%; max-height: var(--l-reel-item-max-height, 100%); width: auto; flex-basis: auto; }
+  .l-switcher { display: flex; flex-wrap: wrap; gap: var(--l-switcher-gap, var(--space-sm)); } .l-switcher > * { flex-grow: 1; flex-basis: calc((var(--l-switcher-threshold, 20rem) - 100%) * 999); }
+  .l-spread { display: flex; flex-direction: var(--l-spread-direction, row); justify-content: space-between; align-items: var(--l-spread-align, center); gap: var(--l-spread-gap, var(--space-md)); }
+  /* ================= Wrapper Components ================= */
+  .l-pad { padding: var(--l-pad-padding, var(--space-md)); padding-inline: var(--l-pad-padding-x, var(--l-pad-padding, var(--space-md))); padding-block: var(--l-pad-padding-y, var(--l-pad-padding, var(--space-md))); }
+  .l-center-content { box-sizing: content-box; margin-inline: auto; max-width: var(--l-center-content-max-width, var(--width-container-max, 60ch)); padding-inline: var(--l-center-content-gutter, 0); text-align: var(--l-center-content-text-align, initial); }
+  .l-cover { display: grid; place-content: var(--l-cover-place-content, center); place-items: var(--l-cover-place-items, center); padding: var(--l-cover-padding, var(--space-lg)); min-height: var(--l-cover-min-height, 50vh); overflow: hidden; text-align: var(--l-cover-text-align, center); }
+  .l-frame { position: relative; overflow: hidden; aspect-ratio: var(--l-frame-ratio, 16 / 9); } .l-frame > :first-child { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: var(--l-frame-object-fit, cover); object-position: var(--l-frame-object-position, center); }
+  .l-center { display: flex; justify-content: var(--l-center-justify, center); align-items: var(--l-center-align, center); min-height: var(--l-center-min-height, auto); padding: var(--l-center-padding, 0); } .l-center--h { align-items: initial; } .l-center--v { justify-content: initial; }
+  /* ================= Complex/Specific Layouts ================= */
+  .l-sidebar { display: grid; gap: var(--l-sidebar-gap, var(--space-lg)); container-type: inline-size; container-name: layout-sidebar; grid-template-areas: "content" "sidebar"; }
+  .l-sidebar > *:not(.l-sidebar__aside) { grid-area: content; min-width: 0; } .l-sidebar > .l-sidebar__aside { grid-area: sidebar; min-width: 0; width: 100%; }
+  @container layout-sidebar (min-width: var(--l-sidebar-breakpoint, var(--cq-bp-md, 45em))) { .l-sidebar { grid-template-columns: var(--l-sidebar-width, minmax(15rem, 25%)) 1fr; grid-template-areas: "sidebar content"; } .l-sidebar > .l-sidebar__aside { width: auto; } .l-sidebar--right { grid-template-columns: 1fr var(--l-sidebar-width, minmax(15rem, 25%)); grid-template-areas: "content sidebar"; } }
+  .l-standard-page { display: grid; grid-template-rows: auto 1fr auto; min-height: var(--l-standard-page-min-height, 100vh); gap: var(--l-standard-page-gap, 0); }
+  .l-standard-page > * { min-width: 0; } .l-standard-page__header { grid-row: 1; } .l-standard-page__main { grid-row: 2; } .l-standard-page__footer { grid-row: 3; }
+  .l-media { display: flex; align-items: var(--l-media-align, flex-start); gap: var(--l-media-gap, var(--space-md)); }
+  .l-media > :first-child { flex-shrink: 0; } .l-media > :last-child { flex-grow: 1; min-width: 0; } .l-media--reverse { flex-direction: row-reverse; }
+  .l-tabs { display: flex; flex-direction: column; gap: var(--l-tabs-gap, var(--space-md)); }
+  .l-tabs__list { flex-shrink: 0; } .l-tabs__panel { flex-grow: 1; min-height: 0; } .l-tabs--bottom { flex-direction: column-reverse; } .l-tabs--left { flex-direction: row; } .l-tabs--right { flex-direction: row-reverse; }
+  .l-tabs--left > .l-tabs__panel, .l-tabs--right > .l-tabs__panel { min-width: 0; } .l-tabs--left > .l-tabs__list, .l-tabs--right > .l-tabs__list { width: var(--l-tabs-side-width, max-content); flex-shrink: 0; }
+} /* End of @layer layouts */
