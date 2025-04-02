@@ -6,11 +6,13 @@
   <title>CSS Framework Test Page</title>
   <link rel="stylesheet" href="src/index.css">
   <style>
+    /* Base styles for demo page */
     .demo-section {
       margin-bottom: 2rem;
       padding: 1.5rem;
       border: 1px solid var(--outline-default);
       border-radius: var(--radius-lg);
+      transition: border-color 0.3s, background-color 0.3s;
     }
 
     .demo-section h2 {
@@ -29,19 +31,28 @@
       font-size: var(--font-size-sm);
       color: var(--auto-contrast-text);
       box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
     }
 
+    /* Theme toggle button */
     .toggle-theme {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
       z-index: 100;
-      padding: 0.5rem 1rem;
+      padding: 0.75rem;
       border-radius: var(--radius-full);
       background-color: var(--surface-default);
       border: 1px solid var(--outline-default);
       box-shadow: var(--shadow-md);
       cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.25rem;
+    }
+
+    .toggle-theme:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-lg);
     }
 
     .dark-icon { display: none; }
@@ -49,6 +60,188 @@
 
     .dark .dark-icon { display: inline; }
     .dark .light-icon { display: none; }
+
+    /* Color Customizer Panel */
+    .customizer-panel {
+      position: fixed;
+      top: 5rem;
+      right: 1rem;
+      width: 320px;
+      background-color: var(--surface-default);
+      border: 1px solid var(--outline-default);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 1rem;
+      z-index: 50;
+      transform: translateX(110%);
+      transition: transform 0.3s ease-in-out;
+      max-height: calc(100vh - 10rem);
+      overflow-y: auto;
+    }
+
+    .customizer-panel.active {
+      transform: translateX(0);
+    }
+
+    .customizer-toggle {
+      position: fixed;
+      top: 5rem;
+      right: 1rem;
+      z-index: 51;
+      padding: 0.5rem;
+      border-radius: var(--radius-full);
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      font-size: 1.5rem;
+    }
+
+    .customizer-toggle:hover {
+      transform: scale(1.05);
+    }
+
+    .customizer-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .customizer-section h3 {
+      font-size: var(--font-size-lg);
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--outline-subtle);
+      padding-bottom: 0.5rem;
+    }
+
+    .color-control {
+      margin-bottom: 1rem;
+    }
+
+    .color-control label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .slider-container input[type="range"] {
+      flex: 1;
+    }
+
+    .value-display {
+      min-width: 3rem;
+      text-align: right;
+      font-family: monospace;
+    }
+
+    .preview-box {
+      height: 3rem;
+      width: 100%;
+      border-radius: var(--radius-md);
+      margin-top: 0.5rem;
+      border: 1px solid var(--outline-default);
+    }
+
+    .preset-colors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .preset-color {
+      width: 2rem;
+      height: 2rem;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      border: 1px solid var(--outline-subtle);
+      transition: transform 0.2s ease;
+    }
+
+    .preset-color:hover {
+      transform: scale(1.1);
+    }
+
+    /* Animation for color transitions */
+    *, *::before, *::after {
+      transition-property: color, background-color, border-color, box-shadow;
+      transition-duration: 0.3s;
+      transition-timing-function: ease;
+    }
+
+    .animated-element {
+      transition: all 0.5s ease;
+    }
+
+    /* Make page look better */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-icon {
+      font-size: 1.5rem;
+      color: var(--accent);
+    }
+
+    /* Add sticky navigation on the side */
+    .side-nav {
+      position: fixed;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: var(--surface-default);
+      border-radius: var(--radius-lg);
+      padding: 1rem 0.5rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--outline-default);
+      z-index: 10;
+      display: none;
+    }
+
+    @media (min-width: 1400px) {
+      .side-nav {
+        display: block;
+      }
+    }
+
+    .side-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .side-nav a {
+      display: block;
+      padding: 0.5rem;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--text-default);
+      font-size: var(--font-size-sm);
+    }
+
+    .side-nav a:hover {
+      background-color: var(--highlight-bg-muted);
+    }
+
+    .side-nav a.active {
+      background-color: var(--accent-subtle);
+      color: var(--text-on-accent-subtle);
+    }
   </style>
 </head>
 <body class="bg-base text-default">
@@ -65,11 +258,107 @@
             <li><a href="#components" class="text-link">Components</a></li>
             <li><a href="#layouts" class="text-link">Layouts</a></li>
             <li><a href="#utilities" class="text-link">Utilities</a></li>
+            <li><a href="#variables" class="text-link">CSS Variables</a></li>
           </ul>
         </nav>
       </div>
     </div>
   </header>
+
+  <!-- Side Navigation for quick access -->
+  <nav class="side-nav">
+    <ul>
+      <li><a href="#typography" class="nav-link" data-section="typography">Aa</a></li>
+      <li><a href="#colors" class="nav-link" data-section="colors">🎨</a></li>
+      <li><a href="#buttons" class="nav-link" data-section="buttons">🔘</a></li>
+      <li><a href="#forms" class="nav-link" data-section="forms">📝</a></li>
+      <li><a href="#components" class="nav-link" data-section="components">🧩</a></li>
+      <li><a href="#layouts" class="nav-link" data-section="layouts">📐</a></li>
+      <li><a href="#utilities" class="nav-link" data-section="utilities">🛠️</a></li>
+      <li><a href="#variables" class="nav-link" data-section="variables">⚙️</a></li>
+    </ul>
+  </nav>
+
+  <!-- Color & Theme Customizer Panel -->
+  <button class="customizer-toggle" id="customizer-toggle">🎨</button>
+  <div class="customizer-panel" id="customizer-panel">
+    <div class="customizer-section">
+      <h3>Theme Colors</h3>
+      <div class="color-control">
+        <label for="accent-hue">Accent Hue (H)</label>
+        <div class="slider-container">
+          <input type="range" id="accent-hue" min="0" max="360" value="250" class="range-slider">
+          <span class="value-display" id="accent-hue-value">250</span>
+        </div>
+        <div class="preview-box" id="accent-preview"></div>
+      </div>
+      <div class="color-control">
+        <label for="accent-chroma">Accent Chroma (C)</label>
+        <div class="slider-container">
+          <input type="range" id="accent-chroma" min="0" max="0.37" value="0.15" step="0.01" class="range-slider">
+          <span class="value-display" id="accent-chroma-value">0.15</span>
+        </div>
+      </div>
+      <div class="color-control">
+        <label for="accent-lightness">Accent Lightness (L)</label>
+        <div class="slider-container">
+          <input type="range" id="accent-lightness" min="30" max="90" value="60" class="range-slider">
+          <span class="value-display" id="accent-lightness-value">60%</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="customizer-section">
+      <h3>Color Presets</h3>
+      <div class="preset-colors">
+        <button class="preset-color" style="background-color: oklch(60% 0.15 250)" title="Violet (Default)" data-h="250" data-c="0.15" data-l="60"></button>
+        <button class="preset-color" style="background-color: oklch(60% 0.15 285)" title="Purple" data-h="285" data-c="0.15" data-l="60"></button>
+        <button class="preset-color" style="background-color: oklch(60% 0.15 300)" title="Fuchsia" data-h="300" data-c="0.15" data-l="60"></button>
+        <button class="preset-color" style="background-color: oklch(60% 0.15 340)" title="Pink" data-h="340" data-c="0.15" data-l="60"></button>
+        <button class="preset-color" style="background-color: oklch(60% 0.15 355)" title="Rose" data-h="355" data-c="0.15" data-l="60"></button>
+        <button class="preset-color" style="background-color: oklch(60% 0.2 25)" title="Red" data-h="25" data-c="0.2" data-l="60"></button>
+        <button class="preset-color" style="background-color: oklch(65% 0.15 40)" title="Orange" data-h="40" data-c="0.15" data-l="65"></button>
+        <button class="preset-color" style="background-color: oklch(70% 0.15 90)" title="Yellow" data-h="90" data-c="0.15" data-l="70"></button>
+        <button class="preset-color" style="background-color: oklch(60% 0.15 145)" title="Green" data-h="145" data-c="0.15" data-l="60"></button>
+        <button class="preset-color" style="background-color: oklch(60% 0.15 180)" title="Teal" data-h="180" data-c="0.15" data-l="60"></button>
+        <button class="preset-color" style="background-color: oklch(65% 0.15 195)" title="Cyan" data-h="195" data-c="0.15" data-l="65"></button>
+        <button class="preset-color" style="background-color: oklch(60% 0.15 210)" title="Sky" data-h="210" data-c="0.15" data-l="60"></button>
+        <button class="preset-color" style="background-color: oklch(60% 0.15 245)" title="Blue" data-h="245" data-c="0.15" data-l="60"></button>
+      </div>
+    </div>
+    
+    <div class="customizer-section">
+      <h3>Secondary & Tertiary</h3>
+      <div class="color-control">
+        <label for="secondary-hue-shift">Secondary Hue Shift</label>
+        <div class="slider-container">
+          <input type="range" id="secondary-hue-shift" min="-180" max="180" value="60" class="range-slider">
+          <span class="value-display" id="secondary-hue-shift-value">60</span>
+        </div>
+        <div class="preview-box" id="secondary-preview"></div>
+      </div>
+      <div class="color-control">
+        <label for="tertiary-hue-shift">Tertiary Hue Shift</label>
+        <div class="slider-container">
+          <input type="range" id="tertiary-hue-shift" min="-180" max="180" value="-90" class="range-slider">
+          <span class="value-display" id="tertiary-hue-shift-value">-90</span>
+        </div>
+        <div class="preview-box" id="tertiary-preview"></div>
+      </div>
+    </div>
+    
+    <div class="customizer-section">
+      <h3>Surface Contrast</h3>
+      <div class="color-control">
+        <label for="surface-chroma">Surface Chroma</label>
+        <div class="slider-container">
+          <input type="range" id="surface-chroma" min="0" max="0.05" value="0.015" step="0.001" class="range-slider">
+          <span class="value-display" id="surface-chroma-value">0.015</span>
+        </div>
+      </div>
+      <div class="preview-box" id="surface-preview" class="bg-surface-default"></div>
+    </div>
+  </div>
 
   <main class="l-stack l-pad">
     <div class="l-center-content l-stack gap-xl" style="--l-center-content-max-width: 80rem;">
@@ -942,6 +1231,117 @@
           </div>
         </div>
       </section>
+
+      <section class="demo-section" id="variables">
+        <h2 class="text-3xl font-bold">CSS Variables</h2>
+        
+        <div class="l-stack gap-lg">
+          <div>
+            <div class="section-header">
+              <span class="section-icon">⚙️</span>
+              <h3 class="text-xl font-semibold">Variable Explorer</h3>
+            </div>
+            <p class="mb-md">This section demonstrates the power of CSS variables in our design system. Click on elements below to see their properties change in real-time based on CSS variable adjustments.</p>
+            
+            <div class="l-stack gap-md">
+              <div class="card animated-element" id="animated-card">
+                <div class="card__header">
+                  <h4 class="card__title">Interactive Card</h4>
+                  <p class="card__subtitle">Watch me change as you adjust variables</p>
+                </div>
+                <div class="card__body">
+                  <p>This component will respond to changes in CSS variables. Try adjusting the accent color, border radius, and shadow values to see this card update in real-time.</p>
+                </div>
+                <div class="card__footer">
+                  <button class="button button-filled-accent" id="animated-button">Interactive Button</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-header">
+              <span class="section-icon">🎨</span>
+              <h3 class="text-xl font-semibold">Variable Playground</h3>
+            </div>
+            
+            <div class="l-stack gap-md">
+              <div class="l-two-col">
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Border Radius</h4>
+                  <div class="card p-md">
+                    <div class="color-control">
+                      <label for="radius-value">Border Radius</label>
+                      <div class="slider-container">
+                        <input type="range" id="radius-value" min="0" max="24" value="6" class="range-slider">
+                        <span class="value-display" id="radius-value-display">6px</span>
+                      </div>
+                    </div>
+                    <div class="preview-box" style="height: 100px;" id="radius-preview"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Shadow Intensity</h4>
+                  <div class="card p-md">
+                    <div class="color-control">
+                      <label for="shadow-value">Shadow Intensity</label>
+                      <div class="slider-container">
+                        <input type="range" id="shadow-value" min="0" max="3" value="1" step="0.1" class="range-slider">
+                        <span class="value-display" id="shadow-value-display">1</span>
+                      </div>
+                    </div>
+                    <div class="preview-box" style="height: 100px;" id="shadow-preview"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-header">
+              <span class="section-icon">📊</span>
+              <h3 class="text-xl font-semibold">Responsive Testing</h3>
+            </div>
+            
+            <div class="card" style="min-height: 200px;">
+              <div class="card__body">
+                <h4 class="mb-md">Container Query Demo</h4>
+                <p class="mb-md">Resize your browser to see how components adapt with container queries.</p>
+                
+                <!-- Container query demo component -->
+                <div class="container-query-demo" id="container-query-demo">
+                  <div class="resize-handle">⇄</div>
+                  <div class="demo-content">
+                    <h3>Container Query Example</h3>
+                    <p>This component will adapt based on its container width, not the viewport width.</p>
+                    <div class="l-cluster">
+                      <button class="button button-filled-accent">Primary</button>
+                      <button class="button button-outline-accent">Secondary</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-header">
+              <span class="section-icon">🌈</span>
+              <h3 class="text-xl font-semibold">Color System Visualizer</h3>
+            </div>
+            
+            <div class="card">
+              <div class="card__body">
+                <p class="mb-md">Click on any color to see its CSS variable and copy it to your clipboard.</p>
+                <div class="l-grid" style="--l-grid-min-item-size: 150px;" id="color-system-grid">
+                  <!-- Colors will be populated by JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -978,7 +1378,302 @@
       } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.body.classList.add('dark');
       }
+      
+      // Initialize the customizer panel
+      initColorCustomizer();
+      initVariablePlayground();
+      setupSectionNavigation();
+      initColorSystemVisualizer();
     });
+    
+    // Color customizer panel
+    function initColorCustomizer() {
+      const customizerToggle = document.getElementById('customizer-toggle');
+      const customizerPanel = document.getElementById('customizer-panel');
+      
+      // Toggle customizer panel
+      customizerToggle.addEventListener('click', () => {
+        customizerPanel.classList.toggle('active');
+      });
+      
+      // Initialize color controls
+      const accentHue = document.getElementById('accent-hue');
+      const accentChroma = document.getElementById('accent-chroma');
+      const accentLightness = document.getElementById('accent-lightness');
+      const secondaryHueShift = document.getElementById('secondary-hue-shift');
+      const tertiaryHueShift = document.getElementById('tertiary-hue-shift');
+      const surfaceChroma = document.getElementById('surface-chroma');
+      
+      // Preview boxes
+      const accentPreview = document.getElementById('accent-preview');
+      const secondaryPreview = document.getElementById('secondary-preview');
+      const tertiaryPreview = document.getElementById('tertiary-preview');
+      const surfacePreview = document.getElementById('surface-preview');
+      
+      // Value displays
+      const accentHueValue = document.getElementById('accent-hue-value');
+      const accentChromaValue = document.getElementById('accent-chroma-value');
+      const accentLightnessValue = document.getElementById('accent-lightness-value');
+      const secondaryHueShiftValue = document.getElementById('secondary-hue-shift-value');
+      const tertiaryHueShiftValue = document.getElementById('tertiary-hue-shift-value');
+      const surfaceChromaValue = document.getElementById('surface-chroma-value');
+      
+      // Get initial values from CSS
+      const root = document.documentElement;
+      const computedStyle = getComputedStyle(root);
+      
+      accentHue.value = getHue('--accent-h') || 250;
+      accentChroma.value = parseFloat(computedStyle.getPropertyValue('--accent-c')) || 0.15;
+      accentLightness.value = parseInt(computedStyle.getPropertyValue('--accent-l')) || 60;
+      secondaryHueShift.value = parseInt(computedStyle.getPropertyValue('--secondary-hue-shift')) || 60;
+      tertiaryHueShift.value = parseInt(computedStyle.getPropertyValue('--tertiary-hue-shift')) || -90;
+      surfaceChroma.value = parseFloat(computedStyle.getPropertyValue('--surface-c')) || 0.015;
+      
+      // Update display values
+      accentHueValue.textContent = accentHue.value;
+      accentChromaValue.textContent = accentChroma.value;
+      accentLightnessValue.textContent = `${accentLightness.value}%`;
+      secondaryHueShiftValue.textContent = secondaryHueShift.value;
+      tertiaryHueShiftValue.textContent = tertiaryHueShift.value;
+      surfaceChromaValue.textContent = surfaceChroma.value;
+      
+      // Helper function to get hue value
+      function getHue(property) {
+        const value = computedStyle.getPropertyValue(property).trim();
+        // Try to parse various formats
+        if (value.includes('var(--hue-')) {
+          // It's a named hue like var(--hue-violet)
+          const hueName = value.match(/var\(--hue-([a-z]+)\)/)[1];
+          return parseInt(computedStyle.getPropertyValue(`--hue-${hueName}`)) || 250;
+        }
+        return parseInt(value) || 250;
+      }
+      
+      // Update the CSS variables and preview
+      function updateColorVariables() {
+        // Set the CSS variables
+        root.style.setProperty('--accent-h', accentHue.value);
+        root.style.setProperty('--accent-c', accentChroma.value);
+        root.style.setProperty('--accent-l', `${accentLightness.value}%`);
+        root.style.setProperty('--secondary-hue-shift', secondaryHueShift.value);
+        root.style.setProperty('--tertiary-hue-shift', tertiaryHueShift.value);
+        root.style.setProperty('--surface-c', surfaceChroma.value);
+        
+        // Update preview boxes
+        accentPreview.style.backgroundColor = `oklch(${accentLightness.value}% ${accentChroma.value} ${accentHue.value})`;
+        
+        // Calculate secondary hue
+        const secondaryHue = (parseInt(accentHue.value) + parseInt(secondaryHueShift.value) + 360) % 360;
+        secondaryPreview.style.backgroundColor = `oklch(${accentLightness.value}% ${accentChroma.value} ${secondaryHue})`;
+        
+        // Calculate tertiary hue
+        const tertiaryHue = (parseInt(accentHue.value) + parseInt(tertiaryHueShift.value) + 360) % 360;
+        tertiaryPreview.style.backgroundColor = `oklch(${accentLightness.value}% ${accentChroma.value} ${tertiaryHue})`;
+        
+        // Update surface preview
+        surfacePreview.style.backgroundColor = `oklch(92% ${surfaceChroma.value} ${accentHue.value})`;
+      }
+      
+      // Set up event listeners
+      accentHue.addEventListener('input', () => {
+        accentHueValue.textContent = accentHue.value;
+        updateColorVariables();
+      });
+      
+      accentChroma.addEventListener('input', () => {
+        accentChromaValue.textContent = accentChroma.value;
+        updateColorVariables();
+      });
+      
+      accentLightness.addEventListener('input', () => {
+        accentLightnessValue.textContent = `${accentLightness.value}%`;
+        updateColorVariables();
+      });
+      
+      secondaryHueShift.addEventListener('input', () => {
+        secondaryHueShiftValue.textContent = secondaryHueShift.value;
+        updateColorVariables();
+      });
+      
+      tertiaryHueShift.addEventListener('input', () => {
+        tertiaryHueShiftValue.textContent = tertiaryHueShift.value;
+        updateColorVariables();
+      });
+      
+      surfaceChroma.addEventListener('input', () => {
+        surfaceChromaValue.textContent = surfaceChroma.value;
+        updateColorVariables();
+      });
+      
+      // Handle preset colors
+      document.querySelectorAll('.preset-color').forEach(preset => {
+        preset.addEventListener('click', () => {
+          const h = preset.dataset.h;
+          const c = preset.dataset.c;
+          const l = preset.dataset.l;
+          
+          accentHue.value = h;
+          accentChroma.value = c;
+          accentLightness.value = l;
+          
+          accentHueValue.textContent = h;
+          accentChromaValue.textContent = c;
+          accentLightnessValue.textContent = `${l}%`;
+          
+          updateColorVariables();
+        });
+      });
+      
+      // Initial update
+      updateColorVariables();
+    }
+    
+    // Initialize variable playground
+    function initVariablePlayground() {
+      const radiusSlider = document.getElementById('radius-value');
+      const radiusDisplay = document.getElementById('radius-value-display');
+      const radiusPreview = document.getElementById('radius-preview');
+      
+      const shadowSlider = document.getElementById('shadow-value');
+      const shadowDisplay = document.getElementById('shadow-value-display');
+      const shadowPreview = document.getElementById('shadow-preview');
+      
+      // Set up radius slider
+      radiusSlider.addEventListener('input', () => {
+        const value = radiusSlider.value;
+        radiusDisplay.textContent = `${value}px`;
+        radiusPreview.style.borderRadius = `${value}px`;
+        
+        // Update the animated card element
+        document.getElementById('animated-card').style.borderRadius = `${value}px`;
+        document.getElementById('animated-button').style.borderRadius = `${value}px`;
+      });
+      
+      // Set up shadow slider
+      shadowSlider.addEventListener('input', () => {
+        const value = shadowSlider.value;
+        shadowDisplay.textContent = value;
+        
+        // Customize shadow based on intensity
+        const blurRadius = 10 * value;
+        const spreadRadius = 2 * value;
+        const opacity = 0.1 * value;
+        
+        shadowPreview.style.boxShadow = `0 ${4 * value}px ${blurRadius}px rgba(0,0,0,${opacity})`;
+        
+        // Update the animated card element
+        document.getElementById('animated-card').style.boxShadow = `0 ${4 * value}px ${blurRadius}px rgba(0,0,0,${opacity})`;
+      });
+      
+      // Set initial values
+      radiusSlider.value = 6;
+      radiusDisplay.textContent = "6px";
+      radiusPreview.style.borderRadius = "6px";
+      radiusPreview.style.backgroundColor = "var(--surface-default)";
+      
+      shadowSlider.value = 1;
+      shadowDisplay.textContent = "1";
+      shadowPreview.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)";
+      shadowPreview.style.backgroundColor = "var(--surface-default)";
+    }
+    
+    // Set up section navigation
+    function setupSectionNavigation() {
+      const sections = document.querySelectorAll('section.demo-section');
+      const navLinks = document.querySelectorAll('.side-nav a');
+      
+      // Function to check which section is in view
+      function updateActiveSection() {
+        let activeSection = null;
+        let minDistanceFromTop = Infinity;
+        
+        sections.forEach(section => {
+          const rect = section.getBoundingClientRect();
+          const distanceFromTop = Math.abs(rect.top);
+          
+          if (distanceFromTop < minDistanceFromTop && rect.top <= 100) {
+            minDistanceFromTop = distanceFromTop;
+            activeSection = section.id;
+          }
+        });
+        
+        if (activeSection) {
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${activeSection}`) {
+              link.classList.add('active');
+            }
+          });
+        }
+      }
+      
+      // Update active section on scroll
+      window.addEventListener('scroll', updateActiveSection);
+      
+      // Initial update
+      updateActiveSection();
+    }
+    
+    // Initialize color system visualizer
+    function initColorSystemVisualizer() {
+      const colorSystemGrid = document.getElementById('color-system-grid');
+      const colors = [
+        { name: 'Base', variable: '--base' },
+        { name: 'Bedrock', variable: '--bedrock' },
+        { name: 'Surface Muted', variable: '--surface-muted' },
+        { name: 'Surface Subtle', variable: '--surface-subtle' },
+        { name: 'Surface Default', variable: '--surface-default' },
+        { name: 'Surface Overt', variable: '--surface-overt' },
+        { name: 'Accent', variable: '--accent' },
+        { name: 'Accent Muted', variable: '--accent-muted' },
+        { name: 'Accent Subtle', variable: '--accent-subtle' },
+        { name: 'Accent Overt', variable: '--accent-overt' },
+        { name: 'Secondary', variable: '--secondary' },
+        { name: 'Tertiary', variable: '--tertiary' },
+        { name: 'Success', variable: '--success' },
+        { name: 'Warning', variable: '--warning' },
+        { name: 'Error', variable: '--error' },
+        { name: 'Info', variable: '--info' },
+      ];
+      
+      // Create color swatches
+      colors.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.classList.add('color-swatch');
+        swatch.title = `${color.name}: ${color.variable}`;
+        swatch.style.backgroundColor = `var(${color.variable})`;
+        swatch.style.width = '100%';
+        swatch.style.height = '80px';
+        swatch.style.cursor = 'pointer';
+        swatch.innerHTML = `<span>${color.name}</span>`;
+        
+        // Create container
+        const container = document.createElement('div');
+        container.classList.add('l-stack', 'gap-xs');
+        container.appendChild(swatch);
+        
+        // Add text label
+        const label = document.createElement('span');
+        label.classList.add('text-sm', 'text-center');
+        label.textContent = color.variable;
+        container.appendChild(label);
+        
+        // Add click to copy
+        swatch.addEventListener('click', () => {
+          navigator.clipboard.writeText(`var(${color.variable})`)
+            .then(() => {
+              const originalText = swatch.innerHTML;
+              swatch.innerHTML = '<span>Copied!</span>';
+              
+              setTimeout(() => {
+                swatch.innerHTML = originalText;
+              }, 1000);
+            });
+        });
+        
+        colorSystemGrid.appendChild(container);
+      });
+    }
   </script>
 </body>
 </html>
