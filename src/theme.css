@@ -1,6 +1,9 @@
 /* ================================================ */
 /* ==               @layer theme                 == */
 /* ================================================ */
+@property --highlight-bg-subtle {
+  syntax: '<color>'
+}
 @layer theme {
   /* Light Mode Theme */
   :root {
@@ -45,13 +48,14 @@
 
     /* Semantic Color Roles (Light Mode) */
     /* Base & Bedrock */
-    --base: oklch(98% calc(var(--surface-c) * 0.8) var(--neutral-h)); /* Use neutral hue for base */
-    --bedrock: oklch(20% calc(var(--surface-c) * 1.2) var(--neutral-h));
-    /* Surfaces */
-    --surface-muted: oklch(99.5% calc(var(--surface-c) * 0.5) var(--neutral-h));
-    --surface-subtle: oklch(96% calc(var(--surface-c) * 0.8) var(--neutral-h)); /* Often neutral is better than secondary */
-    --surface-default: oklch(92% var(--surface-c) var(--neutral-h));
-    --surface-overt: oklch(89% calc(var(--surface-c) * 1.2) var(--neutral-h));
+    --base: oklch(97.5% calc(var(--surface-c) * 0.9) var(--neutral-h)); /* Use neutral hue for base */
+    --bedrock: oklch(15% calc(var(--surface-c) * 1.2) var(--neutral-h)); /* Darkest color (blackish) */
+    /* Surfaces - hierarchy: overt > default > base > subtle > muted */
+    --surface-muted: oklch(95% calc(var(--surface-c) * 0.8) var(--neutral-h)); /* Like a disabled state, low contrast from base */
+    --surface-subtle: oklch(95% calc(var(--surface-c) * 1.05) var(--neutral-h)); /* Subtle difference from base */
+    --surface-default: oklch(94% calc(var(--surface-c) * 1.2) var(--neutral-h)); /* Standard surface */
+    --surface-overt-dark: oklch(77.5% calc(var(--surface-c) * 2.25) var(--neutral-h)); /* Most prominent surface */
+    --surface-overt-light: oklch(99.5% calc(var(--surface-c) * 0.8) var(--neutral-h)); /* Most prominent surface */
     /* Text */
     --text-muted: oklch(45% calc(var(--surface-c) * 1.5) var(--neutral-h) / 0.8);
     --text-subtle: oklch(35% calc(var(--surface-c) * 1.8) var(--neutral-h));
@@ -139,13 +143,13 @@
       /* Dark Mode Config Overrides */
       --accent-l: 70%; --accent-c: 0.18;
       --surface-c: 0.02; --l-threshold: 0.6;
-      /* Dark Mode Role Overrides */
-      --base: oklch(18% calc(var(--surface-c) * 0.8) var(--neutral-h));
-      --bedrock: oklch(95% calc(var(--surface-c) * 0.7) var(--neutral-h));
-      --surface-muted: oklch(15% calc(var(--surface-c) * 0.5) var(--neutral-h));
-      --surface-subtle: oklch(23% calc(var(--surface-c) * 0.8) var(--neutral-h));
-      --surface-default: oklch(27% var(--surface-c) var(--neutral-h));
-      --surface-overt: oklch(30% calc(var(--surface-c) * 1.2) var(--neutral-h));
+      /* Dark Mode Role Overrides - hierarchy: overt > default > base > subtle > muted */
+      --base: oklch(22% calc(var(--surface-c) * 0.9) var(--neutral-h));
+      --bedrock: oklch(95% calc(var(--surface-c) * 0.7) var(--neutral-h)); /* Inverted in dark mode - lightest color */
+      --surface-muted: oklch(20% calc(var(--surface-c) * 0.5) var(--neutral-h)); /* Like a disabled state, low contrast from base */
+      --surface-subtle: oklch(21% calc(var(--surface-c) * 0.7) var(--neutral-h)); /* Subtle difference from base */
+      --surface-default: oklch(25% var(--surface-c) var(--neutral-h)); /* Standard surface */
+      --surface-overt: oklch(30% calc(var(--surface-c) * 1.2) var(--neutral-h)); /* Most prominent surface */
       --text-muted: oklch(65% calc(var(--surface-c) * 1.2) var(--neutral-h) / 0.8);
       --text-subtle: oklch(75% calc(var(--surface-c) * 1.0) var(--neutral-h));
       --text-default: oklch(88% calc(var(--surface-c) * 0.8) var(--neutral-h));

@@ -533,9 +533,9 @@
 
   /* --- Color Generation (Light Mode Defaults) --- */
   /* Base LCH parameters */
-  --base-l-light: 0.98; --base-c-light: var(--surface-c); --base-h-light: var(--accent-h);
+  --base-l-light: 0.982; --base-c-light: var(--surface-c); --base-h-light: var(--accent-h);
   --bedrock-l-light: 0.20; --bedrock-c-light: calc(var(--surface-c) * 1.2); --bedrock-h-light: var(--accent-h);
-  --surface-muted-l-light: 0.995; --surface-muted-c-light: calc(var(--surface-c) * 0.5); --surface-muted-h-light: var(--accent-h);
+  --surface-muted-l-light: 0.995; --surface-muted-c-light: calc(var(--surface-c) * 1); --surface-muted-h-light: var(--accent-h);
   --surface-subtle-l-light: 0.99; --surface-subtle-c-light: calc(var(--surface-c) * 0.8); --surface-subtle-h-light: var(--accent-h);
   --surface-overt-l-light: 0.96; --surface-overt-c-light: var(--surface-c); --surface-overt-h-light: var(--accent-h);
   --text-overt-l-light: max(0.1, min(0.35, (1 - var(--base-l-light)) * var(--contrast-factor))); --text-overt-c-light: calc(var(--surface-c) * 1.8); --text-overt-h-light: var(--accent-h);

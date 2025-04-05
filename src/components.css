@@ -106,7 +106,12 @@
   .card {
      --bg: var(--surface-default); /* Set local --bg */
      background-color: var(--bg);
-     color: var(--auto-contrast-text); /* Use auto-contrast */
+     color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); /* Use auto-contrast */
      border-radius: var(--radius-lg);
      padding: 1.5rem;
      border: var(--border-width) solid var(--outline-subtle);
@@ -141,7 +146,12 @@
   tbody tr:hover {
     --bg: var(--table-row-hover-bg); /* Set local --bg */
     background-color: var(--bg);
-    color: var(--auto-contrast-text); /* Auto contrast on hover */
+    color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); /* Auto contrast on hover */
   }
   /* Enhanced Form Focus States */
   input:focus-visible, select:focus-visible, textarea:focus-visible {
@@ -166,7 +176,12 @@
   .contrast-pair {
     --bg: var(--pair-color, var(--accent));
     background-color: var(--bg);
-    color: var(--auto-contrast-text);
+    color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+));
     padding: 1rem; border-radius: var(--radius-md);
   }
 } /* End of @layer components */

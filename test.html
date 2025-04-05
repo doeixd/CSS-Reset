@@ -29,7 +29,12 @@
       align-items: center;
       justify-content: center;
       font-size: var(--font-size-sm);
-      color: var(--auto-contrast-text);
+      color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+));
       box-shadow: var(--shadow-sm);
       transition: all 0.3s ease;
     }
@@ -242,6 +247,108 @@
       background-color: var(--accent-subtle);
       color: var(--text-on-accent-subtle);
     }
+    
+    /* Enhanced Demo Styles */
+    
+    /* Auto-contrast Demo */
+    .auto-contrast-demo > div {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Contrast Threshold Demo */
+    .contrast-threshold-demo > div {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* High Contrast Mode Demo */
+    .fake-high-contrast.high-contrast-active > div {
+      border-width: 2px !important;
+    }
+    
+    /* Container Query Demo */
+    .container-query-demo-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-direction: column;
+    }
+    
+    @container card (min-width: 25em) {
+      .container-query-demo-buttons {
+        flex-direction: row;
+      }
+    }
+    
+    /* Focus Demo */
+    .focus-demo:focus {
+      /* This is just to make the focus state more visible in the demo */
+      outline-offset: 4px;
+    }
+    
+    /* Link Demo */
+    .link-default {
+      color: var(--text-link);
+      text-decoration: var(--link-decoration);
+    }
+    
+    .link-default:hover {
+      color: var(--text-link-hover);
+      text-decoration: var(--link-decoration-hover);
+    }
+    
+    .link-underline {
+      color: var(--text-link);
+      text-decoration: underline;
+      text-decoration-thickness: var(--link-underline-thickness);
+      text-underline-offset: var(--link-underline-offset);
+    }
+    
+    .link-subtle {
+      color: var(--text-subtle);
+      text-decoration: var(--link-decoration);
+    }
+    
+    .link-subtle:hover {
+      color: var(--text-link);
+      text-decoration: var(--link-decoration-hover);
+    }
+    
+    .link-overt {
+      color: var(--text-overt);
+      text-decoration: var(--link-decoration);
+      font-weight: var(--font-weight-medium);
+    }
+    
+    .link-overt:hover {
+      color: var(--text-link-hover);
+      text-decoration: var(--link-decoration-hover);
+    }
+    
+    .link-animated {
+      color: var(--text-link);
+      text-decoration: var(--link-decoration);
+      transition: color var(--link-transition-duration) var(--link-transition-timing),
+                  text-decoration-color var(--link-transition-duration) var(--link-transition-timing);
+      position: relative;
+    }
+    
+    .link-animated::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: var(--link-underline-thickness);
+      background-color: var(--text-link-hover);
+      transition: width var(--link-transition-duration) var(--link-transition-timing);
+    }
+    
+    .link-animated:hover {
+      color: var(--text-link-hover);
+    }
+    
+    .link-animated:hover::after {
+      width: 100%;
+    }
   </style>
 </head>
 <body class="bg-base text-default">
@@ -438,6 +545,18 @@
               <li class="text-info">Info Text (.text-info)</li>
             </ul>
           </div>
+          
+          <div>
+            <h4 class="text-lg font-semibold mb-sm">Accent Text Variants</h4>
+            <ul class="l-grid" style="--l-grid-min-item-size: 12rem;">
+              <li class="text-accent-muted">Accent Muted Text (.text-accent-muted)</li>
+              <li class="text-accent-subtle">Accent Subtle Text (.text-accent-subtle)</li>
+              <li class="text-accent">Accent Text (.text-accent)</li>
+              <li class="text-accent-overt">Accent Overt Text (.text-accent-overt)</li>
+              <li class="text-secondary">Secondary Text (.text-secondary)</li>
+              <li class="text-tertiary">Tertiary Text (.text-tertiary)</li>
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -501,6 +620,130 @@
               <div class="l-stack gap-xs">
                 <div class="color-swatch bg-tertiary">Tertiary</div>
                 <span class="text-sm text-center">.bg-tertiary</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Accent Background Variants</h3>
+            <div class="l-grid" style="--l-grid-min-item-size: 18rem; --l-grid-gap: var(--space-md);">
+              <div class="p-md rounded-md bg-accent-muted">
+                <h4 class="mb-sm">Accent Muted (.bg-accent-muted)</h4>
+                <p class="text-auto-contrast">This text uses auto-contrast based on accent-muted background.</p>
+              </div>
+              <div class="p-md rounded-md bg-accent-subtle">
+                <h4 class="mb-sm">Accent Subtle (.bg-accent-subtle)</h4>
+                <p class="text-auto-contrast">This text uses auto-contrast based on accent-subtle background.</p>
+              </div>
+              <div class="p-md rounded-md bg-accent">
+                <h4 class="mb-sm">Accent (.bg-accent)</h4>
+                <p class="text-auto-contrast">This text uses auto-contrast based on accent background.</p>
+              </div>
+              <div class="p-md rounded-md bg-accent-overt">
+                <h4 class="mb-sm">Accent Overt (.bg-accent-overt)</h4>
+                <p class="text-auto-contrast">This text uses auto-contrast based on accent-overt background.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Auto-Contrast Text System</h3>
+            <div class="card p-md mb-md">
+              <p class="mb-md">The auto-contrast text system automatically determines optimal text color based on background color using OKLCH color space. Background utility classes set both the <code>background-color</code> and the <code>--bg</code> variable, which is used to calculate <code>--auto-contrast-text</code>.</p>
+              
+              <div class="l-two-col">
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">How It Works</h4>
+                  <pre class="bg-surface-subtle p-sm rounded-md text-sm" style="overflow-x: auto;">
+--auto-contrast-text: oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+);
+                  </pre>
+                  <ul class="l-stack gap-xs mt-sm text-sm">
+                    <li>• Uses background lightness to determine text lightness</li>
+                    <li>• Reduces chroma (saturation) for better readability</li>
+                    <li>• Maintains the original hue for a harmonious look</li>
+                    <li>• Has configurable thresholds for contrast preferences</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Auto-Contrast Demo</h4>
+                  <div class="auto-contrast-demo l-stack gap-sm">
+                    <div class="bg-gray-0 p-md rounded-md">Auto-contrast on Gray 0 (--bg: var(--gray-0))</div>
+                    <div class="bg-gray-3 p-md rounded-md">Auto-contrast on Gray 3 (--bg: var(--gray-3))</div>
+                    <div class="bg-gray-6 p-md rounded-md">Auto-contrast on Gray 6 (--bg: var(--gray-6))</div>
+                    <div class="bg-gray-9 p-md rounded-md">Auto-contrast on Gray 9 (--bg: var(--gray-9))</div>
+                    <div class="bg-gray-12 p-md rounded-md">Auto-contrast on Gray 12 (--bg: var(--gray-12))</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="l-grid" style="--l-grid-min-item-size: 18rem;">
+              <div class="card">
+                <div class="card__header">
+                  <h4 class="card__title">Auto vs Fixed Contrast</h4>
+                </div>
+                <div class="card__body">
+                  <div class="l-stack gap-md">
+                    <div class="l-two-col">
+                      <div class="bg-accent p-md rounded-md">Auto-contrast (.text-auto-contrast)</div>
+                      <div class="bg-accent p-md rounded-md text-default">Fixed text (.text-default)</div>
+                    </div>
+                    <div class="l-two-col">
+                      <div class="bg-success p-md rounded-md">Auto-contrast text</div>
+                      <div class="bg-success p-md rounded-md text-default">Fixed text color</div>
+                    </div>
+                    <div class="l-two-col">
+                      <div class="bg-gray-10 p-md rounded-md">Auto-contrast text</div>
+                      <div class="bg-gray-10 p-md rounded-md text-default">Fixed text color</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card__header">
+                  <h4 class="card__title">Contrast Threshold Control</h4>
+                </div>
+                <div class="card__body">
+                  <div class="form-group mb-md">
+                    <label for="l-threshold" class="form-label">Lightness Threshold (--l-threshold)</label>
+                    <input type="range" id="l-threshold" min="0.4" max="0.8" value="0.65" step="0.01" class="form-input">
+                    <span class="text-sm" id="l-threshold-value">0.65</span>
+                  </div>
+                  
+                  <div class="l-stack gap-sm contrast-threshold-demo">
+                    <div class="bg-accent-subtle p-md rounded-md">Auto-contrast with threshold</div>
+                    <div class="bg-accent p-md rounded-md">Auto-contrast with threshold</div>
+                    <div class="bg-accent-overt p-md rounded-md">Auto-contrast with threshold</div>
+                  </div>
+                </div>
+                <div class="card__footer text-sm">
+                  <p>Changing the threshold impacts when text switches from dark to light.</p>
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card__header">
+                  <h4 class="card__title">High Contrast Mode</h4>
+                </div>
+                <div class="card__body">
+                  <p class="mb-md">In high contrast mode, contrast factors are adjusted for better accessibility.</p>
+                  <div class="fake-high-contrast l-stack gap-sm">
+                    <div class="bg-surface-default p-md rounded-md border border-outline-default">Surface Default</div>
+                    <div class="bg-accent p-md rounded-md">Accent</div>
+                    <div class="bg-success p-md rounded-md">Success</div>
+                    <div class="bg-error p-md rounded-md">Error</div>
+                  </div>
+                </div>
+                <div class="card__footer">
+                  <button class="button button-outline-accent" id="toggle-hc-mode">Toggle High Contrast</button>
+                </div>
               </div>
             </div>
           </div>
@@ -678,6 +921,35 @@
               <button class="button button-filled-error">Error</button>
               <button class="button button-filled-info">Info</button>
               <button class="button button-filled-gray">Gray</button>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Accent Variants</h3>
+            <div class="l-stack gap-md">
+              <h4 class="text-lg">Filled Accent Variants</h4>
+              <div class="l-cluster gap-md">
+                <button class="button button-filled-accent-muted">Accent Muted</button>
+                <button class="button button-filled-accent-subtle">Accent Subtle</button>
+                <button class="button button-filled-accent">Accent</button>
+                <button class="button button-filled-accent-overt">Accent Overt</button>
+              </div>
+              
+              <h4 class="text-lg">Outline Accent Variants</h4>
+              <div class="l-cluster gap-md">
+                <button class="button button-outline-accent-muted">Accent Muted</button>
+                <button class="button button-outline-accent-subtle">Accent Subtle</button>
+                <button class="button button-outline-accent">Accent</button>
+                <button class="button button-outline-accent-overt">Accent Overt</button>
+              </div>
+              
+              <h4 class="text-lg">Text Accent Variants</h4>
+              <div class="l-cluster gap-md">
+                <button class="button button-text-accent-muted">Accent Muted</button>
+                <button class="button button-text-accent-subtle">Accent Subtle</button>
+                <button class="button button-text-accent">Accent</button>
+                <button class="button button-text-accent-overt">Accent Overt</button>
+              </div>
             </div>
           </div>
 
@@ -1001,6 +1273,101 @@
                   </ul>
                 </nav>
               </div>
+              
+              <div>
+                <h4 class="text-lg font-semibold mb-sm">Sidebar Example</h4>
+                <div class="card p-0 overflow-hidden" style="width: 280px;">
+                  <div class="p-md border-b border-outline-subtle">
+                    <h3 class="font-semibold">Dashboard</h3>
+                  </div>
+                  <nav class="sidebar-demo">
+                    <style>
+                      .sidebar-demo {
+                        font-size: var(--font-size-sm);
+                      }
+                      .sidebar-demo .sidebar-item {
+                        display: flex;
+                        align-items: center;
+                        padding: 0.75rem 1rem;
+                        color: var(--text-default);
+                        text-decoration: none;
+                        border-bottom: 1px solid var(--outline-muted);
+                        transition: background-color 150ms ease;
+                      }
+                      .sidebar-demo .sidebar-item:hover {
+                        background-color: var(--highlight-bg-subtle);
+                      }
+                      .sidebar-demo .sidebar-item.active {
+                        background-color: var(--highlight-bg-overt);
+                        color: var(--text-highlight-overt);
+                        border-left: 3px solid var(--accent);
+                        padding-left: calc(1rem - 3px);
+                      }
+                      .sidebar-demo .sidebar-item .icon {
+                        margin-right: 0.75rem;
+                        font-size: 1.1em;
+                        color: var(--text-subtle);
+                      }
+                      .sidebar-demo .sidebar-item.active .icon {
+                        color: var(--accent);
+                      }
+                      .sidebar-demo .sidebar-group {
+                        border-bottom: 1px solid var(--outline-subtle);
+                        padding: 0.5rem 0;
+                      }
+                      .sidebar-demo .sidebar-group-title {
+                        padding: 0.5rem 1rem;
+                        font-size: 0.75rem;
+                        font-weight: var(--font-weight-medium);
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                        color: var(--text-subtle);
+                      }
+                    </style>
+                    <div class="sidebar-group">
+                      <div class="sidebar-group-title">Main</div>
+                      <a href="#" class="sidebar-item active">
+                        <span class="icon">📊</span>
+                        <span>Dashboard</span>
+                      </a>
+                      <a href="#" class="sidebar-item">
+                        <span class="icon">📌</span>
+                        <span>Projects</span>
+                      </a>
+                      <a href="#" class="sidebar-item">
+                        <span class="icon">📝</span>
+                        <span>Tasks</span>
+                      </a>
+                      <a href="#" class="sidebar-item">
+                        <span class="icon">📅</span>
+                        <span>Calendar</span>
+                      </a>
+                    </div>
+                    <div class="sidebar-group">
+                      <div class="sidebar-group-title">Team</div>
+                      <a href="#" class="sidebar-item">
+                        <span class="icon">👥</span>
+                        <span>Members</span>
+                      </a>
+                      <a href="#" class="sidebar-item">
+                        <span class="icon">💬</span>
+                        <span>Messages</span>
+                      </a>
+                    </div>
+                    <div class="sidebar-group">
+                      <div class="sidebar-group-title">Settings</div>
+                      <a href="#" class="sidebar-item">
+                        <span class="icon">👤</span>
+                        <span>Account</span>
+                      </a>
+                      <a href="#" class="sidebar-item">
+                        <span class="icon">⚙️</span>
+                        <span>Preferences</span>
+                      </a>
+                    </div>
+                  </nav>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1146,6 +1513,135 @@
         
         <div class="l-stack gap-lg">
           <div>
+            <h3 class="text-xl font-semibold mb-md">Container Queries</h3>
+            <div class="card p-md mb-md">
+              <p class="mb-md">Container queries allow components to adapt based on their container's size, not just the viewport. This enables truly responsive components that work in any layout context.</p>
+              
+              <div class="l-two-col">
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Named Breakpoints</h4>
+                  <pre class="bg-surface-subtle p-sm rounded-md text-sm" style="overflow-x: auto;">
+:root {
+  /* Standardized container query breakpoints */
+  --cq-bp-xs: 20em;  /* ~320px */
+  --cq-bp-sm: 30em;  /* ~480px */
+  --cq-bp-md: 45em;  /* ~720px */
+  --cq-bp-lg: 60em;  /* ~960px */
+  --cq-bp-xl: 80em;  /* ~1280px */
+  --cq-bp-2xl: 96em; /* ~1536px */
+}</pre>
+                </div>
+                
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Usage</h4>
+                  <div class="l-stack gap-xs text-sm">
+                    <div class="bg-surface-subtle p-sm rounded-md">
+                      <code>.cq-type-inline</code> - Sets <code>container-type: inline-size</code>
+                    </div>
+                    <div class="bg-surface-subtle p-sm rounded-md">
+                      <code>.cq-type-size</code> - Sets <code>container-type: size</code>
+                    </div>
+                    <div class="bg-surface-subtle p-sm rounded-md">
+                      <code>.cq-name-card</code> - Sets <code>container-name: card</code>
+                    </div>
+                    <div class="bg-surface-subtle p-sm rounded-md">
+                      <code>@container card (min-width: var(--cq-bp-md)) { ... }</code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="resizable-container-demo mt-lg p-md rounded-md border border-outline-default" style="resize: horizontal; overflow: hidden; min-width: 200px; max-width: 100%;">
+                <p class="text-center mb-sm">Resize this container →</p>
+                <div class="cq-type-inline cq-name-card rounded-md border border-outline-default p-md" style="width: 100%;">
+                  <div class="card p-md">
+                    <h4 class="card__title">Container Query Demo</h4>
+                    <div class="card__body">
+                      <p>This card's layout will adapt based on its container width, not the viewport width.</p>
+                      <div class="container-query-demo-buttons mt-md">
+                        <button class="button button-filled-accent">Primary Action</button>
+                        <button class="button button-outline-accent">Secondary Action</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Enhanced Focus States</h3>
+            <div class="card p-md mb-md">
+              <p class="mb-md">The framework includes an enhanced focus state system for better accessibility. Focus states are customizable and adapt to high contrast mode automatically.</p>
+              
+              <div class="l-two-col">
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Focus Variables</h4>
+                  <pre class="bg-surface-subtle p-sm rounded-md text-sm" style="overflow-x: auto;">
+:root {
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--outline-focus);
+  --focus-ring-style: solid;
+  
+  /* Form specific */
+  --input-focus-ring-width: var(--focus-ring-width);
+  --input-focus-ring-offset: 0px;
+}</pre>
+                </div>
+                
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Demo Elements</h4>
+                  <div class="l-stack gap-md">
+                    <p>Tab through these elements to see focus states:</p>
+                    <div class="l-row gap-sm">
+                      <button class="button button-filled-accent focus-demo">Button</button>
+                      <a href="#" class="button button-outline-accent focus-demo">Link</a>
+                      <div tabindex="0" class="p-sm rounded-md border border-outline-default focus-demo">Div with tabindex</div>
+                    </div>
+                    <input type="text" class="form-input focus-demo" placeholder="Text input">
+                    <select class="form-input focus-demo">
+                      <option>Select input</option>
+                    </select>
+                  </div>
+                  <p class="text-sm mt-md">The focus states use <code>:focus-visible</code> for better keyboard navigation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold mb-md">Enhanced Link Styling</h3>
+            <div class="card p-md mb-md">
+              <div class="l-two-col">
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Link Variables</h4>
+                  <pre class="bg-surface-subtle p-sm rounded-md text-sm" style="overflow-x: auto;">
+:root {
+  --link-decoration: none;
+  --link-decoration-hover: underline;
+  --link-underline-thickness: 1.5px;
+  --link-underline-offset: 0.15em;
+  --link-transition-duration: 150ms;
+  --link-transition-timing: ease-out;
+}</pre>
+                </div>
+                
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Link Styles</h4>
+                  <div class="l-stack gap-md">
+                    <p>This is a paragraph with <a href="#" class="link-default">a default link</a> inside it.</p>
+                    <p>This is a paragraph with <a href="#" class="link-underline">an always underlined link</a> inside it.</p>
+                    <p>This is a paragraph with <a href="#" class="link-subtle">a subtle link</a> inside it.</p>
+                    <p>This is a paragraph with <a href="#" class="link-overt">an overt link</a> inside it.</p>
+                    <p>This is a paragraph with <a href="#" class="link-animated">an animated link</a> with transition effects.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
             <h3 class="text-xl font-semibold mb-md">Spacing Utilities</h3>
             <div class="l-stack gap-md">
               <div class="bg-surface-subtle p-xs rounded-md">Padding Extra Small (p-xs)</div>
@@ -1191,7 +1687,38 @@
           </div>
 
           <div>
-            <h3 class="text-xl font-semibold mb-md">Shadow Utilities</h3>
+            <h3 class="text-xl font-semibold mb-md">Enhanced Shadow System</h3>
+            <div class="card p-md mb-md">
+              <p class="mb-md">The shadow system uses OKLCH color space with HSL base for easy adjustments. The shadows adapt to dark mode automatically.</p>
+              
+              <div class="l-two-col">
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Base Shadows</h4>
+                  <div class="l-stack gap-md">
+                    <div class="bg-surface-default p-md rounded-md shadow-sm">Small (shadow-sm)</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-md">Medium (shadow-md)</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-lg">Large (shadow-lg)</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-xl">Extra Large (shadow-xl)</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-inner">Inner (shadow-inner)</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-none">None (shadow-none)</div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 class="text-lg font-semibold mb-sm">Semantic Shadows</h4>
+                  <div class="l-stack gap-md">
+                    <div class="bg-surface-default p-md rounded-md shadow-card">Card Shadow</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-dropdown">Dropdown Shadow</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-modal">Modal Shadow</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-button">Button Shadow</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-button-hover">Button Hover Shadow</div>
+                    <div class="bg-surface-default p-md rounded-md shadow-button-active">Button Active Shadow</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <h4 class="text-lg font-semibold mb-sm">Shadow Utilities</h4>
             <div class="l-grid" style="--l-grid-min-item-size: 12rem;">
               <div class="bg-surface-default p-md rounded-md shadow-none">None (shadow-none)</div>
               <div class="bg-surface-default p-md rounded-md shadow-sm">Small (shadow-sm)</div>
@@ -1384,6 +1911,7 @@
       initVariablePlayground();
       setupSectionNavigation();
       initColorSystemVisualizer();
+      initSidebarDemo();
     });
     
     // Color customizer panel
@@ -1614,6 +2142,23 @@
       updateActiveSection();
     }
     
+    // Initialize sidebar demo interactivity
+    function initSidebarDemo() {
+      const sidebarItems = document.querySelectorAll('.sidebar-demo .sidebar-item');
+      
+      sidebarItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          // Remove active class from all items
+          sidebarItems.forEach(i => i.classList.remove('active'));
+          
+          // Add active class to clicked item
+          item.classList.add('active');
+        });
+      });
+    }
+    
     // Initialize color system visualizer
     function initColorSystemVisualizer() {
       const colorSystemGrid = document.getElementById('color-system-grid');
@@ -1674,6 +2219,63 @@
         colorSystemGrid.appendChild(container);
       });
     }
+    
+    // Initialize auto-contrast demos on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set up lightness threshold control
+      const lThresholdSlider = document.getElementById('l-threshold');
+      const lThresholdValue = document.getElementById('l-threshold-value');
+      
+      if (lThresholdSlider) {
+        lThresholdSlider.addEventListener('input', () => {
+          const value = lThresholdSlider.value;
+          lThresholdValue.textContent = value;
+          
+          // Update the CSS variable
+          document.documentElement.style.setProperty('--l-threshold', value);
+          
+          // Update contrast-threshold-demo elements to make them use the new threshold
+          document.querySelectorAll('.contrast-threshold-demo > div').forEach(el => {
+            // Force the auto-contrast to recalculate by toggling a class
+            el.classList.add('contrast-updated');
+            setTimeout(() => {
+              el.classList.remove('contrast-updated');
+            }, 10);
+          });
+        });
+      }
+      
+      // Set up high contrast mode toggle
+      const hcModeToggle = document.getElementById('toggle-hc-mode');
+      
+      if (hcModeToggle) {
+        hcModeToggle.addEventListener('click', () => {
+          document.querySelector('.fake-high-contrast').classList.toggle('high-contrast-active');
+          
+          if (document.querySelector('.fake-high-contrast').classList.contains('high-contrast-active')) {
+            // Apply high contrast settings to the demo
+            document.documentElement.style.setProperty('--contrast-factor', '1.3');
+            document.documentElement.style.setProperty('--l-threshold', '0.6');
+            document.documentElement.style.setProperty('--c-threshold', '0.05');
+            document.documentElement.style.setProperty('--border-width', '1.5px');
+            document.documentElement.style.setProperty('--border-width-thick', '3px');
+            
+            // Update button text
+            hcModeToggle.textContent = 'Disable High Contrast';
+          } else {
+            // Reset to default settings
+            document.documentElement.style.setProperty('--contrast-factor', '1');
+            document.documentElement.style.setProperty('--l-threshold', '0.65');
+            document.documentElement.style.setProperty('--c-threshold', '0.08');
+            document.documentElement.style.setProperty('--border-width', '1px');
+            document.documentElement.style.setProperty('--border-width-thick', '2px');
+            
+            // Update button text
+            hcModeToggle.textContent = 'Toggle High Contrast';
+          }
+        });
+      }
+    });
   </script>
 </body>
 </html>

@@ -9,7 +9,7 @@
   @property --color-a { syntax: '<number>'; inherits: true; initial-value: 1; }
   @property --l-threshold { syntax: '<number>'; inherits: true; initial-value: 0.65; }
   @property --c-threshold { syntax: '<number>'; inherits: true; initial-value: 0.08; }
-  @property --bg { syntax: '<color>'; inherits: false; initial-value: transparent; }
+  @property --bg { syntax: '<color>'; inherits: false; initial-value: transparent }
   @property --fg { syntax: '<color>'; inherits: true; initial-value: currentColor; }
   @property --l-delta { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
   @property --c-delta { syntax: '<percentage>'; inherits: true; initial-value: 0%; }

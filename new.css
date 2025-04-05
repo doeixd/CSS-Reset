@@ -62,7 +62,7 @@
   @property --color-a { syntax: '<number>'; inherits: true; initial-value: 1; }
   @property --l-threshold { syntax: '<number>'; inherits: true; initial-value: 0.65; }
   @property --c-threshold { syntax: '<number>'; inherits: true; initial-value: 0.08; }
-  @property --bg { syntax: '<color>'; inherits: false; initial-value: transparent; }
+  /* @property --bg { syntax: '<color>'; inherits: true; initial-value: transparent; } */
   @property --fg { syntax: '<color>'; inherits: true; initial-value: currentColor; }
   @property --l-delta { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
   @property --c-delta { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
@@ -1026,7 +1026,12 @@
   .card {
      --bg: var(--surface-default); /* Set local --bg */
      background-color: var(--bg);
-     color: var(--auto-contrast-text); /* Use auto-contrast */
+     color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); /* Use auto-contrast */
      border-radius: var(--radius-lg);
      padding: 1.5rem;
      border: var(--border-width) solid var(--outline-subtle);
@@ -1061,7 +1066,12 @@
   tbody tr:hover {
     --bg: var(--table-row-hover-bg); /* Set local --bg */
     background-color: var(--bg);
-    color: var(--auto-contrast-text); /* Auto contrast on hover */
+    color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); /* Auto contrast on hover */
   }
   /* Enhanced Form Focus States */
   input:focus-visible, select:focus-visible, textarea:focus-visible {
@@ -1086,7 +1096,12 @@
   .contrast-pair {
     --bg: var(--pair-color, var(--accent));
     background-color: var(--bg);
-    color: var(--auto-contrast-text);
+    color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+));
     padding: 1rem; border-radius: var(--radius-md);
   }
 } /* End of @layer components */
@@ -1142,25 +1157,120 @@
   .text-link { color: var(--text-link); } .text-highlight-subtle { color: var(--text-highlight-subtle); } .text-highlight-overt { color: var(--text-highlight-overt); }
   .text-success { color: var(--text-success); } .text-warning { color: var(--text-warning); } .text-error { color: var(--text-error); } .text-info { color: var(--text-info); }
   /* Contrast Text Utilities */
-  .text-contrast-on-base { --bg: var(--base); color: var(--auto-contrast-text); }
-  .text-contrast-on-bedrock { --bg: var(--bedrock); color: var(--auto-contrast-text); }
-  .text-contrast-on-surface-muted { --bg: var(--surface-muted); color: var(--auto-contrast-text); }
-  .text-contrast-on-surface-subtle { --bg: var(--surface-subtle); color: var(--auto-contrast-text); }
-  .text-contrast-on-surface-default { --bg: var(--surface-default); color: var(--auto-contrast-text); }
-  .text-contrast-on-surface-overt { --bg: var(--surface-overt); color: var(--auto-contrast-text); }
-  .text-contrast-on-accent { --bg: var(--accent); color: var(--auto-contrast-text); }
-  .text-contrast-on-accent-muted { --bg: var(--accent-muted); color: var(--auto-contrast-text); }
-  .text-contrast-on-accent-subtle { --bg: var(--accent-subtle); color: var(--auto-contrast-text); }
-  .text-contrast-on-accent-overt { --bg: var(--accent-overt); color: var(--auto-contrast-text); }
-  .text-contrast-on-secondary { --bg: var(--secondary); color: var(--auto-contrast-text); }
-  .text-contrast-on-tertiary { --bg: var(--tertiary); color: var(--auto-contrast-text); }
-  .text-contrast-on-highlight-muted { --bg: var(--highlight-bg-muted); color: var(--auto-contrast-text); }
-  .text-contrast-on-highlight-subtle { --bg: var(--highlight-bg-subtle); color: var(--auto-contrast-text); }
-  .text-contrast-on-highlight-overt { --bg: var(--highlight-bg-overt); color: var(--auto-contrast-text); }
-  .text-contrast-on-success { --bg: var(--success); color: var(--auto-contrast-text); }
-  .text-contrast-on-warning { --bg: var(--warning); color: var(--auto-contrast-text); }
-  .text-contrast-on-error { --bg: var(--error); color: var(--auto-contrast-text); }
-  .text-contrast-on-info { --bg: var(--info); color: var(--auto-contrast-text); }
+  .text-contrast-on-base { --bg: var(--base); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-bedrock { --bg: var(--bedrock); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-surface-muted { --bg: var(--surface-muted); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-surface-subtle { --bg: var(--surface-subtle); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-surface-default { --bg: var(--surface-default); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-surface-overt { --bg: var(--surface-overt); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-accent { --bg: var(--accent); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-accent-muted { --bg: var(--accent-muted); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-accent-subtle { --bg: var(--accent-subtle); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-accent-overt { --bg: var(--accent-overt); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-secondary { --bg: var(--secondary); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-tertiary { --bg: var(--tertiary); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-highlight-muted { --bg: var(--highlight-bg-muted); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-highlight-subtle { --bg: var(--highlight-bg-subtle); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-highlight-overt { --bg: var(--highlight-bg-overt); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-success { --bg: var(--success); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-warning { --bg: var(--warning); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-error { --bg: var(--error); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+  .text-contrast-on-info { --bg: var(--info); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
   .text-inherit { color: inherit; }
 
   /* --- Text Color Utilities (Palette Scales) --- */
@@ -1278,35 +1388,75 @@
   /* --- Button Style Utilities --- */
   /* Combine with .button from components */
   /* Filled Buttons */
-  .button-filled-accent { background-color: var(--accent); --bg: var(--accent); color: var(--auto-contrast-text); border-color: transparent; }
+  .button-filled-accent { background-color: var(--accent); --bg: var(--accent); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
   .button-filled-accent:hover:not([disabled]) { background-color: var(--accent-overt); --bg: var(--accent-overt); }
   .button-filled-accent:active:not([disabled]) { background-color: oklch(from var(--accent-overt) calc(l + var(--l-delta-1-down)) c h); --bg: oklch(from var(--accent-overt) calc(l + var(--l-delta-1-down)) c h); }
   
-  .button-filled-secondary { background-color: var(--secondary); --bg: var(--secondary); color: var(--auto-contrast-text); border-color: transparent; }
+  .button-filled-secondary { background-color: var(--secondary); --bg: var(--secondary); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
   .button-filled-secondary:hover:not([disabled]) { background-color: var(--secondary-overt); --bg: var(--secondary-overt); }
   .button-filled-secondary:active:not([disabled]) { background-color: oklch(from var(--secondary-overt) calc(l + var(--l-delta-1-down)) c h); --bg: oklch(from var(--secondary-overt) calc(l + var(--l-delta-1-down)) c h); }
   
-  .button-filled-tertiary { background-color: var(--tertiary); --bg: var(--tertiary); color: var(--auto-contrast-text); border-color: transparent; }
+  .button-filled-tertiary { background-color: var(--tertiary); --bg: var(--tertiary); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
   .button-filled-tertiary:hover:not([disabled]) { background-color: var(--tertiary-overt); --bg: var(--tertiary-overt); }
   .button-filled-tertiary:active:not([disabled]) { background-color: oklch(from var(--tertiary-overt) calc(l + var(--l-delta-1-down)) c h); --bg: oklch(from var(--tertiary-overt) calc(l + var(--l-delta-1-down)) c h); }
   
-  .button-filled-success { background-color: var(--success); --bg: var(--success); color: var(--auto-contrast-text); border-color: transparent; }
+  .button-filled-success { background-color: var(--success); --bg: var(--success); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
   .button-filled-success:hover:not([disabled]) { background-color: oklch(from var(--success) calc(l + var(--l-delta-2-down)) c h); --bg: oklch(from var(--success) calc(l + var(--l-delta-2-down)) c h); }
   .button-filled-success:active:not([disabled]) { background-color: oklch(from var(--success) calc(l + var(--l-delta-3-down)) c h); --bg: oklch(from var(--success) calc(l + var(--l-delta-3-down)) c h); }
   
-  .button-filled-warning { background-color: var(--warning); --bg: var(--warning); color: var(--auto-contrast-text); border-color: transparent; }
+  .button-filled-warning { background-color: var(--warning); --bg: var(--warning); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
   .button-filled-warning:hover:not([disabled]) { background-color: oklch(from var(--warning) calc(l + var(--l-delta-2-down)) c h); --bg: oklch(from var(--warning) calc(l + var(--l-delta-2-down)) c h); }
   .button-filled-warning:active:not([disabled]) { background-color: oklch(from var(--warning) calc(l + var(--l-delta-3-down)) c h); --bg: oklch(from var(--warning) calc(l + var(--l-delta-3-down)) c h); }
   
-  .button-filled-error { background-color: var(--error); --bg: var(--error); color: var(--auto-contrast-text); border-color: transparent; }
+  .button-filled-error { background-color: var(--error); --bg: var(--error); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
   .button-filled-error:hover:not([disabled]) { background-color: oklch(from var(--error) calc(l + var(--l-delta-2-down)) c h); --bg: oklch(from var(--error) calc(l + var(--l-delta-2-down)) c h); }
   .button-filled-error:active:not([disabled]) { background-color: oklch(from var(--error) calc(l + var(--l-delta-3-down)) c h); --bg: oklch(from var(--error) calc(l + var(--l-delta-3-down)) c h); }
   
-  .button-filled-info { background-color: var(--info); --bg: var(--info); color: var(--auto-contrast-text); border-color: transparent; }
+  .button-filled-info { background-color: var(--info); --bg: var(--info); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
   .button-filled-info:hover:not([disabled]) { background-color: oklch(from var(--info) calc(l + var(--l-delta-2-down)) c h); --bg: oklch(from var(--info) calc(l + var(--l-delta-2-down)) c h); }
   .button-filled-info:active:not([disabled]) { background-color: oklch(from var(--info) calc(l + var(--l-delta-3-down)) c h); --bg: oklch(from var(--info) calc(l + var(--l-delta-3-down)) c h); }
   
-  .button-filled-gray { background-color: var(--surface-overt); --bg: var(--surface-overt); color: var(--auto-contrast-text); border-color: transparent; }
+  .button-filled-gray { background-color: var(--surface-overt); --bg: var(--surface-overt); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
   .button-filled-gray:hover:not([disabled]) { background-color: oklch(from var(--surface-overt) calc(l + var(--l-delta-2-down)) c h); --bg: oklch(from var(--surface-overt) calc(l + var(--l-delta-2-down)) c h); }
   .button-filled-gray:active:not([disabled]) { background-color: oklch(from var(--surface-overt) calc(l + var(--l-delta-3-down)) c h); --bg: oklch(from var(--surface-overt) calc(l + var(--l-delta-3-down)) c h); }
   
@@ -1392,7 +1542,12 @@
     /* Requires --_local-bg to be set where background is defined */
     /* e.g., <div class="bg-accent-palette-7 auto-contrast" style="--_local-bg: var(--accent-palette-7)">Text</div> */
     --bg: var(--_local-bg, var(--base)); /* Fallback to theme base */
-    color: var(--auto-contrast-text);
+    color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+));
   }
 
   /* --- Palette Swatch Helper --- */

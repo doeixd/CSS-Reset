@@ -108,8 +108,18 @@ Theme role text colors:
 Contrast text colors:
 
 ```css
-.text-contrast-on-base { --bg: var(--base); color: var(--auto-contrast-text); }
-.text-contrast-on-accent { --bg: var(--accent); color: var(--auto-contrast-text); }
+.text-contrast-on-base { --bg: var(--base); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
+.text-contrast-on-accent { --bg: var(--accent); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); }
 /* ... similar classes for other backgrounds */
 ```
 
@@ -490,14 +500,54 @@ For use with the button component:
 
 ```css
 /* Filled Buttons */
-.button-filled-accent { background-color: var(--accent); --bg: var(--accent); color: var(--auto-contrast-text); border-color: transparent; }
-.button-filled-secondary { background-color: var(--secondary); --bg: var(--secondary); color: var(--auto-contrast-text); border-color: transparent; }
-.button-filled-tertiary { background-color: var(--tertiary); --bg: var(--tertiary); color: var(--auto-contrast-text); border-color: transparent; }
-.button-filled-success { background-color: var(--success); --bg: var(--success); color: var(--auto-contrast-text); border-color: transparent; }
-.button-filled-warning { background-color: var(--warning); --bg: var(--warning); color: var(--auto-contrast-text); border-color: transparent; }
-.button-filled-error { background-color: var(--error); --bg: var(--error); color: var(--auto-contrast-text); border-color: transparent; }
-.button-filled-info { background-color: var(--info); --bg: var(--info); color: var(--auto-contrast-text); border-color: transparent; }
-.button-filled-gray { background-color: var(--surface-overt); --bg: var(--surface-overt); color: var(--auto-contrast-text); border-color: transparent; }
+.button-filled-accent { background-color: var(--accent); --bg: var(--accent); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
+.button-filled-secondary { background-color: var(--secondary); --bg: var(--secondary); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
+.button-filled-tertiary { background-color: var(--tertiary); --bg: var(--tertiary); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
+.button-filled-success { background-color: var(--success); --bg: var(--success); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
+.button-filled-warning { background-color: var(--warning); --bg: var(--warning); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
+.button-filled-error { background-color: var(--error); --bg: var(--error); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
+.button-filled-info { background-color: var(--info); --bg: var(--info); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
+.button-filled-gray { background-color: var(--surface-overt); --bg: var(--surface-overt); color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); border-color: transparent; }
 
 /* Outline Buttons */
 .button-outline-accent { color: var(--accent); border-color: var(--accent-subtle); background-color: transparent; }
