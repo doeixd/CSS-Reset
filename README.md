@@ -35,6 +35,7 @@ My opinionated CSS reset for new projects.
   :where(svg) { fill:currentColor; }
   :where(select), :where(select::picker(select)) { appearance: base-select }
   :where(:is(textarea, select, input)) {field-sizing: content; }
+  :where (:root) { interpolate-size: allow-keywords; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; transition:none; animation-name:none; } }
   @view-transition { navigation:auto; }
 }
@@ -103,6 +104,11 @@ My opinionated CSS reset for new projects.
   :where(:is(body, html)) { 
     width: 100%; 
     height: 100%; 
+  }
+
+  /* Opt-in to size animations */
+  :where(:root) {
+    interpolate-size: allow-keywords;
   }
 
   /* Fixes common media element issues */
