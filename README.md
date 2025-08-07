@@ -34,6 +34,7 @@ My opinionated CSS reset for new projects.
   :where(svg:not([width])) { height:auto; }
   :where(svg) { fill:currentColor; }
   :where(select), :where(select::picker(select)) { appearance: base-select }
+  :where(:is(textarea, select, input)) {field-sizing: content; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; transition:none; animation-name:none; } }
   @view-transition { navigation:auto; }
 }
@@ -143,6 +144,11 @@ My opinionated CSS reset for new projects.
     form-sizing: content; 
     min-height: 2lh; 
     max-height: 10lh; 
+  }
+
+  /* Shrink text areas to content */
+  :where(:is(textarea, select, input)) {
+    field-sizing: content;
   }
 
   /* Allow button borders to escape their containers. I think this is what most people want. Also, trim additional space in buttons */
