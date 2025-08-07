@@ -76,6 +76,8 @@ My opinionated CSS reset for new projects.
     line-height: 1.5; 
     -webkit-font-smoothing: antialiased; 
     font-size: var(--bodyFontSize);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility; 
   }
 
   /* Makes webcomponents / unknown elements display as you'd expect */
