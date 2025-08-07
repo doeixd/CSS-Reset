@@ -220,5 +220,16 @@ My opinionated CSS reset for new projects.
   @view-transition { 
     navigation: auto; 
   }
+
+  /* Consistent styling for the summary element */ 
+  :where(summary) { 
+   cursor: pointer; 
+   display: list-item; 
+  } 
+  
+  /* Remove the default border from iframes */ 
+  :where(iframe) { 
+   border: 0; 
+  } 
 }
 ```
