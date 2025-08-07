@@ -33,7 +33,7 @@ My opinionated CSS reset for new projects.
   :where(iframe) { border:0; }
   :where(svg:not([width])) { height:auto; }
   :where(svg) { fill:currentColor; }
-  :where(select) { appearance: base-select }
+  :where(select), :where(select::picker(select)) { appearance: base-select }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; transition:none; animation-name:none; } }
   @view-transition { navigation:auto; }
 }
@@ -247,18 +247,18 @@ My opinionated CSS reset for new projects.
    border: 0; 
   }
 
-/* Ensure SVGs inherit color and don't have a default size */
-:where(svg:not([width])) {
-  height: auto;
-}
+  /* Ensure SVGs inherit color and don't have a default size */
+  :where(svg:not([width])) {
+    height: auto;
+  }
 
-:where(svg) {
-  fill: currentColor;
-}
+  :where(svg) {
+    fill: currentColor;
+  }
 
-/* Makes select element styleable */
-:where(select) {
-  appearance: base-select
-}
+  /* Makes select element styleable */
+  :where(select), :where(select::picker(select)) {
+    appearance: base-select
+  }
 }
 ```
