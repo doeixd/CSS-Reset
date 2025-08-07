@@ -283,7 +283,7 @@ To create a custom theme, extend the Theme layer:
 
 ### Base Colors
 - `--base`: The main background color of the application
-- `--bedrock`: The base color for containers and sections
+- `--bedrock`: The darkest color of the theme, your "black"
 
 ### Surface Colors
 - `--surface-muted`: The most subtle surface color
@@ -335,4 +335,5 @@ To create a custom theme, extend the Theme layer:
 2. **Respect Dark Mode**: Test your application in both light and dark modes
 3. **Consider Accessibility**: Ensure sufficient contrast in all states
 4. **Create Theme Variations**: Use cascade layers to extend the theme for variations
+
 5. **Document Custom Themes**: When creating custom themes, document the color palette and usage guidelines
