@@ -5,30 +5,36 @@ My opinionated CSS reset for new projects.
 
 ```css
 @layer reset {
-  *, *::before, *::after { margin:0; padding: 0; box-sizing: border-box; vertical-align: baseline; min-width: 0; scroll-behavior: smooth; animation-composition: accumulate; }
-  :where(:not(:is(svg *, p, h1, h2, h3, h4, h5, h6)) { transition: ease-out 100ms; transition-property: color, background, margin, padding, width, grid-column, grid-row, height, grid-template-columns, grid-template-rows, opacity, border, border-radius  }
-  :where(html) { text-size-adjust: none; -webkit-text-size-adjust: none; -moz-text-size-adjust: none; --bodyFontSize: clamp(13.5px, 2.4vw, 16px); --bodyFontColor: #323232; tab-size: 4; font-family: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ; color: var(--bodyFontColor); line-height: 1.5; -webkit-font-smoothing: antialiased; font-size: var(--bodyFontSize); }
-  :where(:not(:defined)) { display: block; }
-  :where(:is(body, html)) { width: 100%; height: 100%; }
-  :where(:is(img, picture, video, canvas, svg)) { display: block; max-width: 100%; vertical-align: middle; }
-  :where(:is(button, select):not([disabled])) { font: inherit; cursor: pointer; }
-  :where(*:not(:is(main, body, .prose, .app, .root, #root, article, form)) > :is(h1, h2, h3, h4, h5, h6)), :where(p) { font-size: inherit; font-weight: inherit; overflow-wrap: break-word; text-overflow: ellipsis; background-color: inherit; }
-  :where(:is(h1, h2, h3, h4, h5, h6)) { text-wrap: balance; letter-spacing: 0.2px; scroll-padding-block: 1lh; }
-  :where(p) { text-wrap: pretty; }
-  :where(textarea) { form-sizing: content; min-height: 2lh; max-height: 10lh; }
-  :where(button) { box-sizing: content-box; text-box-trim: both; text-box-edge: cap alphabetic; }
-  :where(:is(#root, #__next, div#app)) { isolation: isolate; }
-  :where(table) { text-indent: 0; border-color: inherit; border-collapse: collapse; border-spacing: 0; }
-  :where(*:not(p) ~ :is(ul, ol) > li), .list-style-none { list-style: none; }
-  :where([src='']) { visibility: hidden; }
-  *::backdrop { all:unset; }
-  :where(modal::dialog) { max-width: 100dvw; max-height:100dvh; }
-  :where(:not(:is(html, audio, textarea, body, main, table, button, checkbox, input, td, tr, th, tbody, table, tfoot, video, form, details, select, summary, fieldset, hr, *::before, *::after, frame, iframe, datalist, object))) { border-style: solid; border-width: 0; border-color: currentColor; }
-  :where(:is(a:empty, ul:empty, dl:empty, section:empty, article:empty, p:empty, h1:empty, h2:empty, h3:empty, h4:empty, h5:empty, h6:empty)) { display: none; }
-  :where(.display-none) { display: none; }
-  :where(:target) { scroll-margin-block: 5ex; }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; transition: none; animation-name: none; } }
-  @view-transition { navigation: auto; }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; vertical-align:baseline; min-width:0; scroll-behavior:smooth; animation-composition:accumulate; }
+  :where(:not(:is(svg *, p, h1, h2, h3, h4, h5, h6))) { transition:ease-out 100ms; transition-property:color, background, margin, padding, width, grid-column, grid-row, height, grid-template-columns, grid-template-rows, opacity, border, border-radius; }
+  :where(html) { text-size-adjust:none; -webkit-text-size-adjust:none; -moz-text-size-adjust:none; --bodyFontSize:clamp(13.5px, 2.4vw, 16px); --bodyFontColor:#323232; tab-size:4; font-family:'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; color:var(--bodyFontColor); line-height:1.5; -webkit-font-smoothing:antialiased; font-size:var(--bodyFontSize); font-synthesis:none; text-rendering:optimizeLegibility; }
+  :where(html:focus-within) { scroll-behavior:smooth; }
+  :where(:not(:defined)) { display:block; }
+  :where(:is(body, html)) { width:100%; height:100%; }
+  :where(:is(img, picture, video, canvas, svg)) { display:block; max-width:100%; vertical-align:middle; }
+  :where(:is(input, button, textarea, select):not([disabled])) { font:inherit; cursor:pointer; }
+  :where(*:not(:is(main, body, .prose, .app, .root, #root, article, form)) > :is(h1, h2, h3, h4, h5, h6)), :where(p) { font-size:inherit; font-weight:inherit; overflow-wrap:break-word; text-overflow:ellipsis; background-color:inherit; }
+  :where(:is(h1, h2, h3, h4, h5, h6)) { text-wrap:balance; letter-spacing:0.2px; scroll-padding-block:1lh; }
+  :where(p) { text-wrap:pretty; }
+  :where(textarea) { form-sizing:content; min-height:2lh; max-height:10lh; }
+  :where(button) { box-sizing:content-box; text-box-trim:both; text-box-edge:cap alphabetic; }
+  :where(:is(#root, #__next, div#app)) { isolation:isolate; }
+  :where(table) { text-indent:0; border-color:inherit; border-collapse:collapse; border-spacing:0; }
+  :where(*:not(p) ~ :is(ul, ol) > li), .list-style-none { list-style:none; }
+  :where([src='']) { visibility:hidden; }
+  *::backdrop { all:unset; position:fixed; inset:0; opacity:0.7; }
+  :where(dialog) { max-width:100dvw; max-height:100dvh; }
+  :where(:not(:is(html, audio, textarea, body, main, table, button, checkbox, input, td, tr, th, tbody, table, tfoot, video, form, details, select, summary, fieldset, hr, *::before, *::after, frame, iframe, datalist, object))) { border-style:solid; border-width:0; border-color:currentColor; }
+  :where(:is(a:empty, ul:empty, dl:empty, div:empty, section:empty, article:empty, p:empty, h1:empty, h2:empty, h3:empty, h4:empty, h5:empty, h6:empty)) { display:none; }
+  :where(.display-none) { display:none; }
+  :where([hidden], .visually-hidden) { clip:rect(0 0 0 0); clip-path:inset(50%); height:1px; overflow:hidden; position:absolute; white-space:nowrap; width:1px; content-visibility:hidden; }
+  :where(:target) { scroll-margin-block:5ex; }
+  :where(summary) { cursor:pointer; display:list-item; }
+  :where(iframe) { border:0; }
+  :where(svg:not([width])) { height:auto; }
+  :where(svg) { fill:currentColor; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; transition:none; animation-name:none; } }
+  @view-transition { navigation:auto; }
 }
 ```
 
