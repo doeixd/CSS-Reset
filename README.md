@@ -80,6 +80,11 @@ My opinionated CSS reset for new projects.
     text-rendering: optimizeLegibility; 
   }
 
+  /* Smooth scrolling when focusing within the page */
+  :where(html:focus-within) {
+   scroll-behavior: smooth;
+  }
+
   /* Makes webcomponents / unknown elements display as you'd expect */
   :where(:not(:defined)) { 
       display: block; 
@@ -232,6 +237,15 @@ My opinionated CSS reset for new projects.
   /* Remove the default border from iframes */ 
   :where(iframe) { 
    border: 0; 
-  } 
+  }
+
+/* Ensure SVGs inherit color and don't have a default size */
+:where(svg:not([width])) {
+  height: auto;
+}
+
+:where(svg) {
+  fill: currentColor;
+} 
 }
 ```
