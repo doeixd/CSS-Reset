@@ -75,7 +75,7 @@ My opinionated CSS reset for new projects.
 
     /* My preferred text settings. */
     --bodyFontSize: clamp(13.5px, 2.4vw, 16px);
-    --bodyFontColor: #323232;
+    --bodyFontColor: light-dark(#fafafa, #323232);
     tab-size: 4; 
     font-family: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ; 
     color: var(--bodyFontColor);
@@ -83,7 +83,8 @@ My opinionated CSS reset for new projects.
     -webkit-font-smoothing: antialiased; 
     font-size: var(--bodyFontSize);
     font-synthesis: none;
-    text-rendering: optimizeLegibility; 
+    text-rendering: optimizeLegibility;
+    overscroll-behavior: none
   }
 
   /* Smooth scrolling when focusing within the page */
