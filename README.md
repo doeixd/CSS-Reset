@@ -33,6 +33,7 @@ My opinionated CSS reset for new projects.
   :where(iframe) { border:0; }
   :where(svg:not([width])) { height:auto; }
   :where(svg) { fill:currentColor; }
+  :where(select) { appearance: base-select }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; transition:none; animation-name:none; } }
   @view-transition { navigation:auto; }
 }
@@ -253,6 +254,11 @@ My opinionated CSS reset for new projects.
 
 :where(svg) {
   fill: currentColor;
-} 
+}
+
+/* Makes select element styleable */
+:where(select) {
+  appearance: base-select
+}
 }
 ```
