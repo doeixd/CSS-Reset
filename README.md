@@ -5,7 +5,7 @@ My opinionated CSS reset for new projects.
 
 ```css
 @layer reset {
-  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; vertical-align:baseline; min-width:0; scroll-behavior:smooth; animation-composition:accumulate; }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; vertical-align:baseline; min-width:0; scroll-behavior:smooth; animation-composition:accumulate; transition-behavior: allow-discrete; }
   :where(:not(:is(svg *, p, h1, h2, h3, h4, h5, h6))) { transition:ease-out 100ms; transition-property:color, background, margin, padding, width, grid-column, grid-row, height, grid-template-columns, grid-template-rows, opacity, border, border-radius; }
   :where(html) { text-size-adjust:none; -webkit-text-size-adjust:none; -moz-text-size-adjust:none; --bodyFontSize:clamp(13.5px, 2.4vw, 16px); --bodyFontColor:#323232; tab-size:4; font-family:'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; color:var(--bodyFontColor); line-height:1.5; -webkit-font-smoothing:antialiased; font-size:var(--bodyFontSize); font-synthesis:none; text-rendering:optimizeLegibility; }
   :where(html:focus-within) { scroll-behavior:smooth; }
@@ -60,6 +60,7 @@ My opinionated CSS reset for new projects.
     vertical-align: baseline;
     min-width: 0;
     scroll-behavior: smooth;
+    transition-behavior: allow-discrete
   }
 
 /* I prefer having some sort of transition */
